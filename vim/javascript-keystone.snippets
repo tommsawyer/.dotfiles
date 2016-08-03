@@ -1,0 +1,18 @@
+# Keystone model
+snippet km
+	keystone.list('${1}').model
+
+# Keystone model with var
+snippet vkm
+	var ${1:} = keystone.list('$1').model;
+
+snippet kvi
+	view.on('init', function(${1:done}) {
+		${2}
+	});
+
+snippet kvq
+	view.query('${1}', ${2});
+
+snippet kvr
+	view.render('${1}');

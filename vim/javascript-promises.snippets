@@ -11,6 +11,17 @@ snippet vpr
 	})${5}
 
 # Promise.all
-
 snippet pra
 	Promise.all(${1})${2}
+
+# Promise.then
+snippet prt
+	.then(function(${1:result}) {
+		${2}
+	})
+
+# Promise.catch
+snippet prc
+	.catch(function(${1:error}) {
+		${2}
+	})
