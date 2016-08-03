@@ -1,0 +1,16 @@
+# Promise
+snippet pr
+	new Promise(function(${1:resolve}, ${2:reject}) {
+		${3}
+	})${4}
+
+# Promise with variable
+snippet vpr
+	var ${1} = new Promise(function(${2:resolve}, ${3:reject}) {
+		${4}
+	})${5}
+
+# Promise.all
+
+snippet pra
+	Promise.all(${1})${2}
