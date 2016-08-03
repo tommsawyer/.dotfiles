@@ -6,13 +6,20 @@ snippet km
 snippet vkm
 	var ${1:} = keystone.list('$1').model;
 
+# Keystone View
+snippet kvv
+	var ${1:view} = new Keystone.view(${2:req}, ${3:res});
+
+# Keystone View Init
 snippet kvi
 	view.on('init', function(${1:done}) {
 		${2}
 	});
 
+# Keystone View Query
 snippet kvq
 	view.query('${1}', ${2});
 
+# Keystone View Render
 snippet kvr
 	view.render('${1}');

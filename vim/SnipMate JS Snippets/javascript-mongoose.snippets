@@ -1,0 +1,28 @@
+# MONgoose Model Find
+snippet monmf
+	${1}.find(${2}, function(err, ${3:result}) {
+		${4}
+	});
+
+# MONgoose Model Find One
+snippet monmfo
+	${1}.findOne(${2}, function(err, ${3:result}) {
+		${4}
+	});
+
+# MONgoose Model Save
+snippet monms
+	${1}.save(${2});
+
+# MONgoose Model Method Instance
+snippet monmmi
+	${1:ModelSchema}.methods.${2:functionName} = function(${3:arguments}) {
+		${4}
+	};
+
+# MONgoose Model Method Static
+snippet monmms
+	${1:ModelSchema}.statics.${2:functionName} = function(${3:arguments}) {
+		${4}
+	};
+
