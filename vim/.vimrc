@@ -1,23 +1,34 @@
 " Plugins
 
 call plug#begin('~/.vim/plugged')
-        Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-        Plug 'Valloric/YouCompleteMe'
-        Plug 'jiangmiao/auto-pairs'
+
+    Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } " project tree
+    Plug 'jiangmiao/auto-pairs'                             " automaticly insert brackets
+    Plug 'ctrlpvim/ctrlp.vim'                               " fuzzy search
+    Plug 'tpope/vim-surround'                               " surround text with brackets or tags
+    Plug 'godlygeek/tabular'                                " align text by symbol
+
+    " Git
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
-        Plug 'ctrlpvim/ctrlp.vim' 
-        Plug 'tpope/vim-surround'
-        Plug 'godlygeek/tabular'
-        Plug 'jelera/vim-javascript-syntax'        
+
+    " Snippets
         Plug 'MarcWeber/vim-addon-mw-utils'
         Plug 'tomtom/tlib_vim'
         Plug 'garbas/vim-snipmate'
         Plug 'honza/vim-snippets'  
 
-        "Color schemes 
-                Plug 'nanotech/jellybeans.vim'
-                Plug 'morhetz/gruvbox'
+    " Autocompletion
+        Plug 'Valloric/YouCompleteMe'
+
+    " Syntax highlighing
+        Plug 'digitaltoad/vim-pug'          " Jade
+        Plug 'jelera/vim-javascript-syntax' " JS
+
+    " Color schemes 
+        Plug 'nanotech/jellybeans.vim'
+        Plug 'morhetz/gruvbox'
+
 call plug#end()
 
 " Common settings
