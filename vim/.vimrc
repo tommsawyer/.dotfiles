@@ -7,6 +7,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'ctrlpvim/ctrlp.vim'                               " fuzzy search
     Plug 'tpope/vim-surround'                               " surround text with brackets or tags
     Plug 'godlygeek/tabular'                                " align text by symbol
+    Plug 'tpope/vim-commentary'                             " comments
+    Plug 'mileszs/ack.vim'                                  " search in project 
 
     " Git
         Plug 'tpope/vim-fugitive'
@@ -24,6 +26,7 @@ call plug#begin('~/.vim/plugged')
     " Syntax highlighing
         Plug 'digitaltoad/vim-pug'          " Jade
         Plug 'jelera/vim-javascript-syntax' " JS
+        Plug 'elzr/vim-json'                " JSON
 
     " Color schemes 
         Plug 'nanotech/jellybeans.vim'
@@ -39,6 +42,9 @@ set relativenumber
 set expandtab
 set tabstop=4
 set shiftwidth=4
+set nobackup
+set nowb
+set noswapfile
 syntax on
 set nocompatible
 filetype on
@@ -53,11 +59,15 @@ let g:ycm_key_list_previous_completion=[]
 
 " Key bindings
 let g:mapleader=','
-map <C-n> :NERDTreeToggle<CR>
+map <silent> <C-n> :NERDTreeToggle<CR>
 
 " Change buffer by ctrl + h,j,k,l
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
 imap <Tab> <Plug>snipMateNextOrTrigger
+noremap <Leader>f :Ack!<Space>
+noremap <Leader>t :Tabularize<Space>/
+noremap <silent> <Leader>n :noh<CR>
