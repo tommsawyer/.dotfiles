@@ -28,6 +28,8 @@ call plug#begin('~/.vim/plugged')
         Plug 'jelera/vim-javascript-syntax' " JS
         Plug 'elzr/vim-json'                " JSON
 
+        Plug 'Shutnik/jshint2.vim'          " JSHint
+
     " Color schemes 
         Plug 'nanotech/jellybeans.vim'
         Plug 'morhetz/gruvbox'
@@ -50,12 +52,19 @@ set nocompatible
 filetype on
 filetype plugin on
 
+" Draw whitespaces
+set list
+set listchars=space:·
+highlight SpecialKey ctermbg=None ctermfg=236
+
 set hlsearch
 set incsearch
 
 " Disable YouCompleteMe calling by tab to force snipmate work well
 let g:ycm_key_list_select_completion=[]
 let g:ycm_key_list_previous_completion=[]
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " Key bindings
 let g:mapleader=','
