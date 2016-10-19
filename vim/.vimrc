@@ -4,7 +4,6 @@ call plug#begin('~/.vim/plugged')
 
     Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } " project tree
     Plug 'jiangmiao/auto-pairs'                             " automaticly insert brackets
-    Plug 'ctrlpvim/ctrlp.vim'                               " fuzzy search
     Plug 'tpope/vim-surround'                               " surround text with brackets or tags
     Plug 'godlygeek/tabular'                                " align text by symbol
     Plug 'tpope/vim-commentary'                             " comments
@@ -23,6 +22,7 @@ call plug#begin('~/.vim/plugged')
         Plug 'garbas/vim-snipmate'
         Plug 'honza/vim-snippets'  
         Plug 'matthewsimo/angular-vim-snippets'
+        Plug 'tisho/css-snippets-snipmate'
 
     " Autocompletion
         Plug 'Valloric/YouCompleteMe'
@@ -84,19 +84,33 @@ let g:unite_split_rule = "botright"
 let g:unite_force_overwrite_statusline = 0
 let g:unite_winheight = 10
 let g:unite_candidate_icon="▷"
+" Enable fuzzy search
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
 " Unite menus
 
 let g:unite_source_menu_menus = get(g:, 'unite_source_menu_menus', {})
+
 let g:unite_source_menu_menus.git = {
     \'description': 'Git commands'
     \}
 
 let g:unite_source_menu_menus.git.command_candidates = [
             \['>>  Git status (Fugitive)', 'Gstatus'],
+            \['>>  Git blame  (Fugitive)', 'Gblame'],
             \['>>  Git log    (Fugitive)', 'Glog']
             \]
 
+let g:unite_source_menu_menus.common = {
+    \'description': 'Common commands'
+    \}
+
+let g:unite_source_menu_menus.common.command_candidates = [
+            \['>>  Convert indentation to spaces', ':%s/\t/\ \ \ \ /g'],
+            \['>>  Convert indentation to tabs', ':%s/\ \ \ \ /\t/g'],
+            \['>>  Open .vimrc', ':e ~/.vimrc'],
+            \['>>  Reload .vimrc', ':so ~/.vimrc']
+            \]
 
 " Key bindings
 let g:mapleader=','
@@ -110,15 +124,10 @@ map <C-l> <C-W>l
 
 imap <Tab> <Plug>snipMateNextOrTrigger
 
-" convert indentation to spaces
-noremap <silent> <Leader>s ggVG:s/\t/\ \ \ \ /g<CR>:noh<CR>
-" convert indentation to tabs
-noremap <silent> <Leader>S ggVG:s/\ \ \ \ /\t/g<CR>:noh<CR>
-
 noremap <F5> :!node %<CR>
 noremap <Leader>o :<C-u>Unite -buffer-name=files -start-insert buffer file_rec/async:!<CR>
 noremap <Leader>f :Unite grep:.<CR>
 noremap <silent> <Leader>g :Unite -silent -start-insert menu:git<CR>
+noremap <silent> <Leader>c :Unite -silent -start-insert menu:common<CR>
 noremap <Leader>t :Tabularize<Space>/
-noremap <silent> <Leader>q :UniteClose<CR>
 noremap <silent> <Leader>n :noh<CR>
