@@ -11,6 +11,10 @@ call plug#begin('~/.vim/plugged')
     Plug 'powerman/vim-plugin-ruscmd'                       " normal mode mappings in russial layout
     Plug 'Shougo/vimproc.vim'
     Plug 'Shougo/unite.vim'                                 " find in project, run some cmds, etc
+    Plug 'alvan/vim-closetag'                               " autoclose html tags
+    Plug 'mhinz/vim-startify'                               " start screen
+    Plug 'Chiel92/vim-autoformat'                           " autoformat code
+    Plug 'vim-syntastic/syntastic'                          " check errors
 
     " Git
         Plug 'tpope/vim-fugitive'
@@ -28,20 +32,20 @@ call plug#begin('~/.vim/plugged')
         Plug 'digitaltoad/vim-pug'          " Jade
         Plug 'jelera/vim-javascript-syntax' " JS
         Plug 'elzr/vim-json'                " JSON
+        Plug 'othree/html5-syntax.vim'      " HTML
         Plug 'leafgarland/typescript-vim'   " TypeScript
+        Plug 'Valloric/MatchTagAlways'      " Highlight matching tags
 
     " IDE-like features
+      Plug 'ternjs/tern_for_vim'
       Plug 'moll/vim-node'           " nodejs
       Plug 'Quramy/tsuquyomi'        " typescript
       Plug 'klen/python-mode'        " python
-      Plug 'bdauria/angular-cli.vim' " angular 2 cli 
+      Plug 'bdauria/angular-cli.vim' " angular 2 cli
 
     " Look
-      " Color schemes 
+      " Color schemes
           Plug 'nanotech/jellybeans.vim'
-          Plug 'morhetz/gruvbox'
-          Plug '29decibel/codeschool-vim-theme'
-          Plug 'altercation/vim-colors-solarized'
       "Icons support
           Plug 'ryanoasis/vim-devicons'
 
@@ -67,6 +71,9 @@ filetype on
 filetype plugin on
 set scrolloff=5
 
+autocmd InsertEnter * set norelativenumber
+autocmd InsertLeave * set relativenumber
+
 if &term =~ '256color'
   " Disable Background Color Erase (BCE) so that color schemes
   " work properly when Vim is used inside tmux and GNU screen.
@@ -75,18 +82,27 @@ endif
 
 " Draw whitespaces
 set list
-set listchars=space:·,tab:▷\ 
+set listchars=space:·,tab:▷\
 highlight SpecialKey ctermbg=None ctermfg=237
 
-" Do not draw whitespaces in nerdtree
-autocmd FileType nerdtree setlocal nolist
+" Do not draw whitespaces in nerdtree and quickfix
+autocmd FileType nerdtree,qf setlocal nolist
+
+" Remove trailing spaces before saving file
+let blacklist = ['markdown'] " except markdown
+autocmd BufWritePre * if index(blacklist, &ft) < 0 | RemoveTrailingSpaces
 
 " Disable YouCompleteMe calling by tab to force ultisnips work well
 let g:ycm_key_list_select_completion=[]
 let g:ycm_key_list_previous_completion=[]
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-"
+
+" Html matching tags color
+let g:mta_use_matchparen_group = 0
+let g:mta_set_default_matchtag_color = 0
+highlight MatchTag ctermfg=lightblue ctermbg=234 guifg=black guibg=lightgreen
+
 " Status bar settings
 let g:airline_enable_fugitive=1
 let g:airline_fugitive_prefix = '⎇ '
@@ -103,6 +119,10 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " Ignore node_modules
 call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_modules/')
 
+" Syntastic always show errors in quickfix
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+
 " Key bindings
   let g:mapleader=','
   map <silent> <C-n> :NERDTreeToggle<CR>
@@ -115,6 +135,10 @@ call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_mo
   autocmd FileType typescript nnoremap gd :TsuquyomiDefinition<CR>
   autocmd FileType typescript nnoremap gfr :TsuquyomiReferences<CR>
   autocmd FileType typescript nnoremap gr :TsuquyomiRenameSymbol<CR>
+  " JavaScript Refactor Bindings
+  autocmd FileType javascript nnoremap <silent> gd :TernDef<CR>:noh<CR>
+  autocmd FileType javascript nnoremap gfr :TernRefs<CR>
+  autocmd FileType javascript nnoremap gr :TernRename<CR>
 
   let g:UltiSnipsExpandTrigger="<tab>"
   let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -126,6 +150,7 @@ call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_mo
   noremap <Leader>o :<C-u>Unite -start-insert file_rec/async:!<CR>
   noremap <Leader>b :<C-u>Unite -start-insert buffer<CR>
   noremap <Leader>f :Unite grep:.<CR>
+  noremap <silent> <Leader>q :cclose<CR>
   noremap <silent> <Leader>g :Unite -silent -start-insert menu:git<CR>
   noremap <Leader>t :Tabularize<Space>/
   noremap <silent> <Leader>n :noh<CR>
@@ -137,7 +162,7 @@ call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_mo
   nmap <Leader>s :vsplit<CR>
 
   " Find in NerdTree
-  nmap <Leader>a :NERDTreeFind<CR>
+  nmap <silent> <Leader>a :NERDTreeFind<CR>
 
 " Unite menus
 let g:unite_source_menu_menus = get(g:, 'unite_source_menu_menus', {})
