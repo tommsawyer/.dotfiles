@@ -56,6 +56,7 @@ colorscheme jellybeans
 set t_CO=256
 syntax on
 set encoding=utf8
+set nostartofline
 set relativenumber
 set number
 set expandtab
@@ -67,10 +68,18 @@ set noswapfile
 set nocompatible
 set hlsearch
 set incsearch
+set gdefault
+set title
 filetype on
 filetype plugin on
 set scrolloff=5
 
+let NERDTreeMinimalUI=1
+let g:startify_change_to_dir = 0
+let g:startify_files_number = 8
+let g:startify_bookmarks = ['~/.vimrc']
+let g:startify_custom_header =
+    \ map(split(system('fortune ~/.vim/fortunes | cowsay -W 100'), '\n'), '"   ". v:val') + ['','']
 autocmd InsertEnter * set norelativenumber
 autocmd InsertLeave * set relativenumber
 
@@ -86,7 +95,7 @@ set listchars=space:·,tab:▷\
 highlight SpecialKey ctermbg=None ctermfg=237
 
 " Do not draw whitespaces in nerdtree and quickfix
-autocmd FileType nerdtree,qf setlocal nolist
+autocmd FileType nerdtree,qf,fugitiveblame,gitcommit setlocal nolist
 
 " Remove trailing spaces before saving file
 let blacklist = ['markdown'] " except markdown
@@ -122,7 +131,7 @@ call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_mo
 " Syntastic always show errors in quickfix
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-
+let g:syntastic_html_checkers = ['htmlhint']
 " Key bindings
   let g:mapleader=','
   map <silent> <C-n> :NERDTreeToggle<CR>
