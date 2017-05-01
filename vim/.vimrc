@@ -188,14 +188,14 @@ let g:syntastic_html_checkers = ['htmlhint']
 let g:unite_source_menu_menus = get(g:, 'unite_source_menu_menus', {})
 
 let g:unite_source_menu_menus.git = {
-    \'description': 'Git commands'
+    \'description': '  Git commands'
     \}
 
 let g:unite_source_menu_menus.git.command_candidates = [
-            \['>>  Git status (Fugitive)', 'Gstatus'],
-            \['>>  Git blame  (Fugitive)', 'Gblame'],
-            \['>>  Git diff   (Fugitive)', 'Gdiff'],
-            \['>>  Git log    (Fugitive)', 'Glog']
+            \['    status', 'Gstatus'],
+            \['    blame ', 'Gblame'],
+            \['    diff  ', 'Gdiff'],
+            \['    log   ', 'Glog']
             \]
 
 " Load Angular 2 cli plugin when @angular installed in node_modules
