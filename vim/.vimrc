@@ -87,6 +87,8 @@ let g:startify_files_number = 8
 let g:startify_bookmarks = ['~/.vimrc']
 let g:startify_custom_header =
     \ map(split(system('fortune ~/.vim/fortunes | cowsay -W 100'), '\n'), '"   ". v:val') + ['','']
+let g:startify_list_order = ['bookmarks', ['      Recently edited files in current directory:'], 'dir', ['      Recently edited files:'], 'files',]
+
 
 autocmd InsertEnter * set norelativenumber
 autocmd InsertLeave * set relativenumber
