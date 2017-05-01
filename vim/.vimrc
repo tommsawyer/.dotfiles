@@ -8,6 +8,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'godlygeek/tabular'                                " align text by symbol
     Plug 'tpope/vim-commentary'                             " comments
     Plug 'vim-airline/vim-airline'                          " status bar
+    Plug 'vim-airline/vim-airline-themes'                   " status bar themes
     Plug 'powerman/vim-plugin-ruscmd'                       " normal mode mappings in russial layout
     Plug 'Shougo/vimproc.vim'
     Plug 'Shougo/unite.vim'                                 " find in project, run some cmds, etc
@@ -26,13 +27,14 @@ call plug#begin('~/.vim/plugged')
         Plug 'mattn/emmet-vim'
 
     " Autocompletion
-        Plug 'Valloric/YouCompleteMe'
+        Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 
     " Syntax highlighing
         Plug 'digitaltoad/vim-pug'          " Jade
         Plug 'jelera/vim-javascript-syntax' " JS
         Plug 'elzr/vim-json'                " JSON
         Plug 'othree/html5-syntax.vim'      " HTML
+        Plug 'hail2u/vim-css3-syntax'       " CSS3
         Plug 'leafgarland/typescript-vim'   " TypeScript
         Plug 'Valloric/MatchTagAlways'      " Highlight matching tags
 
@@ -45,14 +47,14 @@ call plug#begin('~/.vim/plugged')
 
     " Look
       " Color schemes
-          Plug 'nanotech/jellybeans.vim'
+          Plug 'arcticicestudio/nord-vim'
       "Icons support
           Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
 " Common settings
-colorscheme jellybeans
+colorscheme nord
 set t_CO=256
 syntax on
 set encoding=utf8
@@ -73,6 +75,11 @@ set title
 filetype on
 filetype plugin on
 set scrolloff=5
+set guitablabel=\[%N\]\ %f
+
+" Always show airline status bar
+set laststatus=2
+let g:airline_powerline_fonts = 1
 
 let NERDTreeMinimalUI=1
 let g:startify_change_to_dir = 0
@@ -80,6 +87,7 @@ let g:startify_files_number = 8
 let g:startify_bookmarks = ['~/.vimrc']
 let g:startify_custom_header =
     \ map(split(system('fortune ~/.vim/fortunes | cowsay -W 100'), '\n'), '"   ". v:val') + ['','']
+
 autocmd InsertEnter * set norelativenumber
 autocmd InsertLeave * set relativenumber
 
@@ -92,9 +100,9 @@ endif
 " Draw whitespaces
 set list
 set listchars=space:·,tab:▷\
-highlight SpecialKey ctermbg=None ctermfg=237
+highlight SpecialKey ctermbg=None ctermfg=243
 
-" Do not draw whitespaces in nerdtree and quickfix
+" Do not draw whitespaces not in the editor
 autocmd FileType nerdtree,qf,fugitiveblame,gitcommit setlocal nolist
 
 " Remove trailing spaces before saving file
@@ -110,7 +118,7 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 " Html matching tags color
 let g:mta_use_matchparen_group = 0
 let g:mta_set_default_matchtag_color = 0
-highlight MatchTag ctermfg=lightblue ctermbg=234 guifg=black guibg=lightgreen
+highlight MatchTag ctermfg=lightblue ctermbg=23 guifg=black guibg=lightgreen
 
 " Status bar settings
 let g:airline_enable_fugitive=1
@@ -132,6 +140,7 @@ call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_mo
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_html_checkers = ['htmlhint']
+
 " Key bindings
   let g:mapleader=','
   map <silent> <C-n> :NERDTreeToggle<CR>
@@ -165,8 +174,8 @@ let g:syntastic_html_checkers = ['htmlhint']
   noremap <silent> <Leader>n :noh<CR>
 
   " Switch buffers by left-right arrows
-  nmap <Left> :bprevious<CR>
-  nmap <Right> :bnext<CR>
+  nmap <silent> <Left> :bprevious<CR>
+  nmap <silent> <Right> :bnext<CR>
 
   nmap <Leader>s :vsplit<CR>
 
