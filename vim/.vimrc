@@ -55,6 +55,8 @@ call plug#begin('~/.vim/plugged')
 
 call plug#end()
 
+let g:mapleader=','
+
 " Common settings
 colorscheme nord
 set t_CO=256
@@ -136,10 +138,14 @@ augroup END
     " Ignore node_modules
         call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_modules/')
     " Key bindings
-        noremap <Leader>o :<C-u>Unite -start-insert file_rec/async:!<CR>     " fuzzy-search in filenames
-        noremap <Leader>b :<C-u>Unite -start-insert buffer<CR>               " fuzzy-search in opened buffers
-        noremap <Leader>f :Unite grep:.<CR>                                  " search text in project
-        noremap <silent> <Leader>g :Unite -silent -start-insert menu:git<CR> " git menu
+      " fuzzy-search in filenames
+        noremap <Leader>o :<C-u>Unite -start-insert file_rec/async:!<CR>
+      " fuzzy-search in opened buffers
+        noremap <Leader>b :<C-u>Unite -start-insert buffer<CR>
+      " search text in project
+        noremap <Leader>f :Unite grep:.<CR>
+      " git menu
+        noremap <silent> <Leader>g :Unite -silent -start-insert menu:git<CR>
     " Menus
         let g:unite_source_menu_menus = get(g:, 'unite_source_menu_menus', {})
         let g:unite_source_menu_menus.git = {
@@ -211,7 +217,6 @@ augroup END
     highlight MatchTag ctermfg=lightblue ctermbg=23 guifg=black guibg=lightgreen
 
 " Key bindings
-let g:mapleader=','
 
 " Change buffer by ctrl + h,j,k,l
 map <C-j> <C-W>j
