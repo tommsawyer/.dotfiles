@@ -2,25 +2,26 @@
 
 call plug#begin('~/.vim/plugged')
 
-    Plug 'scrooloose/nerdtree'                              " project tree
-    Plug 'jiangmiao/auto-pairs'                             " automaticly insert brackets
-    Plug 'tpope/vim-surround'                               " surround text with brackets or tags
-    Plug 'godlygeek/tabular'                                " align text by symbol
-    Plug 'tpope/vim-commentary'                             " comments
-    Plug 'vim-airline/vim-airline'                          " status bar
-    Plug 'vim-airline/vim-airline-themes'                   " status bar themes
+    Plug 'scrooloose/nerdtree'            " project tree
+    Plug 'jiangmiao/auto-pairs'           " automaticly insert brackets
+    Plug 'tpope/vim-surround'             " surround text with brackets or tags
+    Plug 'godlygeek/tabular'              " align text by symbol
+    Plug 'tpope/vim-commentary'           " comments
+    Plug 'vim-airline/vim-airline'        " status bar
+    Plug 'vim-airline/vim-airline-themes' " status bar themes
     Plug 'Shougo/vimproc.vim'
-    Plug 'Shougo/unite.vim'                                 " find in project, run some cmds, etc
-    Plug 'tsukkee/unite-tag'                                " unite ctags support
-    Plug 'alvan/vim-closetag'                               " autoclose html tags
-    Plug 'mhinz/vim-startify'                               " start screen
-    Plug 'Chiel92/vim-autoformat'                           " autoformat code
-    Plug 'vim-syntastic/syntastic'                          " check errors
-    Plug 'terryma/vim-multiple-cursors'                     " multiple cursors sublime-style
+    Plug 'Shougo/unite.vim'               " find in project, run some cmds, etc
+    Plug 'tsukkee/unite-tag'              " unite ctags support
+    Plug 'alvan/vim-closetag'             " autoclose html tags
+    Plug 'mhinz/vim-startify'             " start screen
+    Plug 'Chiel92/vim-autoformat'         " autoformat code
+    Plug 'vim-syntastic/syntastic'        " check errors
+    Plug 'terryma/vim-multiple-cursors'   " multiple cursors sublime-style
 
     " Git
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
+        Plug 'tommcdo/vim-fubitive' " :Gbrowse for bitbucket
         Plug 'gregsexton/gitv'
 
     " Snippets
@@ -34,10 +35,11 @@ call plug#begin('~/.vim/plugged')
     " Syntax highlighing
         Plug 'digitaltoad/vim-pug'          " Jade
         Plug 'jelera/vim-javascript-syntax' " JS
+        Plug 'isRuslan/vim-es6'             " JS es6
         Plug 'elzr/vim-json'                " JSON
         Plug 'othree/html5-syntax.vim'      " HTML
         Plug 'hail2u/vim-css3-syntax'       " CSS3
-        Plug 'leafgarland/typescript-vim'   " TypeScript
+        Plug 'HerringtonDarkholme/yats.vim' " TypeScript
         Plug 'Valloric/MatchTagAlways'      " Highlight matching tags
         Plug 'tmhedberg/matchit'            " Extended % for html
 
@@ -63,8 +65,10 @@ let g:mapleader=','
 
 " Common settings
 colorscheme nord
+set nocompatible
 set t_CO=256
 syntax on
+" add new vertical split in the right-hand side
 set splitright
 set encoding=utf8
 set nostartofline
@@ -73,19 +77,34 @@ set number
 set expandtab
 set tabstop=2
 set shiftwidth=2
+set shiftround
+set smarttab
+" no swaps and backups, use git instead
 set nobackup
 set nowb
 set noswapfile
-set nocompatible
+" highlight search word, rerun when typing
 set hlsearch
 set incsearch
+" ignore case when searching, but dont ignore when search word contains uppercase
+set ignorecase
+set smartcase
+set backspace=indent,eol,start
 " global regexps by default
 set gdefault
+" delete comment character when joining commented lines
+set formatoptions+=j
 " show filename in terminal title
 set title
+" autoread file if it was changed on disk
+set autoread
+set shell=/bin/zsh
+" show suggestions when completing commands
+set wildmenu
 filetype on
 filetype plugin on
 set scrolloff=5
+set sidescrolloff=5
 
 if &term =~ '256color'
   " Disable Background Color Erase (BCE) so that color schemes
@@ -269,15 +288,12 @@ augroup END
   noremap <C-l> <C-W>l
 
   noremap <silent> <Leader>q :cclose<CR>
-  noremap <Leader>t :Tabularize<Space>/
+  noremap <silent> <Leader>t :Tabularize<Space>/
   noremap <silent> <Leader>n :noh<CR>
+  nnoremap <silent> <Leader>s :vsplit<CR>
+  nnoremap <silent> <Leader>x :TagbarToggle<CR>
 
-  " Switch buffers by left-right arrows
-  nmap <silent> <Left> :bprevious<CR>
-  nmap <silent> <Right> :bnext<CR>
-  nmap <Leader>s :vsplit<CR>
-
-  " I do not use display lines, only real
+  " Jump between display lines with j/k too
   nnoremap k gk
   nnoremap j gj
 
