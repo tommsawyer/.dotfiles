@@ -9,28 +9,28 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-commentary'           " comments
     Plug 'vim-airline/vim-airline'        " status bar
     Plug 'vim-airline/vim-airline-themes' " status bar themes
-    Plug 'Shougo/vimproc.vim'
-    Plug 'Shougo/unite.vim'               " find in project, run some cmds, etc
-    Plug 'tsukkee/unite-tag'              " unite ctags support
+    Plug 'Shougo/denite.nvim'
     Plug 'alvan/vim-closetag'             " autoclose html tags
     Plug 'mhinz/vim-startify'             " start screen
     Plug 'Chiel92/vim-autoformat'         " autoformat code
     Plug 'vim-syntastic/syntastic'        " check errors
     Plug 'terryma/vim-multiple-cursors'   " multiple cursors sublime-style
+    Plug 'thinca/vim-quickrun'            " run code
 
     " Git
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
         Plug 'tommcdo/vim-fubitive' " :Gbrowse for bitbucket
-        Plug 'gregsexton/gitv'
 
     " Snippets
-        Plug 'SirVer/ultisnips'
-        Plug 'honza/vim-snippets'
+        Plug 'Shougo/neosnippet.vim'
+        Plug 'Shougo/neosnippet-snippets'
         Plug 'mattn/emmet-vim'
 
     " Autocompletion
-        Plug 'Valloric/YouCompleteMe'
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+        Plug 'carlitux/deoplete-ternjs'
+        Plug 'mhartington/nvim-typescript'
 
     " Syntax highlighing
         Plug 'digitaltoad/vim-pug'          " Jade
@@ -67,16 +67,18 @@ let g:mapleader=','
 colorscheme nord
 set nocompatible
 set t_CO=256
+set hidden
 syntax on
 " add new vertical split in the right-hand side
 set splitright
+set splitbelow
 set encoding=utf8
 set nostartofline
 set relativenumber
 set number
 set expandtab
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set shiftround
 set smarttab
 " no swaps and backups, use git instead
@@ -101,6 +103,8 @@ set autoread
 set shell=/bin/zsh
 " show suggestions when completing commands
 set wildmenu
+" do not show current mode, because it is displayed by airline
+set noshowmode
 filetype on
 filetype plugin on
 set scrolloff=5
@@ -146,9 +150,8 @@ augroup HoldenAutocmds
   autocmd FileType python nnoremap <silent> gfr :call pymode#rope#find_it()<CR>
   autocmd FileType python nnoremap <silent> gr :call pymode#rope#rename()<CR>
 
-  " Refactoring menu
-  autocmd FileType typescript nnoremap <silent> <Leader>r :Unite -silent -start-insert menu:typescript_refactoring<CR>
-  autocmd FileType javascript nnoremap <silent> <Leader>r :Unite -silent -start-insert menu:javascript_refactoring<CR>
+  " Autoclose preview window
+  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
   " call emmet by tab in html files
   autocmd FileType html imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
@@ -160,59 +163,36 @@ augroup END
 
 " Plugin settings
 
-"  Unite
-    let g:unite_source_grep_command="ag" " ag is much faster than grep
-    let g:unite_source_grep_default_opts="--nogroup --nocolor --ignore='.git' --ignore='node_modules'"
-    let g:unite_enable_start_insert = 1
-    let g:unite_split_rule = "botright"
-    let g:unite_force_overwrite_statusline = 0
-    let g:unite_winheight = 10
-    " Enable fuzzy search
-        call unite#filters#matcher_default#use(['matcher_fuzzy'])
-    " Ignore node_modules
-        call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', './node_modules/')
+" QuickRun
+  let g:quickrun_config = {
+      \'*': {
+      \'outputter/buffer/split': ':10split'},}
+  noremap <silent> <F5> :QuickRun<CR>
+
+"  Denite
+      call denite#custom#option('default', {
+                \ 'prompt': '>',
+                \ 'winheight': 10,
+                \ })
+      call denite#custom#var('file_rec', 'command',
+                  \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+      call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+                  \ [ '.git/', '.ropeproject/', '__pycache__/',
+                  \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/', 'node_modules/'])
+      call denite#custom#var('grep', 'command', ['ag'])
+      call denite#custom#var('grep', 'default_opts',
+                  \ ['-i', '--vimgrep'])
+      call denite#custom#var('grep', 'recursive_opts', [])
+      call denite#custom#var('grep', 'pattern_opt', [])
+      call denite#custom#var('grep', 'separator', ['--'])
+      call denite#custom#var('grep', 'final_opts', [])
     " Key bindings
       " fuzzy-search in filenames
-        noremap <Leader>o :<C-u>Unite -start-insert file_rec/async:!<CR>
+        noremap <Leader>o :Denite file_rec -highlight-mode-insert=Search<CR>
       " fuzzy-search in opened buffers
-        noremap <Leader>b :<C-u>Unite -start-insert buffer<CR>
-      " fuzzy-search tags
-        noremap <Leader>z :<C-u>Unite -start-insert tag<CR>
+        noremap <Leader>b :Denite buffer -highlight-mode-insert=Search<CR>
       " search text in project
-        noremap <Leader>f :Unite grep:.<CR>
-      " git menu
-        noremap <silent> <Leader>g :Unite -silent -start-insert menu:git<CR>
-    " Menus
-        let g:unite_source_menu_menus = get(g:, 'unite_source_menu_menus', {})
-
-        let g:unite_source_menu_menus.git = {
-            \'description': '  Git commands'
-            \}
-        let g:unite_source_menu_menus.git.command_candidates = [
-                    \['    status', 'Gstatus'],
-                    \['    blame ', 'Gblame'],
-                    \['    diff  ', 'Gdiff'],
-                    \['    log   ', 'Glog']
-                    \]
-
-        let g:unite_source_menu_menus.typescript_refactoring = {
-            \'description': '  TypeScript Refactoring'
-            \}
-        let g:unite_source_menu_menus.typescript_refactoring.command_candidates = [
-                    \['    rename', 'TsuquyomiRenameSymbol'],
-                    \['    show referencies', 'TsuquyomiReferences'],
-                    \['    go to definition', 'TsuquyomiDefinition'],
-                    \['    import', 'TsuquyomiImport']
-                    \]
-
-        let g:unite_source_menu_menus.javascript_refactoring = {
-            \'description': '  JavaScript Refactoring'
-            \}
-        let g:unite_source_menu_menus.javascript_refactoring.command_candidates = [
-                    \['    rename', 'TernRename'],
-                    \['    show referencies', 'TernRef'],
-                    \['    go to definition', 'TernDef'],
-                    \]
+        noremap <Leader>f :Denite grep:. -highlight-mode-insert=Search<CR>
 
 " TsuQuyomi
     " use single quotes on import
@@ -227,14 +207,6 @@ augroup END
     let g:NERDTreeWinSize = 35
     map <silent> <Leader><Leader> :NERDTreeToggle<CR>
     nmap <silent> <Leader>a :NERDTreeFind<CR>
-
-"  YouCompleteMe
-  " Disable YouCompleteMe calling by tab to force ultisnips work well
-    let g:ycm_key_list_select_completion=[]
-    let g:ycm_key_list_previous_completion=[]
-  " Autoclose docs after completion
-    let g:ycm_autoclose_preview_window_after_completion = 1
-    let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "  Airline
   " Always show airline status bar
@@ -265,10 +237,22 @@ augroup END
         \ 'files'
         \ ]
 
-"  UltiSnips
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsJumpForwardTrigger="<c-b>"
-  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"  Deoplete
+    let g:deoplete#enable_at_startup = 1
+
+" Neocomplete
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    imap <expr><TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ neosnippet#expandable_or_jumpable() ?
+    \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    " For conceal markers.
+    if has('conceal')
+    set conceallevel=2 concealcursor=niv
+    endif
 
 "  MatchTagAlways
   " Color of matching tags
@@ -280,7 +264,6 @@ augroup END
   let g:pymode_folding = 0
 
 " Key bindings
-
   " Change buffer by ctrl + h,j,k,l
   noremap <C-j> <C-W>j
   noremap <C-k> <C-W>k
@@ -296,6 +279,8 @@ augroup END
   " Jump between display lines with j/k too
   nnoremap k gk
   nnoremap j gj
+
+  nnoremap <silent> <F7> :Autoformat<CR>
 
   " Resize vertical split by Ctrl + up/down
   nnoremap <C-up> 7<C-w>>
