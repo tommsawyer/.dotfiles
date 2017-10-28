@@ -22,7 +22,7 @@ call plug#begin('~/.vim/plugged')
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
         Plug 'tommcdo/vim-fubitive'         " :Gbrowse for bitbucket
-        Plug 'github.com/tpope/vim-rhubarb' " :Gbrowse for github
+        Plug 'tpope/vim-rhubarb' " :Gbrowse for github
 
     " Snippets
         Plug 'Shougo/neosnippet.vim'
