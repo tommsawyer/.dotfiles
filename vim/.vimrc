@@ -9,18 +9,20 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-commentary'           " comments
     Plug 'vim-airline/vim-airline'        " status bar
     Plug 'vim-airline/vim-airline-themes' " status bar themes
-    Plug 'Shougo/denite.nvim'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
     Plug 'alvan/vim-closetag'             " autoclose html tags
     Plug 'mhinz/vim-startify'             " start screen
     Plug 'Chiel92/vim-autoformat'         " autoformat code
     Plug 'vim-syntastic/syntastic'        " check errors
     Plug 'terryma/vim-multiple-cursors'   " multiple cursors sublime-style
-    Plug 'thinca/vim-quickrun'            " run code
+    Plug 'editorconfig/editorconfig-vim'  " http://editorconfig.org
 
     " Git
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
-        Plug 'tommcdo/vim-fubitive' " :Gbrowse for bitbucket
+        Plug 'tommcdo/vim-fubitive'         " :Gbrowse for bitbucket
+        Plug 'github.com/tpope/vim-rhubarb' " :Gbrowse for github
 
     " Snippets
         Plug 'Shougo/neosnippet.vim'
@@ -31,6 +33,8 @@ call plug#begin('~/.vim/plugged')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'carlitux/deoplete-ternjs'
         Plug 'mhartington/nvim-typescript'
+        Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+        Plug 'zchee/deoplete-go', { 'do': 'make'}
 
     " Syntax highlighing
         Plug 'digitaltoad/vim-pug'          " Jade
@@ -45,13 +49,11 @@ call plug#begin('~/.vim/plugged')
 
     " IDE-like features
       Plug 'ternjs/tern_for_vim'
+      Plug 'geekjuice/vim-mocha'
+      Plug 'fatih/vim-go'
       Plug 'moll/vim-node'           " nodejs
       Plug 'Quramy/tsuquyomi'        " typescript
-      Plug 'klen/python-mode'        " python
       Plug 'bdauria/angular-cli.vim' " angular 2 cli
-
-      Plug 'majutsushi/tagbar'
-      Plug 'craigemery/vim-autotag'  " ctags
 
     " Look
       " Color schemes
@@ -77,8 +79,8 @@ set nostartofline
 set relativenumber
 set number
 set expandtab
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set shiftround
 set smarttab
 " no swaps and backups, use git instead
@@ -118,7 +120,7 @@ endif
 
 " Draw whitespaces
 set list
-set listchars=space:·,tab:▷\
+set listchars=space:·,tab:>>
 highlight SpecialKey ctermbg=None ctermfg=243
 
 " Autocmds
@@ -144,11 +146,11 @@ augroup HoldenAutocmds
   autocmd FileType javascript nnoremap <silent> gd :TernDef<CR>:noh<CR>
   autocmd FileType javascript nnoremap gfr :TernRefs<CR>
   autocmd FileType javascript nnoremap gr :TernRename<CR>
-  "
-  " Python Refactor Bindings
-  autocmd FileType python nnoremap <silent> gd :call pymode#rope#goto_definition()<CR>
-  autocmd FileType python nnoremap <silent> gfr :call pymode#rope#find_it()<CR>
-  autocmd FileType python nnoremap <silent> gr :call pymode#rope#rename()<CR>
+
+  " Go Refactor Bindings
+  autocmd FileType go nnoremap <silent> gd :GoDef<CR>:noh<CR>
+  autocmd FileType go nnoremap gfr :GoReferrers<CR>
+  autocmd FileType go nnoremap gr :GoRename<CR>
 
   " Autoclose preview window
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
@@ -163,36 +165,35 @@ augroup END
 
 " Plugin settings
 
+"Mocha
+  let g:mocha_js_command = "!NODE_ENV=test mocha --recursive {spec}"
+  nmap <Leader>mc :call RunCurrentSpecFile()<CR>
+  nmap <Leader>mn :call RunNearestSpec()<CR>
+
 " QuickRun
   let g:quickrun_config = {
       \'*': {
       \'outputter/buffer/split': ':10split'},}
   noremap <silent> <F5> :QuickRun<CR>
 
-"  Denite
-      call denite#custom#option('default', {
-                \ 'prompt': '>',
-                \ 'winheight': 10,
-                \ })
-      call denite#custom#var('file_rec', 'command',
-                  \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-      call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-                  \ [ '.git/', '.ropeproject/', '__pycache__/',
-                  \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/', 'node_modules/'])
-      call denite#custom#var('grep', 'command', ['ag'])
-      call denite#custom#var('grep', 'default_opts',
-                  \ ['-i', '--vimgrep'])
-      call denite#custom#var('grep', 'recursive_opts', [])
-      call denite#custom#var('grep', 'pattern_opt', [])
-      call denite#custom#var('grep', 'separator', ['--'])
-      call denite#custom#var('grep', 'final_opts', [])
-    " Key bindings
-      " fuzzy-search in filenames
-        noremap <Leader>o :Denite file_rec -highlight-mode-insert=Search<CR>
-      " fuzzy-search in opened buffers
-        noremap <Leader>b :Denite buffer -highlight-mode-insert=Search<CR>
-      " search text in project
-        noremap <Leader>f :Denite grep:. -highlight-mode-insert=Search<CR>
+function! IsGitRepo()
+  let status = system('git status')
+  return status !~ "fatal"
+endfunction
+
+" FZF
+  " Key bindings
+    " fuzzy-search in filenames
+    if IsGitRepo()
+      noremap <Leader>o :GFiles<CR>
+    else
+      noremap <Leader>o :Files<CR>
+    endif
+
+    " fuzzy-search in opened buffers
+    noremap <Leader>b :Buffers<CR>
+    " search text in project
+    noremap <Leader>f :Ag<Space>
 
 " TsuQuyomi
     " use single quotes on import
@@ -222,6 +223,12 @@ augroup END
     let g:syntastic_always_populate_loc_list = 1
     let g:syntastic_auto_loc_list = 1
   let g:syntastic_html_checkers = ['htmlhint']
+  let g:syntastic_javascript_checkers = ['eslint']
+  let g:syntastic_go_checkers = ['']
+
+" Vim-go
+  let g:go_snippet_engine = "neosnippet"
+  let g:go_metalinter_autosave = 1
 
 "  Startify
   let g:startify_change_to_dir = 0
@@ -239,6 +246,9 @@ augroup END
 
 "  Deoplete
     let g:deoplete#enable_at_startup = 1
+    let g:tern_request_timeout = 1
+    let g:tern#command = ["tern"]
+    let g:tern#arguments = ["--persistent"]
 
 " Neocomplete
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -249,9 +259,13 @@ augroup END
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
     \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
+    xmap <C-l> <Plug>(neosnippet_expand_target)
+" Neosnippets
+    let g:neosnippet#enable_snipmate_compatibility = 1
+
     " For conceal markers.
     if has('conceal')
-    set conceallevel=2 concealcursor=niv
+      set conceallevel=2 concealcursor=niv
     endif
 
 "  MatchTagAlways
@@ -259,9 +273,6 @@ augroup END
     let g:mta_use_matchparen_group = 0
     let g:mta_set_default_matchtag_color = 0
     highlight MatchTag ctermfg=lightblue ctermbg=23 guifg=black guibg=lightgreen
-
-" Python Mode
-  let g:pymode_folding = 0
 
 " Key bindings
   " Change buffer by ctrl + h,j,k,l
@@ -274,13 +285,13 @@ augroup END
   noremap <silent> <Leader>t :Tabularize<Space>/
   noremap <silent> <Leader>n :noh<CR>
   nnoremap <silent> <Leader>s :vsplit<CR>
-  nnoremap <silent> <Leader>x :TagbarToggle<CR>
 
   " Jump between display lines with j/k too
   nnoremap k gk
   nnoremap j gj
 
   nnoremap <silent> <F7> :Autoformat<CR>
+  nnoremap <silent> <F9> :GoBuild<CR>
 
   " Resize vertical split by Ctrl + up/down
   nnoremap <C-up> 7<C-w>>
@@ -292,3 +303,8 @@ augroup END
   " Move up/down visual selection by K/J
   vnoremap K :m '<-2<CR>gv=gv
   vnoremap J :m '>+1<CR>gv=gv
+  let g:go_fmt_command = "goimports"
+
+
+  "console.log macro
+  let @l = '_iconsole.log(lx$pa;=='
