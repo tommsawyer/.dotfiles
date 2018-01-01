@@ -2,58 +2,62 @@
 
 call plug#begin('~/.vim/plugged')
 
-    Plug 'scrooloose/nerdtree'            " project tree
-    Plug 'jiangmiao/auto-pairs'           " automaticly insert brackets
-    Plug 'tpope/vim-surround'             " surround text with brackets or tags
-    Plug 'godlygeek/tabular'              " align text by symbol
-    Plug 'tpope/vim-commentary'           " comments
-    Plug 'vim-airline/vim-airline'        " status bar
-    Plug 'vim-airline/vim-airline-themes' " status bar themes
+    Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }           " project tree
+    Plug 'w0rp/ale'                                                   " linter
+    Plug 'jiangmiao/auto-pairs'                                       " automaticly insert brackets
+    Plug 'tpope/vim-surround'                                         " surround text with brackets or tags
+    Plug 'godlygeek/tabular'                                          " align text by symbol
+    Plug 'tpope/vim-commentary'                                       " comments
+    Plug 'tpope/vim-eunuch'                                           " unix helpers
+    Plug 'vim-airline/vim-airline'                                    " status bar
+    Plug 'vim-airline/vim-airline-themes'                             " status bar themes
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-    Plug 'junegunn/fzf.vim'
-    Plug 'alvan/vim-closetag'             " autoclose html tags
-    Plug 'mhinz/vim-startify'             " start screen
-    Plug 'Chiel92/vim-autoformat'         " autoformat code
-    Plug 'vim-syntastic/syntastic'        " check errors
-    Plug 'terryma/vim-multiple-cursors'   " multiple cursors sublime-style
-    Plug 'editorconfig/editorconfig-vim'  " http://editorconfig.org
+    Plug 'junegunn/fzf.vim'                                           " fuzzy finder
+    Plug 'alvan/vim-closetag'                                         " autoclose html tags
+    Plug 'mhinz/vim-startify'                                         " start screen
+    Plug 'Chiel92/vim-autoformat'                                     " autoformat code
+    Plug 'terryma/vim-multiple-cursors'                               " multiple cursors sublime-style
+    Plug 'editorconfig/editorconfig-vim'                              " http://editorconfig.org
+    Plug 'machakann/vim-highlightedyank'                              " highlight text on yank
+    Plug 'AndrewRadev/splitjoin.vim'                                  " join or split struct/objects etc
 
     " Git
-        Plug 'tpope/vim-fugitive'
-        Plug 'airblade/vim-gitgutter'
-        Plug 'tommcdo/vim-fubitive'         " :Gbrowse for bitbucket
-        Plug 'tpope/vim-rhubarb' " :Gbrowse for github
+        Plug 'tpope/vim-fugitive'     " git core for vim
+        Plug 'airblade/vim-gitgutter' " show icons on editor left side
+        Plug 'tommcdo/vim-fubitive'   " :Gbrowse for bitbucket
+        Plug 'tpope/vim-rhubarb'      " :Gbrowse for github
 
     " Snippets
-        Plug 'Shougo/neosnippet.vim'
-        Plug 'Shougo/neosnippet-snippets'
-        Plug 'mattn/emmet-vim'
+        Plug 'Shougo/neosnippet.vim'                            " snippet engine
+        Plug 'Shougo/neosnippet-snippets'                       " snippets for many languages
+        Plug 'mattn/emmet-vim', {'for': ['html', 'javascript']} " emmet-like behaviour for html
 
     " Autocompletion
-        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        Plug 'carlitux/deoplete-ternjs'
-        Plug 'mhartington/nvim-typescript'
-        Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-        Plug 'zchee/deoplete-go', { 'do': 'make'}
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                               " completion engine
+        Plug 'carlitux/deoplete-ternjs'                                                             " javascript completion
+        Plug 'mhartington/nvim-typescript'                                                          " typescript completion
+        Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' } " golang completion daemon
+        Plug 'zchee/deoplete-go', { 'do': 'make'}                                                   " golang completion
 
     " Syntax highlighing
-        Plug 'digitaltoad/vim-pug'          " Jade
-        Plug 'jelera/vim-javascript-syntax' " JS
-        Plug 'isRuslan/vim-es6'             " JS es6
-        Plug 'elzr/vim-json'                " JSON
-        Plug 'othree/html5-syntax.vim'      " HTML
-        Plug 'hail2u/vim-css3-syntax'       " CSS3
-        Plug 'HerringtonDarkholme/yats.vim' " TypeScript
-        Plug 'Valloric/MatchTagAlways'      " Highlight matching tags
-        Plug 'tmhedberg/matchit'            " Extended % for html
+        Plug 'digitaltoad/vim-pug'             " Jade
+        Plug 'jelera/vim-javascript-syntax'    " JS
+        Plug 'isRuslan/vim-es6'                " JS es6
+        Plug 'elzr/vim-json'                   " JSON
+        Plug 'othree/html5-syntax.vim'         " HTML
+        Plug 'hail2u/vim-css3-syntax'          " CSS3
+        Plug 'HerringtonDarkholme/yats.vim'    " TypeScript
+        Plug 'Valloric/MatchTagAlways'         " Highlight matching tags
+        Plug 'tmhedberg/matchit'               " Extended % for html
+        Plug 'ekalinin/Dockerfile.vim'         " Dockerfile
+        Plug 'martinda/Jenkinsfile-vim-syntax' " Jenkinsfile
 
     " IDE-like features
-      Plug 'ternjs/tern_for_vim'
-      Plug 'geekjuice/vim-mocha'
-      Plug 'fatih/vim-go'
-      Plug 'moll/vim-node'           " nodejs
-      Plug 'Quramy/tsuquyomi'        " typescript
-      Plug 'bdauria/angular-cli.vim' " angular 2 cli
+      Plug 'ternjs/tern_for_vim', { 'for': 'javascript' } " javascript
+      Plug 'fatih/vim-go', { 'for' : 'go' }               " golang tools
+      Plug 'godoctor/godoctor.vim', { 'for' : 'go' }      " golang refactoring
+      Plug 'moll/vim-node'                                " nodejs tools
+      Plug 'Quramy/tsuquyomi'                             " typescript tools
 
     " Look
       " Color schemes
@@ -90,6 +94,8 @@ set noswapfile
 " highlight search word, rerun when typing
 set hlsearch
 set incsearch
+" nvim feature, preview :%s command
+set inccommand=split
 " ignore case when searching, but dont ignore when search word contains uppercase
 set ignorecase
 set smartcase
@@ -111,6 +117,9 @@ filetype on
 filetype plugin on
 set scrolloff=5
 set sidescrolloff=5
+set updatetime=800
+" type of vertical split characters
+set fillchars+=vert:┃ 
 
 if &term =~ '256color'
   " Disable Background Color Erase (BCE) so that color schemes
@@ -120,7 +129,7 @@ endif
 
 " Draw whitespaces
 set list
-set listchars=space:·,tab:>>
+set listchars=space:·,tab:──
 highlight SpecialKey ctermbg=None ctermfg=243
 
 " Autocmds
@@ -134,7 +143,7 @@ augroup HoldenAutocmds
   autocmd FileType nerdtree,qf,fugitiveblame,gitcommit setlocal nolist
 
   " Remove trailing spaces before saving file
-  let trailing_spaces_blacklist = ['markdown'] " except markdown
+  let trailing_spaces_blacklist = ['markdown', 'vim', 'go'] " exceptions
   autocmd BufWritePre * if index(trailing_spaces_blacklist, &ft) < 0 | RemoveTrailingSpaces
 
   " TypeScript Refactor Bindings
@@ -148,52 +157,40 @@ augroup HoldenAutocmds
   autocmd FileType javascript nnoremap gr :TernRename<CR>
 
   " Go Refactor Bindings
+  let g:go_fmt_command = "goimports"
   autocmd FileType go nnoremap <silent> gd :GoDef<CR>:noh<CR>
   autocmd FileType go nnoremap gfr :GoReferrers<CR>
   autocmd FileType go nnoremap gr :GoRename<CR>
+  autocmd FileType go vnoremap ge :GoRefactor extract<Space>
+  autocmd FileType go vnoremap gt :GoRefactor toggle<CR>
+  autocmd FileType go vnoremap gv :GoRefactor var<Space>
+
+  autocmd FileType go nnoremap <Leader>d :GoDeclsDir<CR>
+  autocmd Filetype go
+        \  command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+        \| command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+        \| command! -bang AS call go#alternate#Switch(<bang>0, 'split')
 
   " Autoclose preview window
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
   " call emmet by tab in html files
   autocmd FileType html imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
-  " Load Angular 2 cli plugin when @angular installed in node_modules
-  autocmd VimEnter * if globpath('.,..','node_modules/@angular') != '' | call angular_cli#init() | endif
 augroup END
 
 
 " Plugin settings
-
-"Mocha
-  let g:mocha_js_command = "!NODE_ENV=test mocha --recursive {spec}"
-  nmap <Leader>mc :call RunCurrentSpecFile()<CR>
-  nmap <Leader>mn :call RunNearestSpec()<CR>
-
-" QuickRun
-  let g:quickrun_config = {
-      \'*': {
-      \'outputter/buffer/split': ':10split'},}
-  noremap <silent> <F5> :QuickRun<CR>
-
-function! IsGitRepo()
-  let status = system('git status')
-  return status !~ "fatal"
-endfunction
+" highlighted yank
+  let g:highlightedyank_highlight_duration = 200
 
 " FZF
   " Key bindings
-    " fuzzy-search in filenames
-    if IsGitRepo()
-      noremap <Leader>o :GFiles<CR>
-    else
-      noremap <Leader>o :Files<CR>
-    endif
-
-    " fuzzy-search in opened buffers
-    noremap <Leader>b :Buffers<CR>
-    " search text in project
-    noremap <Leader>f :Ag<Space>
+  " fuzzy-search in filenames
+  noremap <Leader>o :Files<CR>
+  " fuzzy-search in opened buffers
+  noremap <Leader>b :Buffers<CR>
+  " search text in project
+  noremap <Leader>f :Ag<Space>
 
 " TsuQuyomi
     " use single quotes on import
@@ -217,18 +214,23 @@ endfunction
   let g:airline_enable_fugitive=1
   let g:airline_fugitive_prefix = '⎇ '
   let g:airline_section_c = '%t'
-
-"  Syntastic
-  " Syntastic always show errors in quickfix
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list = 1
-  let g:syntastic_html_checkers = ['htmlhint']
-  let g:syntastic_javascript_checkers = ['eslint']
-  let g:syntastic_go_checkers = ['']
+  let g:airline_mode_map = {
+        \ '__' : '-',
+        \ 'n'  : 'N',
+        \ 'i'  : 'I',
+        \ 'R'  : 'R',
+        \ 'c'  : 'C',
+        \ 'v'  : 'V',
+        \ 'V'  : 'V',
+        \ 's'  : 'S',
+        \ 'S'  : 'S',
+        \ }
 
 " Vim-go
   let g:go_snippet_engine = "neosnippet"
   let g:go_metalinter_autosave = 1
+  let g:go_auto_type_info = 1
+  let g:go_updatetime = 500
 
 "  Startify
   let g:startify_change_to_dir = 0
@@ -275,16 +277,27 @@ endfunction
     highlight MatchTag ctermfg=lightblue ctermbg=23 guifg=black guibg=lightgreen
 
 " Key bindings
-  " Change buffer by ctrl + h,j,k,l
-  noremap <C-j> <C-W>j
-  noremap <C-k> <C-W>k
-  noremap <C-h> <C-W>h
-  noremap <C-l> <C-W>l
+  func! WinMove(key)
+    let t:curwin = winnr()
+    exec "wincmd ".a:key
+    if (t:curwin == winnr())
+      if (match(a:key,'[jk]'))
+        wincmd v
+      else
+        wincmd s
+      endif
+      exec "wincmd ".a:key
+    endif
+  endfu
+ 
+  nnoremap <silent> <C-h> :call WinMove('h')<CR>
+  nnoremap <silent> <C-j> :call WinMove('j')<CR>
+  nnoremap <silent> <C-k> :call WinMove('k')<CR>
+  nnoremap <silent> <C-l> :call WinMove('l')<CR>
 
   noremap <silent> <Leader>q :cclose<CR>
   noremap <silent> <Leader>t :Tabularize<Space>/
   noremap <silent> <Leader>n :noh<CR>
-  nnoremap <silent> <Leader>s :vsplit<CR>
 
   " Jump between display lines with j/k too
   nnoremap k gk
@@ -297,14 +310,26 @@ endfunction
   nnoremap <C-up> 7<C-w>>
   nnoremap <C-down> 7<C-w><
 
+  nnoremap <Left> :lprev<CR>
+  nnoremap <Right> :lnext<CR>
+
   " S is shadowed by cc, so set it to smth useful
   nnoremap S i<CR><Esc><right>
+
 
   " Move up/down visual selection by K/J
   vnoremap K :m '<-2<CR>gv=gv
   vnoremap J :m '>+1<CR>gv=gv
-  let g:go_fmt_command = "goimports"
 
+  " workaround using multiple cursors with neocomplete
+  function! Multiple_cursors_before()
+    if exists(':NeoCompleteLock')==2
+      exe 'NeoCompleteLock'
+    endif
+  endfunction
 
-  "console.log macro
-  let @l = '_iconsole.log(lx$pa;=='
+  function! Multiple_cursors_after()
+    if exists(':NeoCompleteUnlock')==2
+      exe 'NeoCompleteUnlock'
+    endif
+  endfunction
