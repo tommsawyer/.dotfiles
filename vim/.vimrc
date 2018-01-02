@@ -5,8 +5,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }           " project tree
     Plug 'w0rp/ale'                                                   " linter
     Plug 'jiangmiao/auto-pairs'                                       " automaticly insert brackets
-    Plug 'tpope/vim-surround'                                         " surround text with brackets or tags
     Plug 'godlygeek/tabular'                                          " align text by symbol
+    Plug 'tpope/vim-surround'                                         " surround text with brackets or tags
     Plug 'tpope/vim-commentary'                                       " comments
     Plug 'tpope/vim-eunuch'                                           " unix helpers
     Plug 'vim-airline/vim-airline'                                    " status bar
@@ -23,6 +23,7 @@ call plug#begin('~/.vim/plugged')
 
     " Git
         Plug 'tpope/vim-fugitive'     " git core for vim
+        Plug 'jreybert/vimagit'       " better git committing
         Plug 'airblade/vim-gitgutter' " show icons on editor left side
         Plug 'tommcdo/vim-fubitive'   " :Gbrowse for bitbucket
         Plug 'tpope/vim-rhubarb'      " :Gbrowse for github
@@ -133,9 +134,11 @@ set listchars=space:·,tab:──
 highlight SpecialKey ctermbg=None ctermfg=243
 
 " Autocmds
+
 augroup HoldenAutocmds
   autocmd!
 
+  autocmd FileType qf setlocal wrap
   autocmd InsertEnter * set norelativenumber
   autocmd InsertLeave * set relativenumber
 
@@ -143,7 +146,7 @@ augroup HoldenAutocmds
   autocmd FileType nerdtree,qf,fugitiveblame,gitcommit setlocal nolist
 
   " Remove trailing spaces before saving file
-  let trailing_spaces_blacklist = ['markdown', 'vim', 'go'] " exceptions
+  let trailing_spaces_blacklist = ['markdown', 'vim'] " exceptions
   autocmd BufWritePre * if index(trailing_spaces_blacklist, &ft) < 0 | RemoveTrailingSpaces
 
   " TypeScript Refactor Bindings
@@ -157,7 +160,6 @@ augroup HoldenAutocmds
   autocmd FileType javascript nnoremap gr :TernRename<CR>
 
   " Go Refactor Bindings
-  let g:go_fmt_command = "goimports"
   autocmd FileType go nnoremap <silent> gd :GoDef<CR>:noh<CR>
   autocmd FileType go nnoremap gfr :GoReferrers<CR>
   autocmd FileType go nnoremap gr :GoRename<CR>
@@ -171,15 +173,16 @@ augroup HoldenAutocmds
         \| command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
         \| command! -bang AS call go#alternate#Switch(<bang>0, 'split')
 
-  " Autoclose preview window
-  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
   " call emmet by tab in html files
   autocmd FileType html imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 augroup END
 
 
 " Plugin settings
+
+" Vimagit
+  let g:magit_default_sections = ['commit', 'staged', 'unstaged']
+
 " highlighted yank
   let g:highlightedyank_highlight_duration = 200
 
@@ -209,28 +212,28 @@ augroup END
 "  Airline
   " Always show airline status bar
     set laststatus=2
-  " Use powerline fonts
+
     let g:airline_powerline_fonts = 1
-  let g:airline_enable_fugitive=1
-  let g:airline_fugitive_prefix = '⎇ '
-  let g:airline_section_c = '%t'
-  let g:airline_mode_map = {
-        \ '__' : '-',
-        \ 'n'  : 'N',
-        \ 'i'  : 'I',
-        \ 'R'  : 'R',
-        \ 'c'  : 'C',
-        \ 'v'  : 'V',
-        \ 'V'  : 'V',
-        \ 's'  : 'S',
-        \ 'S'  : 'S',
-        \ }
+    let g:airline_enable_fugitive=1
+    let g:airline_fugitive_prefix = '⎇ '
+    let g:airline_mode_map = {
+          \ '__' : '-',
+          \ 'n'  : 'N',
+          \ 'i'  : 'I',
+          \ 'R'  : 'R',
+          \ 'c'  : 'C',
+          \ 'v'  : 'V',
+          \ 'V'  : 'V',
+          \ 's'  : 'S',
+          \ 'S'  : 'S',
+          \ }
 
 " Vim-go
   let g:go_snippet_engine = "neosnippet"
-  let g:go_metalinter_autosave = 1
   let g:go_auto_type_info = 1
   let g:go_updatetime = 500
+  let g:go_fmt_autosave = 1
+  let g:go_fmt_command = "goimports"
 
 "  Startify
   let g:startify_change_to_dir = 0
@@ -252,6 +255,15 @@ augroup END
     let g:tern#command = ["tern"]
     let g:tern#arguments = ["--persistent"]
 
+    " workaround using multiple cursors with deoplete
+    function! Multiple_cursors_before()
+      let b:deoplete_disable_auto_complete = 1
+    endfunction
+
+    function! Multiple_cursors_after()
+      let b:deoplete_disable_auto_complete = 0
+    endfunction
+
 " Neocomplete
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     imap <expr><TAB>
@@ -261,7 +273,8 @@ augroup END
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
     \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-    xmap <C-l> <Plug>(neosnippet_expand_target)
+    xmap <C-k> <Plug>(neosnippet_expand_target)
+
 " Neosnippets
     let g:neosnippet#enable_snipmate_compatibility = 1
 
@@ -295,7 +308,6 @@ augroup END
   nnoremap <silent> <C-k> :call WinMove('k')<CR>
   nnoremap <silent> <C-l> :call WinMove('l')<CR>
 
-  noremap <silent> <Leader>q :cclose<CR>
   noremap <silent> <Leader>t :Tabularize<Space>/
   noremap <silent> <Leader>n :noh<CR>
 
@@ -316,20 +328,7 @@ augroup END
   " S is shadowed by cc, so set it to smth useful
   nnoremap S i<CR><Esc><right>
 
-
   " Move up/down visual selection by K/J
   vnoremap K :m '<-2<CR>gv=gv
   vnoremap J :m '>+1<CR>gv=gv
 
-  " workaround using multiple cursors with neocomplete
-  function! Multiple_cursors_before()
-    if exists(':NeoCompleteLock')==2
-      exe 'NeoCompleteLock'
-    endif
-  endfunction
-
-  function! Multiple_cursors_after()
-    if exists(':NeoCompleteUnlock')==2
-      exe 'NeoCompleteUnlock'
-    endif
-  endfunction
