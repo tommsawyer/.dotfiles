@@ -30,7 +30,7 @@ call plug#begin('~/.vim/plugged')
 
     " Snippets
         Plug 'Shougo/neosnippet.vim'                            " snippet engine
-        Plug 'Shougo/neosnippet-snippets'                       " snippets for many languages
+        Plug 'tommsawyer/snippets'                              " my snippets collection
         Plug 'mattn/emmet-vim', {'for': ['html', 'javascript']} " emmet-like behaviour for html
 
     " Autocompletion
@@ -276,7 +276,10 @@ augroup END
     xmap <C-k> <Plug>(neosnippet_expand_target)
 
 " Neosnippets
-    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#disable_runtime_snippets = {
+      \   '_' : 1,
+      \ }
+    let g:neosnippet#snippets_directory='~/.vim/plugged/snippets'
 
     " For conceal markers.
     if has('conceal')
@@ -322,8 +325,8 @@ augroup END
   nnoremap <C-up> 7<C-w>>
   nnoremap <C-down> 7<C-w><
 
-  nnoremap <Left> :lprev<CR>
-  nnoremap <Right> :lnext<CR>
+  nnoremap <Up> :lprev<CR>
+  nnoremap <Down> :lnext<CR>
 
   " S is shadowed by cc, so set it to smth useful
   nnoremap S i<CR><Esc><right>
