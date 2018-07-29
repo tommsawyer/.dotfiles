@@ -1,14 +1,12 @@
 " Plugins
 
 call plug#begin('~/.vim/plugged')
-
     Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }           " project tree
     Plug 'w0rp/ale'                                                   " linter
     Plug 'jiangmiao/auto-pairs'                                       " automaticly insert brackets
     Plug 'godlygeek/tabular'                                          " align text by symbol
     Plug 'tpope/vim-surround'                                         " surround text with brackets or tags
     Plug 'tpope/vim-commentary'                                       " comments
-    Plug 'tpope/vim-eunuch'                                           " unix helpers
     Plug 'vim-airline/vim-airline'                                    " status bar
     Plug 'vim-airline/vim-airline-themes'                             " status bar themes
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -20,11 +18,14 @@ call plug#begin('~/.vim/plugged')
     Plug 'editorconfig/editorconfig-vim'                              " http://editorconfig.org
     Plug 'machakann/vim-highlightedyank'                              " highlight text on yank
     Plug 'AndrewRadev/splitjoin.vim'                                  " join or split struct/objects etc
+    Plug 'iamcco/markdown-preview.vim'                                " preview for Markdown
+    Plug 'tpope/vim-unimpaired'                                       " additional helpful shortcuts
+    Plug 'wellle/targets.vim'                                         " additional text objects
+    Plug 'KabbAmine/zeavim.vim'                                       " shortcuts for Zeal
 
     " Git
         Plug 'tpope/vim-fugitive'     " git core for vim
-        Plug 'jreybert/vimagit'       " better git committing
-        Plug 'airblade/vim-gitgutter' " show icons on editor left side
+        Plug 'airblade/vim-gitgutter' " show icons on editor left side; chunk preview/stage/undo
         Plug 'tommcdo/vim-fubitive'   " :Gbrowse for bitbucket
         Plug 'tpope/vim-rhubarb'      " :Gbrowse for github
 
@@ -41,7 +42,8 @@ call plug#begin('~/.vim/plugged')
         Plug 'zchee/deoplete-go', { 'do': 'make'}                                                   " golang completion
 
     " Syntax highlighing
-        Plug 'digitaltoad/vim-pug'             " Jade
+        Plug 'uarun/vim-protobuf'              " Protobuf
+        Plug 'digitaltoad/vim-pug'             " Pug(formely Jade)
         Plug 'jelera/vim-javascript-syntax'    " JS
         Plug 'isRuslan/vim-es6'                " JS es6
         Plug 'elzr/vim-json'                   " JSON
@@ -56,7 +58,6 @@ call plug#begin('~/.vim/plugged')
     " IDE-like features
       Plug 'ternjs/tern_for_vim', { 'for': 'javascript' } " javascript
       Plug 'fatih/vim-go', { 'for' : 'go' }               " golang tools
-      Plug 'godoctor/godoctor.vim', { 'for' : 'go' }      " golang refactoring
       Plug 'moll/vim-node'                                " nodejs tools
       Plug 'Quramy/tsuquyomi'                             " typescript tools
 
@@ -103,8 +104,8 @@ set smartcase
 set backspace=indent,eol,start
 " global regexps by default
 set gdefault
-" delete comment character when joining commented lines
-set formatoptions+=j
+" delete comment character when joining commented lines, insert on enter/o
+set formatoptions+=jro
 " show filename in terminal title
 set title
 " autoread file if it was changed on disk
@@ -118,9 +119,10 @@ filetype on
 filetype plugin on
 set scrolloff=5
 set sidescrolloff=5
-set updatetime=800
+set updatetime=300
 " type of vertical split characters
-set fillchars+=vert:┃ 
+set fillchars+=vert:┃
+set signcolumn=yes
 
 if &term =~ '256color'
   " Disable Background Color Erase (BCE) so that color schemes
@@ -138,12 +140,16 @@ highlight SpecialKey ctermbg=None ctermfg=243
 augroup HoldenAutocmds
   autocmd!
 
+  " Autoclose preview window
+  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
   autocmd FileType qf setlocal wrap
   autocmd InsertEnter * set norelativenumber
   autocmd InsertLeave * set relativenumber
 
   " Do not draw whitespaces not in the editor
-  autocmd FileType nerdtree,qf,fugitiveblame,gitcommit setlocal nolist
+  autocmd FileType nerdtree,qf,fugitiveblame,gitcommit,diff setlocal nolist
+  autocmd FileType nerdtree,qf,fugitiveblame,gitcommit,diff setlocal signcolumn=no
 
   " Remove trailing spaces before saving file
   let trailing_spaces_blacklist = ['markdown', 'vim'] " exceptions
@@ -162,12 +168,13 @@ augroup HoldenAutocmds
   " Go Refactor Bindings
   autocmd FileType go nnoremap <silent> gd :GoDef<CR>:noh<CR>
   autocmd FileType go nnoremap gfr :GoReferrers<CR>
-  autocmd FileType go nnoremap gr :GoRename<CR>
-  autocmd FileType go vnoremap ge :GoRefactor extract<Space>
-  autocmd FileType go vnoremap gt :GoRefactor toggle<CR>
-  autocmd FileType go vnoremap gv :GoRefactor var<Space>
-
+  autocmd FileType go nnoremap <Leader>i :GoImpl<Space>
+  autocmd FileType go nnoremap gr :GoRename <Space>
   autocmd FileType go nnoremap <Leader>d :GoDeclsDir<CR>
+  autocmd FileType go nnoremap <Leader>e :GoIfErr<CR>
+  autocmd FileType go nnoremap <silent> <Leader>c :GoCoverageToggle<CR>
+  autocmd FileType go inoremap <Leader>e <C-o>:GoIfErr<CR>
+
   autocmd Filetype go
         \  command! -bang A call go#alternate#Switch(<bang>0, 'edit')
         \| command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
@@ -180,8 +187,14 @@ augroup END
 
 " Plugin settings
 
-" Vimagit
-  let g:magit_default_sections = ['commit', 'staged', 'unstaged']
+" ALE
+  let g:ale_sign_warning = ''
+  let g:ale_sign_error = ''
+  let g:ale_linters = {'go': ['staticcheck', 'gosimple']}
+  let g:ale_go_staticcheck_lint_package=1
+
+  nnoremap <silent> ]w :ALENextWrap<CR>zz
+  nnoremap <silent> [w :ALEPreviousWrap<CR>zz
 
 " highlighted yank
   let g:highlightedyank_highlight_duration = 200
@@ -195,6 +208,11 @@ augroup END
   " search text in project
   noremap <Leader>f :Ag<Space>
 
+"  GitGutter
+    let g:gitgutter_sign_added=''
+    let g:gitgutter_sign_modified = ''
+    let g:gitgutter_sign_removed = ''
+
 " TsuQuyomi
     " use single quotes on import
     let g:tsuquyomi_single_quote_import = 1
@@ -205,7 +223,8 @@ augroup END
     let g:NERDTreeDirArrowCollapsible = ''
     let g:NERDTreeCascadeOpenSingleChildDir = 0
     let g:NERDTreeCascadeSingleChildDir = 0
-    let g:NERDTreeWinSize = 35
+    let g:NERDTreeWinSize = 30
+    let g:NERDTreeHijackNetrw=1
     map <silent> <Leader><Leader> :NERDTreeToggle<CR>
     nmap <silent> <Leader>a :NERDTreeFind<CR>
 
@@ -213,7 +232,9 @@ augroup END
   " Always show airline status bar
     set laststatus=2
 
+    let g:airline_skip_empty_sections = 1
     let g:airline_powerline_fonts = 1
+    let g:airline_section_z=""
     let g:airline_enable_fugitive=1
     let g:airline_fugitive_prefix = '⎇ '
     let g:airline_mode_map = {
@@ -236,17 +257,33 @@ augroup END
   let g:go_fmt_command = "goimports"
 
 "  Startify
+  function! s:filter_header(lines) abort
+    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
+    let centered_lines = map(copy(a:lines),
+          \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+    return centered_lines
+  endfunction
+  let header = 
+      \ map(split(system('fortune ~/.vim/fortunes | cowsay -W 50'), '\n'), '"   ". v:val') + ['','']
   let g:startify_change_to_dir = 0
-  let g:startify_files_number = 8
-  let g:startify_bookmarks = ['~/.vimrc']
-  let g:startify_custom_header =
-      \ map(split(system('fortune ~/.vim/fortunes | cowsay -W 100'), '\n'), '"   ". v:val') + ['','']
+  let g:startify_files_number = 5
+  let g:startify_custom_header = s:filter_header(header)
   let g:startify_list_order = [
         \ 'bookmarks',
-        \ ['      Recently edited files in current directory:'],
+        \ ['      Recently edited files:'],
         \ 'dir',
-        \ ['      Recently edited files:'],
-        \ 'files'
+        \ ['      Commands:'],
+        \ 'commands'
+        \ ]
+
+  let g:startify_bookmarks = ['~/.vimrc']
+  let g:startify_commands = [
+        \ {'p1': ['Update All Plugins', ':PlugUpdate']},
+        \ {'p2': ['Install New Plugins', ':PlugInstall']},
+        \ {'p3': ['Clean Old Plugins', ':PlugClean']},
+        \ {'p4': ['Upgrade vim-plug', ':PlugUpgrade']},
+        \ {'p5': ['Plugin Status', ':PlugStatus']},
+        \ {'ch': ['Check Health', ':checkhealth']}
         \ ]
 
 "  Deoplete
@@ -254,6 +291,9 @@ augroup END
     let g:tern_request_timeout = 1
     let g:tern#command = ["tern"]
     let g:tern#arguments = ["--persistent"]
+    let g:deoplete#sources#go#package_dot = 1
+    let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+    let g:deoplete#sources#go#pointer = 1
 
     " workaround using multiple cursors with deoplete
     function! Multiple_cursors_before()
@@ -266,6 +306,7 @@ augroup END
 
 " Neocomplete
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
     imap <expr><TAB>
     \ pumvisible() ? "\<C-n>" :
     \ neosnippet#expandable_or_jumpable() ?
@@ -312,7 +353,6 @@ augroup END
   nnoremap <silent> <C-l> :call WinMove('l')<CR>
 
   noremap <silent> <Leader>t :Tabularize<Space>/
-  noremap <silent> <Leader>n :noh<CR>
 
   " Jump between display lines with j/k too
   nnoremap k gk
@@ -325,13 +365,25 @@ augroup END
   nnoremap <C-up> 7<C-w>>
   nnoremap <C-down> 7<C-w><
 
-  nnoremap <Up> :lprev<CR>
-  nnoremap <Down> :lnext<CR>
-
   " S is shadowed by cc, so set it to smth useful
   nnoremap S i<CR><Esc><right>
 
   " Move up/down visual selection by K/J
   vnoremap K :m '<-2<CR>gv=gv
   vnoremap J :m '>+1<CR>gv=gv
+  nnoremap <CR> :noh<CR><CR>
 
+  nnoremap <Leader>h :Zeavim!<CR>
+
+  iab rt return
+  iab todo // TODO(tommsawyer):
+
+  fun! ToggleCC()
+    if &cc == ''
+      set cc=81
+    else
+      set cc=
+    endif
+  endfun
+
+  nnoremap <silent> <F2> :call ToggleCC()<CR>
