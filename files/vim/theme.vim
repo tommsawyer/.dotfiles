@@ -46,3 +46,6 @@ highlight CocInfoSign ctermbg=235
 
 highlight CocFloating ctermbg=237
 highlight Pmenu ctermbg=237
+
+highlight HighlightedyankRegion ctermbg=237
+highlight Visual ctermbg=237

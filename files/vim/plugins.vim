@@ -10,16 +10,17 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf.vim'
 
     " Improving vim
-    Plug 'tpope/vim-surround'   " surround text with brackets or tags
-    Plug 'tpope/vim-unimpaired' " additional helpful shortcuts
-    Plug 'tpope/vim-commentary' " commenting code
-    Plug 'jiangmiao/auto-pairs' " automaticly insert brackets
-    Plug 'wellle/targets.vim'   " additional text objects
+    Plug 'machakann/vim-sandwich'       " surround text with brackets or tags
+    Plug 'tpope/vim-unimpaired'         " additional helpful shortcuts
+    Plug 'tpope/vim-commentary'         " commenting code
+    Plug 'jiangmiao/auto-pairs'         " automaticly insert brackets
+    Plug 'wellle/targets.vim'           " additional text objects
+    Plug 'jeetsukumaran/vim-indentwise' " indent-based motions
 
     " Language support
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'mattn/emmet-vim' 
-    Plug 'janko/vim-test'
+    Plug 'vim-test/vim-test'
     Plug 'AndrewRadev/splitjoin.vim'
 
     " Code formatting
@@ -37,7 +38,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'christoomey/vim-tmux-runner'
    
     " Themes
-    Plug 'morhetz/gruvbox'                " main theme
+    Plug 'gruvbox-community/gruvbox'      " main theme
     Plug 'vim-airline/vim-airline'        " statusline
     Plug 'vim-airline/vim-airline-themes' " themes for statusline
     Plug 'ryanoasis/vim-devicons'         " icons in nerdtree
@@ -55,8 +56,7 @@ source ~/dotfiles/files/vim/plugins/coc.vim
 source ~/dotfiles/files/vim/plugins/coc-git.vim
 source ~/dotfiles/files/vim/plugins/fzf.vim
 source ~/dotfiles/files/vim/plugins/autoformat.vim
-
-let g:highlightedyank_highlight_duration = 200
+source ~/dotfiles/files/vim/plugins/highlightedyank.vim
 
 " let g:hardtime_default_on = 1
 let g:hardtime_maxcount = 2
