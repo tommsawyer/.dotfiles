@@ -1,0 +1,14 @@
+tap "homebrew/bundle"
+tap "homebrew/core"
+
+brew "bat"
+brew "go"
+brew "htop"
+brew "httpie"
+brew "kubernetes-cli"
+brew "libpq", link: true
+brew "node"
+brew "protobuf"
+brew "ripgrep"
+brew "tmux"
+brew "vim"
