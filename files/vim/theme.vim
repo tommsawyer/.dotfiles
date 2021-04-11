@@ -50,3 +50,8 @@ highlight Pmenu ctermbg=237
 
 highlight HighlightedyankRegion ctermbg=237
 highlight Visual ctermbg=237
+highlight Search ctermbg=237 cterm=none ctermfg=none
+highlight IncSearch ctermbg=66 cterm=none ctermfg=250
+highlight DiffAdded ctermbg=235 ctermfg=106
+highlight DiffChanged ctermbg=235 ctermfg=72
+highlight DiffRemoved ctermbg=235 ctermfg=167
