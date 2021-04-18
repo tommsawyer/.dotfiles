@@ -18,10 +18,6 @@ nnoremap <silent> <C-j> :call WinMove('j')<CR>
 nnoremap <silent> <C-k> :call WinMove('k')<CR>
 nnoremap <silent> <C-l> :call WinMove('l')<CR>
 
-" Jump between display lines with j/k too
-nnoremap k gk
-nnoremap j gj
-
 nnoremap S i<CR><Esc><right>
 nnoremap <CR> :noh<CR><CR>
 

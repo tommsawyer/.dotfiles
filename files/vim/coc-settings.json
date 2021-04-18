@@ -38,5 +38,7 @@
     "git.showCommitInFloating": true,
     "git.addedSign.hlGroup": "DiffAdded",
     "git.changedSign.hlGroup": "DiffChanged",
-    "git.removedSign.hlGroup": "DiffRemoved"
+    "git.removedSign.hlGroup": "DiffRemoved",
+    "git.conflict.current.hlGroup": "ConflictCurrent",
+    "git.conflict.incoming.hlGroup": "ConflictIncoming"
 }

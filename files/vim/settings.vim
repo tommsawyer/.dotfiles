@@ -16,6 +16,7 @@ set tabstop=2
 set shiftwidth=2
 set shiftround
 set smarttab
+set redrawtime=10000
 
 " no swaps and backups, use git instead
 set nobackup
@@ -50,7 +51,7 @@ set sidescrolloff=3
 set updatetime=300
 " type of vertical split characters
 set signcolumn=yes
-set laststatus=2
+set laststatus=0
 set timeoutlen=1000 ttimeoutlen=0
 
 let g:go_highlight_trailing_whitespace_error=0

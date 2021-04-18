@@ -39,8 +39,6 @@ call plug#begin('~/.vim/plugged')
    
     " Themes
     Plug 'gruvbox-community/gruvbox'      " main theme
-    Plug 'vim-airline/vim-airline'        " statusline
-    Plug 'vim-airline/vim-airline-themes' " themes for statusline
     Plug 'ryanoasis/vim-devicons'         " icons in nerdtree
     Plug 'machakann/vim-highlightedyank'  " highlight text on yank
 

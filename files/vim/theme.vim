@@ -1,6 +1,9 @@
 set background=dark
 " use vertical line for splits
 set fillchars+=vert:┃
+set fillchars+=stl:━
+set fillchars+=stlnc:━
+set statusline=━
 
 let g:gruvbox_invert_selection=0
 colorscheme gruvbox
@@ -55,3 +58,13 @@ highlight IncSearch ctermbg=66 cterm=none ctermfg=250
 highlight DiffAdded ctermbg=235 ctermfg=106
 highlight DiffChanged ctermbg=235 ctermfg=72
 highlight DiffRemoved ctermbg=235 ctermfg=167
+highlight NERDTreeCWD ctermbg=235 ctermfg=243
+
+highlight ConflictCurrent ctermbg=237
+highlight ConflictIncoming ctermbg=241
+command Theirs CocCommand git.keepIncoming
+command Ours CocCommand git.keepCurrent
+command Both CocCommand git.keepBoth
+
+highlight StatusLine ctermbg=236 ctermfg=235
+highlight StatusLineNC ctermbg=236 ctermfg=235
