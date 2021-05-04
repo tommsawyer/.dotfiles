@@ -34,6 +34,7 @@ nmap <silent> gfr <Plug>(coc-references-used)
 nmap <silent> ga  <Plug>(coc-codeaction-cursor)
 nmap <silent> ]d  <Plug>(coc-diagnostic-next)
 nmap <silent> [d  <Plug>(coc-diagnostic-prev)
+nmap <silent> ga  <Plug>(coc-codeaction-cursor)
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <silent> <Leader>d :CocList symbols<CR>

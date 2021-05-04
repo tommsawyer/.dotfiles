@@ -62,9 +62,9 @@ highlight NERDTreeCWD ctermbg=235 ctermfg=243
 
 highlight ConflictCurrent ctermbg=237
 highlight ConflictIncoming ctermbg=241
-command Theirs CocCommand git.keepIncoming
-command Ours CocCommand git.keepCurrent
-command Both CocCommand git.keepBoth
 
 highlight StatusLine ctermbg=236 ctermfg=235
 highlight StatusLineNC ctermbg=236 ctermfg=235
+highlight CocMenuSel ctermbg=237 ctermfg=none
+highlight PreviewMatch ctermbg=none ctermfg=167 cterm=bold
+

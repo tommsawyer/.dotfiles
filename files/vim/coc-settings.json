@@ -1,4 +1,7 @@
 {
+    "suggest.enablePreview": true,
+    "suggest.maxPreviewWidth": 100,
+    "list.previewHighlightGroup": "PreviewMatch",
     "diagnostic.errorSign": "",
     "suggest.disableMenuShortcut": true,
     "suggest.snippetIndicator": "",
