@@ -8,33 +8,6 @@ set statusline=━
 let g:gruvbox_invert_selection=0
 colorscheme gruvbox
 
-let g:airline_section_z = ""
-let g:airline_mode_map = {
-      \ '__' : '-',
-      \ 'c'  : 'C',
-      \ 'i'  : 'I',
-      \ 'ic' : 'I',
-      \ 'ix' : 'I',
-      \ 'n'  : 'N',
-      \ 'ni' : 'N',
-      \ 'no' : 'N',
-      \ 'R'  : 'R',
-      \ 'Rv' : 'R',
-      \ 's'  : 'S',
-      \ 'S'  : 'S',
-      \ 't'  : 'T',
-      \ 'v'  : 'V',
-      \ 'V'  : 'V',
-      \ }
-
-function! s:update_git_status()
-  let g:airline_section_b = "%{get(g:,'coc_git_status','')}"
-endfunction
-
-let g:airline_section_b = "%{get(g:,'coc_git_status','')}"
-
-autocmd User CocGitStatusChange call s:update_git_status()
-
 " make line between splits less visible
 highlight VertSplit ctermfg=236 ctermbg=235
 
@@ -69,5 +42,6 @@ highlight CocMenuSel ctermbg=237 ctermfg=none
 highlight PreviewMatch ctermbg=none ctermfg=167 cterm=bold
 
 highlight link OperatorSandwichBuns Visual
-highlight link OperatorSandwichChange ConflictCurrent
-highlight link OperatorSandwichDelete ConflictIncoming
+highlight link OperatorSandwichChange Visual
+highlight link OperatorSandwichDelete Visual
+highlight link OperatorSandwichAdd Visual
