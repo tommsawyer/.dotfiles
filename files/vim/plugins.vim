@@ -15,7 +15,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-commentary'         " commenting code
     Plug 'jiangmiao/auto-pairs'         " automaticly insert brackets
     Plug 'wellle/targets.vim'           " additional text objects
-    Plug 'jeetsukumaran/vim-indentwise' " indent-based motions
 
     " Language support
     Plug 'neoclide/coc.nvim', {'branch': 'release'}

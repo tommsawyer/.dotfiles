@@ -68,3 +68,6 @@ highlight StatusLineNC ctermbg=236 ctermfg=235
 highlight CocMenuSel ctermbg=237 ctermfg=none
 highlight PreviewMatch ctermbg=none ctermfg=167 cterm=bold
 
+highlight link OperatorSandwichBuns Visual
+highlight link OperatorSandwichChange ConflictCurrent
+highlight link OperatorSandwichDelete ConflictIncoming
