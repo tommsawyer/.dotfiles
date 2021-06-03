@@ -7,8 +7,6 @@ let g:NERDTreeCascadeOpenSingleChildDir = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeWinSize = 35
 let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
-let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
-let g:NERDTreeStatusline="FILES"
 
 map <silent> <Leader><Leader> :NERDTreeToggle<CR>
 nmap <silent> <Leader>a :NERDTreeFind<CR>

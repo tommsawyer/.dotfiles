@@ -11,3 +11,4 @@ noremap <silent> <Space> :Files<CR>
 noremap <silent> <Leader>b :Buffers<CR>
 " search text in project
 noremap <silent> <Leader>f :Rg<CR>
+vnoremap <silent> <Leader>f y:Rg <C-R>"<CR>

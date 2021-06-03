@@ -19,7 +19,7 @@ nnoremap <silent> <C-k> :call WinMove('k')<CR>
 nnoremap <silent> <C-l> :call WinMove('l')<CR>
 
 nnoremap S i<CR><Esc><right>
-nnoremap <CR> :noh<CR><CR>
+nnoremap <silent> <CR> :noh<CR><CR>
 
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
