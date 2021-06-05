@@ -16,7 +16,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-commentary'   " commenting code
     Plug 'jiangmiao/auto-pairs'   " automaticly insert brackets
     Plug 'wellle/targets.vim'     " additional text objects
-
+    Plug 'christoomey/vim-system-copy' " copy to system clipboard
     " Language support
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'mattn/emmet-vim' 
