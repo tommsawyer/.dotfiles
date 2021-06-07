@@ -14,7 +14,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'machakann/vim-sandwich' " surround text with brackets or tags
     Plug 'tpope/vim-unimpaired'   " additional helpful shortcuts
     Plug 'tpope/vim-commentary'   " commenting code
-    Plug 'jiangmiao/auto-pairs'   " automaticly insert brackets
+    Plug 'tmsvg/pear-tree'   " automaticly insert brackets
     Plug 'wellle/targets.vim'     " additional text objects
     Plug 'christoomey/vim-system-copy' " copy to system clipboard
     " Language support
@@ -45,3 +45,7 @@ source ~/dotfiles/files/vim/plugins/coc.vim
 source ~/dotfiles/files/vim/plugins/coc-git.vim
 source ~/dotfiles/files/vim/plugins/fzf.vim
 source ~/dotfiles/files/vim/plugins/highlightedyank.vim
+
+let g:pear_tree_smart_openers = 0
+let g:pear_tree_smart_closers = 0
+let g:pear_tree_smart_backspace = 0

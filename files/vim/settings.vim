@@ -55,3 +55,8 @@ set laststatus=0
 set timeoutlen=1000 ttimeoutlen=0
 
 let g:go_highlight_trailing_whitespace_error=0
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
