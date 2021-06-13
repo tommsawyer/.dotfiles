@@ -17,7 +17,7 @@ highlight EndOfBuffer guifg=#282828
 " make signcolumn transparent
 highlight SignColumn guibg=#282828
 
-highlight CocErrorSign guibg=#282828 ctermfg=124
+highlight CocErrorSign guibg=#282828 guifg=#cc241d
 highlight CocWarningSign guibg=#282828
 highlight CocInfoSign guibg=#282828
 

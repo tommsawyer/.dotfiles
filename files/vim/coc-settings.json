@@ -42,10 +42,12 @@
   "git.addedSign.text": "",
   "git.removedSign.text": "",
   "git.changedSign.text": "",
-  "git.showCommitInFloating": true,
+  "git.changeRemovedSign.text": "",
+  "git.changeRemovedSign.hlGroup": "DiffRemoved",
   "git.addedSign.hlGroup": "DiffAdded",
   "git.changedSign.hlGroup": "DiffChanged",
   "git.removedSign.hlGroup": "DiffRemoved",
+  "git.showCommitInFloating": true,
   "git.conflict.current.hlGroup": "ConflictCurrent",
   "git.conflict.incoming.hlGroup": "ConflictIncoming"
 }

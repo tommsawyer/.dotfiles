@@ -16,5 +16,7 @@ export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export FZF_DEFAULT_OPTS="--color=gutter:235 --color=hl+:#ffb964 --reverse"
 export EDITOR=vim
 alias rg='rg --hidden'
+alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs'
 [ -f ~/.zshcustom ] && source ~/.zshcustom
+
