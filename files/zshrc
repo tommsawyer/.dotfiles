@@ -13,7 +13,7 @@ export PATH="$PATH:$HOME/tmux"
 export PATH="$PATH:$HOME/.gem/ruby/2.6.0/bin"
 export CDPATH=$GOPATH/src
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
-export FZF_DEFAULT_OPTS="--color=gutter:235 --color=hl+:#ffb964 --reverse"
+export FZF_DEFAULT_OPTS="--color=gutter:#282828 --color=hl+:#ffb964 --reverse"
 export EDITOR=vim
 alias rg='rg --hidden'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
