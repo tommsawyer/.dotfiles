@@ -3,20 +3,19 @@ call plug#begin('~/.vim/plugged')
     " Project tree
     Plug 'scrooloose/nerdtree', { 'on':  ['NERDTreeToggle', 'NERDTreeFind'] }
 
-    " Multiple cursors
-    Plug 'mg979/vim-visual-multi'
-   
     " Fuzzy finder
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
 
     " Improving vim
-    Plug 'machakann/vim-sandwich' " surround text with brackets or tags
-    Plug 'tpope/vim-unimpaired'   " additional helpful shortcuts
-    Plug 'tpope/vim-commentary'   " commenting code
-    Plug 'tmsvg/pear-tree'   " automaticly insert brackets
-    Plug 'wellle/targets.vim'     " additional text objects
-    Plug 'christoomey/vim-system-copy' " copy to system clipboard
+    Plug 'machakann/vim-sandwich'          " surround text with brackets or tags
+    Plug 'tpope/vim-unimpaired'            " additional helpful shortcuts
+    Plug 'tpope/vim-commentary'            " commenting code
+    Plug 'tmsvg/pear-tree'                 " automaticly insert brackets
+    Plug 'wellle/targets.vim'              " additional text objects
+    Plug 'christoomey/vim-system-copy'     " copy to system clipboard
+    Plug 'ConradIrwin/vim-bracketed-paste' " no more :set paste
+
     " Language support
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'mattn/emmet-vim' 
