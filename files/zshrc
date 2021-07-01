@@ -20,3 +20,6 @@ alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out &
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs'
 [ -f ~/.zshcustom ] && source ~/.zshcustom
 
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
