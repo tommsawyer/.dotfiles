@@ -1,4 +1,4 @@
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-go', 'coc-snippets']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-go', 'coc-snippets', 'coc-yaml', 'coc-vetur', 'coc-pyright', 'coc-tsserver']
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
