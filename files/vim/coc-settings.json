@@ -1,8 +1,5 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": [
-    "go",
-    "json"
-  ],
+  "coc.preferences.formatOnSaveFiletypes": ["go", "json", "vue"],
   "suggest.enablePreview": true,
   "suggest.maxPreviewWidth": 100,
   "list.previewHighlightGroup": "PreviewMatch",

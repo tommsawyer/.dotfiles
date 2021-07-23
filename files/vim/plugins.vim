@@ -18,7 +18,6 @@ call plug#begin('~/.vim/plugged')
 
     " Language support
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'mattn/emmet-vim' 
     Plug 'vim-test/vim-test'
     Plug 'AndrewRadev/splitjoin.vim'
 
@@ -27,6 +26,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'uarun/vim-protobuf'      " Protobuf
     Plug 'elzr/vim-json'           " JSON
     Plug 'ekalinin/Dockerfile.vim' " Dockerfile
+    Plug 'posva/vim-vue'           " Vue.js
 
     " Tmux integration
     Plug 'christoomey/vim-tmux-runner'

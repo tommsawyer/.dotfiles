@@ -45,3 +45,4 @@ highlight link OperatorSandwichBuns Visual
 highlight link OperatorSandwichChange Visual
 highlight link OperatorSandwichDelete Visual
 highlight link OperatorSandwichAdd Visual
+highlight javaScript guifg=#ebdbb2
