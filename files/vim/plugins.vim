@@ -10,7 +10,7 @@ call plug#begin('~/.vim/plugged')
     " Improving vim
     Plug 'machakann/vim-sandwich'          " surround text with brackets or tags
     Plug 'tpope/vim-unimpaired'            " additional helpful shortcuts
-    Plug 'tpope/vim-commentary'            " commenting code
+    Plug 'tomtom/tcomment_vim'             " commenting code
     Plug 'tmsvg/pear-tree'                 " automaticly insert brackets
     Plug 'wellle/targets.vim'              " additional text objects
     Plug 'christoomey/vim-system-copy'     " copy to system clipboard
