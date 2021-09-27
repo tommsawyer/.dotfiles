@@ -46,5 +46,7 @@
   "git.removedSign.hlGroup": "DiffRemoved",
   "git.showCommitInFloating": true,
   "git.conflict.current.hlGroup": "ConflictCurrent",
-  "git.conflict.incoming.hlGroup": "ConflictIncoming"
+  "git.conflict.incoming.hlGroup": "ConflictIncoming",
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.format.defaultFormatter.js": "prettier"
 }
