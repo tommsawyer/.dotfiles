@@ -52,7 +52,6 @@ return require("packer").startup(function(use)
   use {
     "machakann/vim-sandwich", -- surround text with brackets/tags
     "tpope/vim-unimpaired",   -- additional paired shortcuts
-    "wellle/targets.vim",     -- additional text objects like arguments/paired quotes
     "windwp/nvim-autopairs",  -- auto-add closing quotes/brackets
     "numToStr/Comment.nvim",  -- commenting
     "b0o/schemastore.nvim",   -- schemas for yaml/json

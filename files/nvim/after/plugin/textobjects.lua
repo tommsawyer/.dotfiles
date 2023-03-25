@@ -11,12 +11,8 @@ require 'nvim-treesitter.configs'.setup {
         ["ii"] = "@conditional.inner",
         ["al"] = "@loop.outer",
         ["il"] = "@loop.inner",
-        ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-      },
-      selection_modes = {
-        ['@parameter.outer'] = 'v', -- charwise
-        ['@function.outer'] = 'V', -- linewise
-        ['@class.outer'] = '<c-v>', -- blockwise
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
       },
       include_surrounding_whitespace = false,
     },
