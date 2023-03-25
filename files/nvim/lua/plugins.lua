@@ -41,6 +41,10 @@ return require("packer").startup(function(use)
     "lewis6991/gitsigns.nvim",              -- git signs
     "lukas-reineke/indent-blankline.nvim" , -- indentation level lines
   } 
+  use {
+    'kosayoda/nvim-lightbulb',
+    requires = 'antoinemadec/FixCursorHold.nvim',
+  }
 
   -- improving nvim
   use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"}) -- AST
