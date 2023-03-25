@@ -15,6 +15,7 @@ vim-clean-plugins:
 	vim +PlugClean +qall
 
 symlinks:
+	ln -s ~/dotfiles/files/nvim ~/.config
 	ln -s ~/dotfiles/files/zshrc ~/.zshrc
 	ln -s ~/dotfiles/files/vimrc ~/.vimrc
 	ln -s ~/dotfiles/files/tmux.conf ~/.tmux.conf
