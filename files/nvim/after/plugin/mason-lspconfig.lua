@@ -32,3 +32,10 @@ require('mason-lspconfig').setup_handlers({
   end,
 })
 
+lspconfig.yamlls.setup {
+  settings = {
+    yaml = {
+      schemas = require('schemastore').yaml.schemas {},
+    },
+  },
+}

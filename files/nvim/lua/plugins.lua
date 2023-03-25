@@ -55,6 +55,7 @@ return require("packer").startup(function(use)
     "wellle/targets.vim",     -- additional text objects like arguments/paired quotes
     "windwp/nvim-autopairs",  -- auto-add closing quotes/brackets
     "numToStr/Comment.nvim",  -- commenting
+    "b0o/schemastore.nvim",   -- schemas for yaml/json
   }
   -- additional text objects from treesitter
   use({
