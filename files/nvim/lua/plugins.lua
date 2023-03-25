@@ -40,6 +40,7 @@ return require("packer").startup(function(use)
     "lunarvim/darkplus.nvim" ,              -- main theme
     "lewis6991/gitsigns.nvim",              -- git signs
     "lukas-reineke/indent-blankline.nvim" , -- indentation level lines
+    "stevearc/dressing.nvim",               -- better ui
   } 
   use {
     'kosayoda/nvim-lightbulb',
