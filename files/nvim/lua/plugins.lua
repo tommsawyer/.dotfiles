@@ -46,6 +46,10 @@ return require("packer").startup(function(use)
     'kosayoda/nvim-lightbulb',
     requires = 'antoinemadec/FixCursorHold.nvim',
   }
+  use {
+    "folke/trouble.nvim",
+    requires = "nvim-tree/nvim-web-devicons",
+  }
 
   -- improving nvim
   use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"}) -- AST
