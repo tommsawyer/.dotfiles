@@ -7,6 +7,7 @@ null_ls.setup({
       null_ls.builtins.code_actions.gomodifytags,
       null_ls.builtins.formatting.goimports,
       null_ls.builtins.diagnostics.golangci_lint,
+      null_ls.builtins.formatting.lua_format,
     },
     on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
