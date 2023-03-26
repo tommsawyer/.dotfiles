@@ -14,7 +14,7 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
-    mapping = {
+  mapping = {
     ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
     ["<C-p>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -36,14 +36,21 @@ cmp.setup {
     })
   },
   sources = {
-    { name = "luasnip"},
-    { name = "nvim_lsp"},
+    { name = "luasnip" },
+    { name = "nvim_lsp" },
     { name = "path" },
     { name = 'nvim_lsp_signature_help' },
   },
   window = {
     documentation = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+    },
+  },
+  sorting = {
+    comparators = {
+      cmp.config.compare.exact,
+      cmp.config.compare.locality,
+      cmp.config.compare.score,
     },
   },
   experimental = {
