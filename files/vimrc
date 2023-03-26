@@ -1,7 +1,0 @@
-source ~/dotfiles/files/vim/settings.vim
-source ~/dotfiles/files/vim/plugins.vim
-source ~/dotfiles/files/vim/theme.vim
-source ~/dotfiles/files/vim/abbr.vim
-source ~/dotfiles/files/vim/mappings.vim
-source ~/dotfiles/files/vim/autocommands.vim
-source ~/dotfiles/files/vim/commands.vim
