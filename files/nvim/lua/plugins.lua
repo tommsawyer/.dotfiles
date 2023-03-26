@@ -73,5 +73,6 @@ return require("packer").startup(function(use)
     "Wansmer/treesj",
     requires = { "nvim-treesitter" },
   })
+  use "takac/vim-hardtime" -- break bad habits
 end)
 
