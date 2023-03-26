@@ -42,6 +42,7 @@ return require("packer").startup(function(use)
     "lewis6991/gitsigns.nvim",              -- git signs
     "lukas-reineke/indent-blankline.nvim" , -- indentation level lines
     "stevearc/dressing.nvim",               -- better ui
+    "onsails/lspkind.nvim",                 -- completion icons
   } 
   use {
     'kosayoda/nvim-lightbulb',
