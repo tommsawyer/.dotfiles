@@ -36,7 +36,6 @@ cmp.setup {
     })
   },
   sources = {
-    { name = "luasnip" },
     { name = "nvim_lsp" },
     { name = "path" },
     { name = 'nvim_lsp_signature_help' },
