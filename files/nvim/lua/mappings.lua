@@ -1,14 +1,13 @@
 vim.g.mapleader = ","
 
-function moveWindow(direction)
+local function moveWindow(direction)
   local currentWindow = vim.fn.winnr()
-  print(currentWindow)
 
   vim.api.nvim_command("wincmd " .. direction)
   if vim.fn.winnr() == currentWindow then
     if direction == "j" or direction == "k" then
       vim.api.nvim_command("wincmd s")
-    else 
+    else
       vim.api.nvim_command("wincmd v")
     end
 
