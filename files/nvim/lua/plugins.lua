@@ -27,8 +27,6 @@ return require("packer").startup(function(use)
   use {
     "hrsh7th/cmp-buffer",                 -- words from buffer
     "hrsh7th/cmp-path",                   -- filesystem paths
-    "saadparwaiz1/cmp_luasnip",           -- snippets
-    "hrsh7th/cmp-cmdline",                -- cmdline
     "hrsh7th/cmp-nvim-lsp",               -- LSP support
     "hrsh7th/cmp-nvim-lsp-signature-help" -- function arguments
   }
