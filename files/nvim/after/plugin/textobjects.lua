@@ -24,16 +24,10 @@ require 'nvim-treesitter.configs'.setup {
         ["]i"] = "@conditional.outer",
         ["]l"] = "@loop.outer",
       },
-      goto_next_end = {
-        ["]F"] = "@function.outer",
-      },
       goto_previous_start = {
         ["[f"] = "@function.outer",
         ["[i"] = "@conditional.outer",
         ["[l"] = "@loop.outer",
-      },
-      goto_previous_end = {
-        ["[F"] = "@function.outer",
       },
     },
   },
