@@ -23,6 +23,7 @@ local lsp_attach = function(client, bufnr)
 end
 
 local lspconfig = require('lspconfig')
+
 require('mason-lspconfig').setup_handlers({
   function(server_name)
     lspconfig[server_name].setup({
@@ -32,10 +33,12 @@ require('mason-lspconfig').setup_handlers({
   end,
 })
 
+
 lspconfig.yamlls.setup {
   settings = {
     yaml = {
-      schemas = require('schemastore').yaml.schemas {},
+      keyOrdering = false,
+      schemas = require('schemastore').yaml.schemas(),
     },
   },
 }
