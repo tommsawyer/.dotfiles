@@ -34,3 +34,9 @@ vim.opt.linebreak = true
 vim.opt.cmdheight = 0
 vim.opt.mouse = ''
 vim.cmd("colorscheme darkplus")
+
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
