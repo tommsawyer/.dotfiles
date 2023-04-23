@@ -10,20 +10,18 @@ export GOPATH=$HOME/Projects/go
 export GOBIN=$GOPATH/bin
 export PATH="$PATH:$GOBIN"
 export PATH="$PATH:$HOME/tmux"
-export PATH="$PATH:$HOME/.gem/ruby/2.6.0/bin"
 export CDPATH=$GOPATH/src
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export FZF_DEFAULT_OPTS="--color=gutter:#282828 --color=hl+:#ffb964 --reverse"
 export EDITOR=nvim
-alias rg='rg --hidden'
-alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs'
-[ -f ~/.zshcustom ] && source ~/.zshcustom
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 alias vim='nvim'
 alias tm='tmux new -s ${PWD##*/}'
+alias rg='rg --hidden'
+alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
+
+[ -f ~/.zshcustom ] && source ~/.zshcustom
