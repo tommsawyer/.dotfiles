@@ -1,7 +1,7 @@
 export ZSH_DISABLE_COMPFIX=true
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
-plugins=(git tmux)
+plugins=(aliases macos git tmux golang docker-compose)
 source $ZSH/oh-my-zsh.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -14,12 +14,12 @@ export PATH="$PATH:$HOME/.gem/ruby/2.6.0/bin"
 export CDPATH=$GOPATH/src
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export FZF_DEFAULT_OPTS="--color=gutter:#282828 --color=hl+:#ffb964 --reverse"
-export EDITOR=vim
+export EDITOR=nvim
 alias rg='rg --hidden'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
+
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs'
 [ -f ~/.zshcustom ] && source ~/.zshcustom
-
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
