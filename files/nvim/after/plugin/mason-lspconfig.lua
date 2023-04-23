@@ -30,30 +30,37 @@ require('mason-lspconfig').setup_handlers({
       capabilities = lsp_capabilities,
     })
   end,
-})
 
+  ["yamlls"] = function()
+    lspconfig.yamlls.setup {
+      on_attach = lsp_attach,
+      capabilities = lsp_capabilities,
+      settings = {
+        yaml = {
+          keyOrdering = false,
+          schemas = require('schemastore').yaml.schemas(),
+        },
+      },
+    }
+  end,
 
-lspconfig.yamlls.setup {
-  settings = {
-    yaml = {
-      keyOrdering = false,
-      schemas = require('schemastore').yaml.schemas(),
-    },
-  },
-}
-
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
+  ["lua_ls"] = function()
+    lspconfig.lua_ls.setup({
+      on_attach = lsp_attach,
+      capabilities = lsp_capabilities,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { "vim" },
+          },
+          workspace = {
+            library = vim.api.nvim_get_runtime_file("", true),
+          },
+          telemetry = {
+            enable = false,
+          },
+        },
       },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
+    })
+  end
 })
