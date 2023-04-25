@@ -3,7 +3,6 @@ require 'nvim-treesitter.configs'.setup {
     select = {
       enable = true,
       lookahead = true,
-
       keymaps = {
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
@@ -13,6 +12,8 @@ require 'nvim-treesitter.configs'.setup {
         ["il"] = "@loop.inner",
         ["aa"] = "@parameter.outer",
         ["ia"] = "@parameter.inner",
+        ["ac"] = "@call.outer",
+        ["ic"] = "@call.inner",
       },
       include_surrounding_whitespace = false,
     },
@@ -23,11 +24,13 @@ require 'nvim-treesitter.configs'.setup {
         ["]f"] = "@function.outer",
         ["]i"] = "@conditional.outer",
         ["]l"] = "@loop.outer",
+        ["]c"] = "@call.outer",
       },
       goto_previous_start = {
         ["[f"] = "@function.outer",
         ["[i"] = "@conditional.outer",
         ["[l"] = "@loop.outer",
+        ["[c"] = "@call.outer",
       },
     },
   },
