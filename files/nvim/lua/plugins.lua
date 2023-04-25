@@ -43,8 +43,8 @@ return require("packer").startup(function(use)
     "onsails/lspkind.nvim",                -- completion icons
     "nvim-tree/nvim-web-devicons",         -- better icons
     "antoinemadec/FixCursorHold.nvim",
-    "kosayoda/nvim-lightbulb",             -- hints for lsp actions
     "folke/trouble.nvim",                  -- better ui for linters
+    "j-hui/fidget.nvim",                   -- lsp progress notification
   }
 
   -- improving nvim
