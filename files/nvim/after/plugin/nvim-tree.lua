@@ -1,5 +1,16 @@
 require("nvim-tree").setup {
   renderer = {
+    indent_markers = {
+      enable = true,
+      inline_arrows = true,
+      icons = {
+        corner = "└",
+        edge = "│",
+        item = "│",
+        bottom = "─",
+        none = " ",
+      },
+    },
     root_folder_label = false,
     icons = {
       show = {
@@ -7,6 +18,8 @@ require("nvim-tree").setup {
         modified = false,
       },
     },
+    -- removes higlight of readme.md/Makefile
+    special_files = {},
   },
 }
 
