@@ -58,4 +58,7 @@ return require("packer").startup(function(use)
     "nvim-treesitter/nvim-treesitter-textobjects",              -- additional text objects
     "Wansmer/treesj",                                           -- spilt/join lines
   }
+
+  -- Delay repeat execution of certain keys
+  use 'ja-ford/delaytrain.nvim'
 end)
