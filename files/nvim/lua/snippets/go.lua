@@ -64,6 +64,7 @@ local function go_result_type()
     method_declaration = true,
     func_literal = true,
   }
+
   local function_node
   for _, v in ipairs(scope) do
     if function_node_types[v:type()] then
@@ -84,31 +85,28 @@ local function go_result_type()
   )
 
   for _, node in query:iter_captures(function_node, 0) do
-    if node:type() == "parameter_list" then
-      local result = {}
-
-      local count = node:named_child_count()
-      for idx = 0, count - 1 do
-        local matching_node = node:named_child(idx)
-        local type_node = matching_node:field("type")[1]
-        table.insert(result, go_default_value(get_node_text(type_node, 0)))
-        if idx ~= count - 1 then
-          table.insert(result, t { ", " })
-        end
-      end
-
-      return result
+    if node:type() ~= "parameter_list" then
+      return go_default_value(get_node_text(node, 0))
     end
 
-    return go_default_value(get_node_text(node, 0))
+    local result = {}
+
+    local count = node:named_child_count()
+    for idx = 0, count - 1 do
+      local matching_node = node:named_child(idx)
+      local type_node = matching_node:field("type")[1]
+
+      table.insert(result, go_default_value(get_node_text(type_node, 0)))
+      if idx ~= count - 1 then
+        table.insert(result, t { ", " })
+      end
+    end
+
+    return result
   end
 
+
   return {}
-end
-
-
-local function go_return_values()
-  return ls.sn(nil, go_result_type())
 end
 
 ls.add_snippets("go", {
@@ -119,7 +117,7 @@ ls.add_snippets("go", {
     }
     <finish>
     ]], {
-      result = d(1, go_return_values),
+      result = d(1, function() return ls.sn(nil, go_result_type()) end),
       finish = i(0)
     }
   ))
