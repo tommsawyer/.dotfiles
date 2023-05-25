@@ -14,6 +14,8 @@ require 'nvim-treesitter.configs'.setup {
         ["ia"] = "@parameter.inner",
         ["ac"] = "@call.outer",
         ["ic"] = "@call.inner",
+        ["as"] = "@statement.outer",
+        ["is"] = "@statement.outer",
       },
       include_surrounding_whitespace = false,
     },
@@ -25,13 +27,25 @@ require 'nvim-treesitter.configs'.setup {
         ["]i"] = "@conditional.outer",
         ["]l"] = "@loop.outer",
         ["]c"] = "@call.outer",
+        ["]s"] = "@statement.outer",
       },
       goto_previous_start = {
         ["[f"] = "@function.outer",
         ["[i"] = "@conditional.outer",
         ["[l"] = "@loop.outer",
         ["[c"] = "@call.outer",
+        ["[s"] = "@statement.outer",
       },
+    },
+  },
+
+  textsubjects = {
+    enable = true,
+    prev_selection = ',', -- (Optional) keymap to select the previous selection
+    keymaps = {
+      ['.'] = 'textsubjects-smart',
+      [';'] = 'textsubjects-container-outer',
+      ['i;'] = 'textsubjects-container-inner',
     },
   },
 }

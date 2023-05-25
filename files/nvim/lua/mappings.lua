@@ -21,3 +21,6 @@ vim.keymap.set('n', '<C-h>', moveWindow("h"))
 vim.keymap.set('n', '<C-j>', moveWindow("j"))
 vim.keymap.set('n', '<C-k>', moveWindow("k"))
 vim.keymap.set('n', '<C-l>', moveWindow("l"))
+
+vim.keymap.set('n', '{', ':<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>', { silent = true })
+vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>', { silent = true })

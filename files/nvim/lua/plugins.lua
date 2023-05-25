@@ -56,6 +56,7 @@ return require("packer").startup(function(use)
     "numToStr/Comment.nvim",                                    -- commenting
     "b0o/schemastore.nvim",                                     -- schemas for yaml/json
     "nvim-treesitter/nvim-treesitter-textobjects",              -- additional text objects
+    "RRethy/nvim-treesitter-textsubjects",                      -- additional text objects
     "Wansmer/treesj",                                           -- spilt/join lines
   }
 
