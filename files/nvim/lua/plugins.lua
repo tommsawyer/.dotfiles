@@ -45,6 +45,7 @@ return require("packer").startup(function(use)
     "antoinemadec/FixCursorHold.nvim",
     "folke/trouble.nvim",                  -- better ui for linters
     "j-hui/fidget.nvim",                   -- lsp progress notification
+    "VidocqH/lsp-lens.nvim",
   }
 
   -- improving nvim
