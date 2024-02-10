@@ -45,6 +45,17 @@ return require("packer").startup(function(use)
     "antoinemadec/FixCursorHold.nvim",
     "folke/trouble.nvim",                  -- better ui for linters
   }
+  use({
+    "utilyre/barbecue.nvim",
+    tag = "*",
+    requires = {
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("barbecue").setup()
+    end,
+  })
 
   -- improving nvim
   use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" }) -- AST

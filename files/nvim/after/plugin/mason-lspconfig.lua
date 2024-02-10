@@ -38,6 +38,10 @@ require('mason-lspconfig').setup_handlers({
       settings = {
         yaml = {
           keyOrdering = false,
+          schemaStore = {
+            enable = false,
+            url = "",
+          },
           schemas = require('schemastore').yaml.schemas(),
         },
       },
