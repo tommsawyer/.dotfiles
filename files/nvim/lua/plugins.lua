@@ -5,7 +5,7 @@ return require("packer").startup(function(use)
 
   -- managing files
   use {
-    "nvim-telescope/telescope.nvim", tag = "0.1.1",
+    "nvim-telescope/telescope.nvim", tag = "0.1.5",
     requires = { { "nvim-lua/plenary.nvim" } }
   }                             -- fuzzy-finder
   use "nvim-tree/nvim-tree.lua" -- project tree
@@ -44,8 +44,6 @@ return require("packer").startup(function(use)
     "nvim-tree/nvim-web-devicons",         -- better icons
     "antoinemadec/FixCursorHold.nvim",
     "folke/trouble.nvim",                  -- better ui for linters
-    "j-hui/fidget.nvim",                   -- lsp progress notification
-    "VidocqH/lsp-lens.nvim",
   }
 
   -- improving nvim

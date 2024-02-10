@@ -15,7 +15,7 @@ telescope.setup {
   },
 }
 
-vim.keymap.set('n', ' ', builtin.git_files, {})
+vim.keymap.set('n', ' ', builtin.find_files, {})
 vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>d', builtin.lsp_dynamic_workspace_symbols, {})
 vim.keymap.set('n', '<leader>h', builtin.help_tags, {})
