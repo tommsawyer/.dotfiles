@@ -2,7 +2,7 @@ local indentline = require("ibl")
 
 indentline.setup {
   indent = {
-    char = "│",
+    char = "▏",
   },
   exclude = {
     filetypes = { "help", "packer", "NvimTree", },
@@ -10,5 +10,6 @@ indentline.setup {
   },
   scope = {
     enabled = true,
+    show_start = false,
   },
 }

@@ -32,7 +32,7 @@ return require("packer").startup(function(use)
   }
 
   -- autoformatting
-  use "jose-elias-alvarez/null-ls.nvim"
+  use "stevearc/conform.nvim"
 
   -- appearance
   use {
