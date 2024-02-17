@@ -18,7 +18,7 @@ vim.opt.shiftwidth = 2                          -- the number of spaces inserted
 vim.opt.tabstop = 2                             -- insert 2 spaces for a tab
 vim.opt.cursorline = true                       -- highlight the current line
 vim.opt.number = true                           -- set numbered lines
-vim.opt.laststatus = 3                          -- only the last window will always have a status line
+vim.opt.laststatus = 0                          -- only the last window will always have a status line
 vim.opt.showcmd = false                         -- hide (partial) command in the last line of the screen (for performance)
 vim.opt.ruler = false                           -- hide the line and column number of the cursor position
 vim.opt.numberwidth = 4                         -- minimal number of columns to use for the line number {default 4}
@@ -34,12 +34,5 @@ vim.opt.formatoptions:remove({ "c", "r", "o" }) -- This is a sequence of letters
 vim.opt.linebreak = true
 vim.opt.cmdheight = 0
 vim.opt.mouse = ''
-vim.cmd("colorscheme darkplus")
-
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
 
 vim.cmd("abbr rt return")
