@@ -65,7 +65,7 @@ return {
       formatting = {
         format = lspkind.cmp_format({
           mode = 'symbol',
-          maxwidth = 50,
+          maxwidth = 60,
         })
       },
       sources = {
@@ -85,8 +85,7 @@ return {
         },
       },
       experimental = {
-        ghost_text = false,
-        native_menu = false,
+        ghost_text = true,
       },
     }
   end
