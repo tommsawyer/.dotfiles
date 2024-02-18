@@ -4,6 +4,7 @@ return {
     require("conform").setup({
       formatters_by_ft = {
         go = { "goimports" },
+        json = { "fixjson" },
       },
 
       format_on_save = {
