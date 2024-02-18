@@ -66,6 +66,7 @@ return {
         format = lspkind.cmp_format({
           mode = 'symbol',
           maxwidth = 60,
+          show_labelDetails = false,
         })
       },
       sources = {
@@ -82,10 +83,12 @@ return {
           cmp.config.compare.exact,
           cmp.config.compare.locality,
           cmp.config.compare.score,
+          cmp.config.compare.offset,
+          cmp.config.compare.kind,
         },
       },
       experimental = {
-        ghost_text = true,
+        ghost_text = false,
       },
     }
   end

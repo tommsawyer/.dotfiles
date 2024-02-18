@@ -9,7 +9,16 @@ return {
       local configs = require 'nvim-treesitter.configs'
 
       configs.setup({
-        ensure_installed = { "go", "vim" },
+        ensure_installed = {
+          "go",
+          "vim",
+          "gosum",
+          "gomod",
+          "yaml",
+          "json",
+          "sql",
+          "dockerfile"
+        },
         sync_install = false,
         auto_install = false,
         highlight = {
