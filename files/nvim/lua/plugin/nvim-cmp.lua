@@ -1,7 +1,6 @@
 return {
   "hrsh7th/nvim-cmp",
   dependencies = {
-    "hrsh7th/cmp-buffer",                  -- words from buffer
     "hrsh7th/cmp-path",                    -- filesystem paths
     "hrsh7th/cmp-nvim-lsp",                -- LSP support
     "hrsh7th/cmp-nvim-lsp-signature-help", -- function arguments
