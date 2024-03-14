@@ -5,6 +5,7 @@ return {
       formatters_by_ft = {
         go = { "goimports" },
         json = { "fixjson" },
+        templ = { "templ" },
       },
 
       format_on_save = {

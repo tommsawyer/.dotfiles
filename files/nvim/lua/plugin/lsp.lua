@@ -74,6 +74,29 @@ return {
             },
           },
         })
+      end,
+
+      ["emmet_ls"] = function()
+        lspconfig.emmet_ls.setup({
+          on_attach = lsp_attach,
+          capabilities = lsp_capabilities,
+          filetypes = {
+            'astro',
+            'css',
+            'eruby',
+            'html',
+            'htmldjango',
+            'javascriptreact',
+            'less',
+            'pug',
+            'sass',
+            'scss',
+            'svelte',
+            'typescriptreact',
+            'vue',
+            'templ',
+          },
+        })
       end
     })
   end

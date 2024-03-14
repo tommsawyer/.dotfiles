@@ -1,5 +1,6 @@
 return {
   "hrsh7th/nvim-cmp",
+  event = "InsertEnter",
   dependencies = {
     "hrsh7th/cmp-path",                    -- filesystem paths
     "hrsh7th/cmp-nvim-lsp",                -- LSP support

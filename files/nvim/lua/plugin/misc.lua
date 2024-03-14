@@ -4,7 +4,11 @@ return {
     lazy = false,
     opts = {},
   },
-  { "windwp/nvim-autopairs",          opts = {} },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {}
+  },
   { "machakann/vim-sandwich" },
   { "tpope/vim-unimpaired" },
   { "stevearc/dressing.nvim" },      -- better ui

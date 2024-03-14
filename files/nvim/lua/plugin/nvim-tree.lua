@@ -24,6 +24,12 @@ return {
         -- removes higlight of readme.md/Makefile
         special_files = {},
       },
+      filters = {
+        custom = {
+          '.*_templ.go',
+          'go.sum',
+        }
+      }
     }
 
     vim.keymap.set('n', '<leader><leader>', '<Cmd>NvimTreeToggle<CR>')
