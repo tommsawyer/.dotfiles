@@ -9,6 +9,13 @@ return {
     require("mason").setup()
     require("mason-lspconfig").setup()
 
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+    vim.lsp.handlers.hover, {
+      -- Use a sharp border with `FloatBorder` highlights
+      border = "single",
+      }
+    )
+
     local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
     local lsp_attach = function(client, bufnr)
@@ -79,6 +86,7 @@ return {
       ["emmet_language_server"] = function()
         lspconfig.emmet_language_server.setup({
           on_attach = lsp_attach,
+          handlers = handlers,
           capabilities = lsp_capabilities,
           filetypes = {
             'astro',
