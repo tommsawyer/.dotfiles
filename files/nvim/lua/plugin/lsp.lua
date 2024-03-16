@@ -10,9 +10,9 @@ return {
     require("mason-lspconfig").setup()
 
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-    vim.lsp.handlers.hover, {
-      -- Use a sharp border with `FloatBorder` highlights
-      border = "single",
+      vim.lsp.handlers.hover, {
+        -- Use a sharp border with `FloatBorder` highlights
+        border = "single",
       }
     )
 
@@ -34,6 +34,17 @@ return {
       bufmap('v', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>')
       bufmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
       bufmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
+      if vim.bo.filetype == "templ" then
+        if client.name == "html" then
+          -- templ lsp doesn't support documentSymbolProvider yet, so use html for .templ files
+          require("nvim-navic").attach(client, bufnr)
+        end
+      else
+        if client.server_capabilities["documentSymbolProvider"] then
+          require("nvim-navic").attach(client, bufnr)
+        end
+      end
     end
 
     local lspconfig = require('lspconfig')

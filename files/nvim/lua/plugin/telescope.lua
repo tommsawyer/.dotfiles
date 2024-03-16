@@ -12,7 +12,7 @@ return {
         selection_caret = " ",
         sorting_strategy = "ascending",
         layout_strategy = "center",
-        path_display = { "absolute" },
+        path_display = { "truncate" },
         preview = false,
         results_title = false,
         prompt_title = false,
