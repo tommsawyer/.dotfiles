@@ -16,7 +16,7 @@ return {
         preview = false,
         results_title = false,
         prompt_title = false,
-        file_ignore_patterns = { ".git/", "node_modules", ".*_templ.go", "go.sum" },
+        file_ignore_patterns = { ".git/", "node_modules", ".*_templ.go", "go.sum", ".*_templ.txt" },
       },
     }
 
