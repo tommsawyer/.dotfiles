@@ -1,6 +1,6 @@
 return {
   'neovim/nvim-lspconfig',
-  dependencies = { 
+  dependencies = {
     'saghen/blink.cmp',
     'b0o/schemastore.nvim',
   },
