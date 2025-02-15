@@ -9,5 +9,4 @@ return {
   { "stevearc/dressing.nvim" },      -- better ui
   { "nvim-tree/nvim-web-devicons" }, -- better icons
   { "antoinemadec/FixCursorHold.nvim" },
-  { "sindrets/diffview.nvim" },
 }
