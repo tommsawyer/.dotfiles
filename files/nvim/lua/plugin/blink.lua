@@ -12,7 +12,7 @@ return {
     },
 
     sources = {
-      default = { 'lsp' },
+      default = { 'lsp', 'snippets' },
     },
 
     completion = {
