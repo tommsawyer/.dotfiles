@@ -15,9 +15,10 @@ return {
 
       bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
       bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-      bufmap('n', 'gy', '<cmd>TroubleToggle lsp_type_definitions<cr>')
-      bufmap('n', 'gi', '<cmd>TroubleToggle lsp_implementations<cr>')
-      bufmap('n', 'gfr', '<cmd>TroubleToggle lsp_references<cr>')
+      bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>')
+      bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>')
+      bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>')
+      bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>')
       bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.rename()<cr>')
       bufmap('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>')
       bufmap('v', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>')

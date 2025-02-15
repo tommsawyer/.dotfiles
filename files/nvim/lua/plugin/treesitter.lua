@@ -19,7 +19,8 @@ return {
           "yaml",
           "json",
           "sql",
-          "dockerfile"
+          "dockerfile",
+          "javascript",
         },
         sync_install = false,
         auto_install = false,

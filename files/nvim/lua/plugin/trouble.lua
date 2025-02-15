@@ -7,7 +7,7 @@ return {
       use_diagnostic_signs = true,
     })
 
-    vim.keymap.set("n", "<leader>t", "<cmd>TroubleToggle document_diagnostics<cr>",
+    vim.keymap.set("n", "<leader>t", "<cmd>Trouble diagnostics toggle focus=true<cr>",
       { silent = true, noremap = true }
     )
   end
