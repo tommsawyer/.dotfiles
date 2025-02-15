@@ -39,6 +39,7 @@ return {
     local server_configs = {
       templ = {},
       gopls = {},
+      ts_ls = {},
       jsonls = {
         json = {
           schemas = require('schemastore').json.schemas(),
