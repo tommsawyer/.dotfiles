@@ -1,23 +1,12 @@
 return {
-  "williamboman/mason.nvim",             -- managing LSP/DAP servers
-  dependencies = {
-    "williamboman/mason-lspconfig.nvim", -- bridge between mason and lspconfig
-    "neovim/nvim-lspconfig",             -- default lsp configs
-    "b0o/schemastore.nvim",              -- schemas for yaml/json
+  'neovim/nvim-lspconfig',
+  dependencies = { 
+    'saghen/blink.cmp',
+    'b0o/schemastore.nvim',
   },
-  config = function()
-    require("mason").setup()
-    require("mason-lspconfig").setup()
 
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-      vim.lsp.handlers.hover, {
-        -- Use a sharp border with `FloatBorder` highlights
-        border = "single",
-      }
-    )
-
-    local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-
+  config = function(_, opts)
+    local lspconfig = require('lspconfig')
     local lsp_attach = function(client, bufnr)
       local bufmap = function(mode, lhs, rhs)
         local opts = { buffer = true }
@@ -47,75 +36,68 @@ return {
       end
     end
 
-    local lspconfig = require('lspconfig')
-
-    require('mason-lspconfig').setup_handlers({
-      function(server_name)
-        lspconfig[server_name].setup({
-          on_attach = lsp_attach,
-          capabilities = lsp_capabilities,
-        })
-      end,
-
-      ["yamlls"] = function()
-        lspconfig.yamlls.setup {
-          on_attach = lsp_attach,
-          capabilities = lsp_capabilities,
-          settings = {
-            yaml = {
-              keyOrdering = false,
-              schemaStore = {
-                enable = false,
-                url = "",
-              },
-              schemas = require('schemastore').yaml.schemas(),
+    local server_configs = {
+      templ = {},
+      gopls = {},
+      jsonls = {
+        json = {
+          schemas = require('schemastore').json.schemas(),
+          validate = { enable = true },
+        },
+      },
+      yamlls = {
+        settings = {
+          yaml = {
+            keyOrdering = false,
+            schemaStore = {
+              enable = false,
+              url = "",
+            },
+            schemas = require('schemastore').yaml.schemas(),
+          },
+        },
+      },
+      lua_ls = {
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+            },
+            telemetry = {
+              enable = false,
             },
           },
-        }
-      end,
+        },
+      },
+      emmet_language_server = {
+        filetypes = {
+          'astro',
+          'css',
+          'eruby',
+          'html',
+          'htmldjango',
+          'javascriptreact',
+          'less',
+          'pug',
+          'sass',
+          'scss',
+          'svelte',
+          'typescriptreact',
+          'vue',
+          'templ',
+        },
+      },
+    }
 
-      ["lua_ls"] = function()
-        lspconfig.lua_ls.setup({
-          on_attach = lsp_attach,
-          capabilities = lsp_capabilities,
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { "vim" },
-              },
-              workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
-              },
-              telemetry = {
-                enable = false,
-              },
-            },
-          },
-        })
-      end,
-
-      ["emmet_language_server"] = function()
-        lspconfig.emmet_language_server.setup({
-          on_attach = lsp_attach,
-          capabilities = lsp_capabilities,
-          filetypes = {
-            'astro',
-            'css',
-            'eruby',
-            'html',
-            'htmldjango',
-            'javascriptreact',
-            'less',
-            'pug',
-            'sass',
-            'scss',
-            'svelte',
-            'typescriptreact',
-            'vue',
-            'templ',
-          },
-        })
-      end
-    })
+    for server, config in pairs(server_configs) do
+      -- passing config.capabilities to blink.cmp merges with the capabilities in your
+      -- `opts[server].capabilities, if you've defined it
+      config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
+      config.on_attach = lsp_attach
+      lspconfig[server].setup(config)
+    end
   end
 }
