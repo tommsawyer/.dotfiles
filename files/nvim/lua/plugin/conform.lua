@@ -6,6 +6,7 @@ return {
         go = { "goimports" },
         json = { "fixjson" },
         templ = { "templ" },
+        javascript = { "prettier" },
       },
 
       format_on_save = {

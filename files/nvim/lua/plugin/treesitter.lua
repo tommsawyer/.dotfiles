@@ -5,6 +5,7 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
       "windwp/nvim-ts-autotag",
+      'dlvandenberg/nvim-treesitter-nginx',
     },
     config = function()
       local configs = require 'nvim-treesitter.configs'

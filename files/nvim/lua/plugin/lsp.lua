@@ -97,7 +97,6 @@ return {
       ["emmet_language_server"] = function()
         lspconfig.emmet_language_server.setup({
           on_attach = lsp_attach,
-          handlers = handlers,
           capabilities = lsp_capabilities,
           filetypes = {
             'astro',
