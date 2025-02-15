@@ -12,10 +12,20 @@ return {
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lsp' },
     },
 
-    signature = { enabled = true },
+    completion = {
+      documentation = { 
+        auto_show = true, 
+        auto_show_delay_ms = 500,
+        window = {
+          border = 'single',
+        },
+      },
+    },
+
+    signature = { enabled = true, window = { border = 'single'} },
   },
   opts_extend = { "sources.default" }
 }
