@@ -6,12 +6,6 @@ return {
       "JoosepAlviste/nvim-ts-context-commentstring",
       opts = {
         enable_autocmd = false,
-        languages = {
-          templ = {
-            __default = '// %s',
-            component_declaration = '<!-- %s -->',
-          },
-        },
       }
     },
     config = function()
