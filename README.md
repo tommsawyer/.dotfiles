@@ -17,8 +17,9 @@ file, then symlinks the configs. Existing non-symlinked configs are moved to
 
 After that:
 
-- iTerm2: Settings → Profiles → Colors → Color Presets → import
-  `files/iterm/tokyonight_night.itermcolors`, font JetBrainsMono Nerd Font Mono
+- iTerm2: Settings → Profiles → select "Tokyo Night" → Other Actions → Set as
+  Default (the profile itself — colors, font, no mark indicators — comes from
+  `files/iterm/tokyonight.json` as a dynamic profile)
 - `nvim` installs its plugins on the first start
 
 ### Layout
@@ -31,3 +32,4 @@ After that:
 | `files/bat` | `~/.config/bat` |
 | `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
 | `files/git/delta.gitconfig` | included from `~/.gitconfig` |
+| `files/iterm/tokyonight.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/tokyonight.json` |
