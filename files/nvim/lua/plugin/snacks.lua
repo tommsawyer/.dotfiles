@@ -43,11 +43,9 @@ return {
       scope = { char = "▏" },
       animate = { enabled = false },
     },
-    lazygit = { enabled = true },
   },
 
   keys = {
-    { "<leader>gl", function() Snacks.lazygit() end,                      desc = "Lazygit" },
     { "<leader>go", function() Snacks.gitbrowse() end,                    desc = "Open in browser", mode = { "n", "v" } },
     { "<leader>n",  function() Snacks.notifier.show_history() end,        desc = "Notification history" },
     { "<leader>z",  function() Snacks.zen() end,                          desc = "Zen mode" },
