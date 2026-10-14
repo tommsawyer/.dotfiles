@@ -10,6 +10,7 @@ return {
         preset = "select",
       },
     },
+    input = { enabled = true },
     -- notifier = { enabled = true },
     -- quickfile = { enabled = true },
     -- scope = { enabled = true },

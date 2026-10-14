@@ -5,101 +5,110 @@ return {
     'b0o/schemastore.nvim',
   },
 
-  config = function(_, opts)
-    local lspconfig = require('lspconfig')
-    local lsp_attach = function(client, bufnr)
-      local bufmap = function(mode, lhs, rhs)
-        local opts = { buffer = true }
-        vim.keymap.set(mode, lhs, rhs, opts)
-      end
-
-      bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-      bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-      bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>')
-      bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>')
-      bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>')
-      bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>')
-      bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.rename()<cr>')
-      bufmap('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-      bufmap('v', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-      bufmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-      bufmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
-
-      if vim.bo.filetype == "templ" then
-        if client.name == "html" then
-          -- templ lsp doesn't support documentSymbolProvider yet, so use html for .templ files
-          require("nvim-navic").attach(client, bufnr)
-        end
-      else
-        if client.server_capabilities["documentSymbolProvider"] then
-          require("nvim-navic").attach(client, bufnr)
-        end
-      end
+  config = function()
+    -- built-in gr* mappings (0.11+) would make `gr` wait for timeoutlen
+    for _, lhs in ipairs({ 'grn', 'gra', 'grr', 'gri', 'grt', 'grx' }) do
+      pcall(vim.keymap.del, 'n', lhs)
     end
+    pcall(vim.keymap.del, 'x', 'gra')
 
-    local server_configs = {
-      templ = {},
-      gopls = {},
-      ts_ls = {},
-      jsonls = {
+    vim.diagnostic.config({
+      virtual_text = true,
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = '\u{f057} ',
+          [vim.diagnostic.severity.WARN] = '\u{f071} ',
+          [vim.diagnostic.severity.HINT] = '\u{f0eb} ',
+          [vim.diagnostic.severity.INFO] = '\u{f05a} ',
+        },
+      },
+    })
+
+    vim.api.nvim_create_autocmd('LspAttach', {
+      group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
+      callback = function(args)
+        local bufmap = function(mode, lhs, rhs)
+          vim.keymap.set(mode, lhs, rhs, { buffer = args.buf })
+        end
+
+        bufmap('n', 'K', vim.lsp.buf.hover)
+        bufmap('n', 'gd', vim.lsp.buf.definition)
+        bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>')
+        bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>')
+        bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>')
+        bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>')
+        bufmap('n', 'gr', vim.lsp.buf.rename)
+        bufmap({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action)
+      end,
+    })
+
+    vim.lsp.config('*', {
+      capabilities = require('blink.cmp').get_lsp_capabilities(),
+    })
+
+    vim.lsp.config('jsonls', {
+      settings = {
         json = {
           schemas = require('schemastore').json.schemas(),
           validate = { enable = true },
         },
       },
-      yamlls = {
-        settings = {
-          yaml = {
-            keyOrdering = false,
-            schemaStore = {
-              enable = false,
-              url = "",
-            },
-            schemas = require('schemastore').yaml.schemas(),
-          },
-        },
-      },
-      lua_ls = {
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-            workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
-            },
-            telemetry = {
-              enable = false,
-            },
-          },
-        },
-      },
-      emmet_language_server = {
-        filetypes = {
-          'astro',
-          'css',
-          'eruby',
-          'html',
-          'htmldjango',
-          'javascriptreact',
-          'less',
-          'pug',
-          'sass',
-          'scss',
-          'svelte',
-          'typescriptreact',
-          'vue',
-          'templ',
-        },
-      },
-    }
+    })
 
-    for server, config in pairs(server_configs) do
-      -- passing config.capabilities to blink.cmp merges with the capabilities in your
-      -- `opts[server].capabilities, if you've defined it
-      config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
-      config.on_attach = lsp_attach
-      lspconfig[server].setup(config)
-    end
+    vim.lsp.config('yamlls', {
+      settings = {
+        yaml = {
+          keyOrdering = false,
+          schemaStore = {
+            enable = false,
+            url = "",
+          },
+          schemas = require('schemastore').yaml.schemas(),
+        },
+      },
+    })
+
+    vim.lsp.config('lua_ls', {
+      settings = {
+        Lua = {
+          runtime = { version = 'LuaJIT' },
+          diagnostics = { globals = { 'vim' } },
+          workspace = {
+            checkThirdParty = false,
+            library = { vim.env.VIMRUNTIME },
+          },
+          telemetry = { enable = false },
+        },
+      },
+    })
+
+    vim.lsp.config('emmet_language_server', {
+      filetypes = {
+        'astro',
+        'css',
+        'eruby',
+        'html',
+        'htmldjango',
+        'javascriptreact',
+        'less',
+        'pug',
+        'sass',
+        'scss',
+        'svelte',
+        'typescriptreact',
+        'vue',
+        'templ',
+      },
+    })
+
+    vim.lsp.enable({
+      'templ',
+      'gopls',
+      'tsc', -- native TypeScript 7 language server
+      'jsonls',
+      'yamlls',
+      'lua_ls',
+      'emmet_language_server',
+    })
   end
 }

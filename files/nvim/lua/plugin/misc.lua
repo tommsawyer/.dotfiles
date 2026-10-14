@@ -6,7 +6,11 @@ return {
   },
   { "machakann/vim-sandwich" },
   { "tpope/vim-unimpaired" },
-  { "stevearc/dressing.nvim" },      -- better ui
   { "nvim-tree/nvim-web-devicons" }, -- better icons
-  { "antoinemadec/FixCursorHold.nvim" },
+  { "Bekaboo/dropbar.nvim" },        -- breadcrumbs in winbar
+  {
+    -- native `gc` commenting picks up commentstring from treesitter context
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    opts = { enable_autocmd = false },
+  },
 }

@@ -1,1 +1,3 @@
-require("lazy").setup("plugin")
+require("lazy").setup("plugin", {
+  rocks = { enabled = false },
+})

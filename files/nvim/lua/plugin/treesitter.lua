@@ -1,84 +1,112 @@
+local parsers = {
+  "bash",
+  "css",
+  "dockerfile",
+  "go",
+  "gomod",
+  "gosum",
+  "gowork",
+  "html",
+  "javascript",
+  "json",
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "nginx",
+  "query",
+  "sql",
+  "templ",
+  "tsx",
+  "typescript",
+  "vim",
+  "vimdoc",
+  "yaml",
+}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      "windwp/nvim-ts-autotag",
-      'dlvandenberg/nvim-treesitter-nginx',
-    },
     config = function()
-      local configs = require 'nvim-treesitter.configs'
+      require("nvim-treesitter").install(parsers)
 
-      configs.setup({
-        ensure_installed = {
-          "go",
-          "vim",
-          "gosum",
-          "gomod",
-          "yaml",
-          "json",
-          "sql",
-          "dockerfile",
-          "javascript",
-        },
-        sync_install = false,
-        auto_install = false,
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = true
-        },
-        autotag = {
-          enable = true,
-          enable_rename = true,
-          enable_close = true,
-          enable_close_on_slash = true,
-          filetypes = { "html", "xml", "templ" },
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ai"] = "@conditional.outer",
-              ["ii"] = "@conditional.inner",
-              ["al"] = "@loop.outer",
-              ["il"] = "@loop.inner",
-              ["aa"] = "@parameter.outer",
-              ["ia"] = "@parameter.inner",
-              ["ac"] = "@call.outer",
-              ["ic"] = "@call.inner",
-              ["as"] = "@statement.outer",
-              ["is"] = "@statement.outer",
-            },
-            include_surrounding_whitespace = false,
-          },
-          move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              ["]f"] = "@function.outer",
-              ["]i"] = "@conditional.outer",
-              ["]l"] = "@loop.outer",
-              ["]c"] = "@call.outer",
-              ["]s"] = "@statement.outer",
-            },
-            goto_previous_start = {
-              ["[f"] = "@function.outer",
-              ["[i"] = "@conditional.outer",
-              ["[l"] = "@loop.outer",
-              ["[c"] = "@call.outer",
-              ["[s"] = "@statement.outer",
-            },
-          },
-        },
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
+        callback = function(args)
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
     end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    config = function()
+      require("nvim-treesitter-textobjects").setup({
+        select = {
+          lookahead = true,
+          include_surrounding_whitespace = false,
+        },
+        move = {
+          set_jumps = true, -- whether to set jumps in the jumplist
+        },
+      })
+
+      local select = require("nvim-treesitter-textobjects.select")
+      local selects = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ai"] = "@conditional.outer",
+        ["ii"] = "@conditional.inner",
+        ["al"] = "@loop.outer",
+        ["il"] = "@loop.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+        ["ac"] = "@call.outer",
+        ["ic"] = "@call.inner",
+        ["as"] = "@statement.outer",
+        ["is"] = "@statement.outer",
+      }
+      for lhs, query in pairs(selects) do
+        vim.keymap.set({ "x", "o" }, lhs, function()
+          select.select_textobject(query, "textobjects")
+        end)
+      end
+
+      local move = require("nvim-treesitter-textobjects.move")
+      local moves = {
+        f = "@function.outer",
+        i = "@conditional.outer",
+        l = "@loop.outer",
+        c = "@call.outer",
+        s = "@statement.outer",
+      }
+      for key, query in pairs(moves) do
+        vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
+          move.goto_next_start(query, "textobjects")
+        end)
+        vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
+          move.goto_previous_start(query, "textobjects")
+        end)
+      end
+    end
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    opts = {
+      opts = {
+        enable_close = true,
+        enable_rename = true,
+        enable_close_on_slash = true,
+      },
+      aliases = {
+        templ = "html",
+      },
+    },
   },
   {
     "Wansmer/treesj",

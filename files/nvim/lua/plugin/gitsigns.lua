@@ -13,13 +13,13 @@ return {
         -- Navigation
         map('n', ']g', function()
           if vim.wo.diff then return ']g' end
-          vim.schedule(function() gs.next_hunk({ navigation_message = false }) end)
+          vim.schedule(function() gs.nav_hunk("next", { navigation_message = false }) end)
           return '<Ignore>'
         end, { expr = true })
 
         map('n', '[g', function()
           if vim.wo.diff then return '[g' end
-          vim.schedule(function() gs.prev_hunk({ navigation_message = false }) end)
+          vim.schedule(function() gs.nav_hunk("prev", { navigation_message = false }) end)
           return '<Ignore>'
         end, { expr = true })
 
