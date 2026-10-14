@@ -33,6 +33,12 @@ return {
       }
     }
 
+    -- let LSP update imports when files are renamed in the tree
+    local events = require("nvim-tree.api").events
+    events.subscribe(events.Event.NodeRenamed, function(data)
+      Snacks.rename.on_rename_file(data.old_name, data.new_name)
+    end)
+
     vim.keymap.set('n', '<leader><leader>', '<Cmd>NvimTreeToggle<CR>')
     vim.keymap.set('n', '<leader>a', ':NvimTreeFindFile<CR>')
   end

@@ -11,17 +11,23 @@ return {
       },
     },
     input = { enabled = true },
-    -- notifier = { enabled = true },
-    -- quickfile = { enabled = true },
-    -- scope = { enabled = true },
-    -- scroll = { enabled = true },
-    -- statuscolumn = { enabled = true },
-    -- words = { enabled = true },
+    notifier = { enabled = true },
+    bigfile = { enabled = true },
+    gitbrowse = { enabled = true },
+    rename = { enabled = true },
+    indent = {
+      enabled = true,
+      indent = { char = "▏" },
+      scope = { char = "▏" },
+      animate = { enabled = false },
+    },
     lazygit = { enabled = true },
   },
 
   keys = {
     { "<leader>gl", function() Snacks.lazygit() end,                      desc = "Lazygit" },
+    { "<leader>go", function() Snacks.gitbrowse() end,                    desc = "Open in browser", mode = { "n", "v" } },
+    { "<leader>n",  function() Snacks.notifier.show_history() end,        desc = "Notification history" },
 
     {
       "<space>",
