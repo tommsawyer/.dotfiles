@@ -4,12 +4,12 @@ ZSH_THEME="robbyrussell"
 plugins=(aliases macos git tmux golang docker-compose)
 source $ZSH/oh-my-zsh.sh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+command -v fzf >/dev/null && source <(fzf --zsh)
 
 export GOPATH=$HOME/Projects/go
 export GOBIN=$GOPATH/bin
 export PATH="$PATH:$GOBIN"
-export PATH="$PATH:$HOME/tmux"
+export PATH="$HOME/.local/bin:$PATH"
 export CDPATH=$GOPATH/src
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export FZF_DEFAULT_OPTS="--color=gutter:#282828 --color=hl+:#ffb964 --reverse"

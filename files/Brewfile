@@ -1,14 +1,28 @@
-tap "homebrew/bundle"
-tap "homebrew/core"
-
-brew "bat"
-brew "go"
-brew "htop"
-brew "httpie"
-brew "kubernetes-cli"
-brew "libpq", link: true
-brew "node"
-brew "protobuf"
-brew "ripgrep"
+# core
+brew "neovim"
 brew "tmux"
-brew "vim"
+brew "git"
+brew "node"
+
+# cli
+brew "bat"
+brew "fd"
+brew "fzf"
+brew "htop"
+brew "lazygit"
+brew "ripgrep"
+brew "tree-sitter-cli"
+
+# language servers
+brew "gopls"
+brew "lua-language-server"
+brew "templ"
+brew "typescript"
+brew "vscode-langservers-extracted"
+brew "yaml-language-server"
+
+# formatters
+brew "gofumpt"
+brew "prettier"
+
+cask "font-jetbrains-mono-nerd-font"
