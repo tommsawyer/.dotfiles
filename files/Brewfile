@@ -3,6 +3,7 @@ brew "neovim"
 brew "tmux"
 brew "git"
 brew "node"
+brew "go"
 
 # cli
 brew "bat"
