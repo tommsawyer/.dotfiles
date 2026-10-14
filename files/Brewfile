@@ -29,3 +29,6 @@ cask "font-jetbrains-mono-nerd-font"
 
 # markdown
 brew "marksman"
+
+# git
+brew "git-delta"

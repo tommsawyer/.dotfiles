@@ -21,6 +21,8 @@ symlinks:
 	mkdir -p ~/Library/Application\ Support/lazygit
 	ln -sfn ~/.dotfiles/files/lazygit/config.yml ~/Library/Application\ Support/lazygit/config.yml
 	bat cache --build
+	git config --global --get-all include.path | grep -q dotfiles/files/git/delta.gitconfig || \
+		git config --global --add include.path ~/.dotfiles/files/git/delta.gitconfig
 
 spell:
 	mkdir -p ~/.local/share/nvim/site/spell

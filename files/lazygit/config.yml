@@ -25,3 +25,8 @@ gui:
       - "#db4b4b"
     defaultFgColor:
       - "#c0caf5"
+
+git:
+  diffRenderers:
+    - type: stdinFilter
+      command: delta --paging=never
