@@ -27,5 +27,40 @@ alias vim='nvim'
 alias tm='tmux new -s ${PWD##*/}'
 alias rg='rg --hidden'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
+alias lg='lazygit'
+
+# Habit trainer: everyday git commands typed in a terminal (including oh-my-zsh
+# aliases like gst, gd, gp) print the lazygit way instead of running.
+# Only when stdout is a terminal, so scripts, $(git ...), editors and tools keep
+# working. Run real git anyway with `command git ...` or `GIT_FORCE=1 git ...`.
+git() {
+  if [[ -t 1 && -z $GIT_FORCE ]]; then
+    local hint
+    case $1 in
+      status)          hint="просто открой lazygit: панель Files (2)" ;;
+      diff)            hint="Files (2): дифф выбранного файла справа" ;;
+      add)             hint="Files (2): space - stage файла, a - stage всех" ;;
+      commit)          hint="Files (2): c - коммит, A - amend" ;;
+      push)            hint="P - push" ;;
+      pull)            hint="p - pull" ;;
+      fetch)           hint="Files (2): f - fetch" ;;
+      log|show)        hint="Commits (4): история, enter - файлы коммита" ;;
+      checkout|switch) hint="Branches (3): space - checkout, n - новая ветка" ;;
+      branch)          hint="Branches (3): n - новая, d - удалить, R - переименовать" ;;
+      merge)           hint="Branches (3): M - merge в текущую" ;;
+      rebase)          hint="Branches (3): r - rebase; Commits (4): e/s/f - edit/squash/fixup" ;;
+      stash)           hint="Files (2): s - stash; Stash (5): space - apply, g - pop" ;;
+      reset|restore)   hint="Files (2): D - discard/reset; Commits (4): g - reset к коммиту" ;;
+      cherry-pick)     hint="Commits (4): C - скопировать, V - вставить" ;;
+    esac
+    if [[ -n $hint ]]; then
+      print -P "%F{yellow}git $1 -> используй lazygit (lg)%f"
+      print "  $hint"
+      print -P "%F{8}  всё равно выполнить: command git $*%f"
+      return 1
+    fi
+  fi
+  command git "$@"
+}
 
 [ -f ~/.zshcustom ] && source ~/.zshcustom
