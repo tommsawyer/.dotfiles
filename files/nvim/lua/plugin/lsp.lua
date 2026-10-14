@@ -6,12 +6,6 @@ return {
   },
 
   config = function()
-    -- built-in gr* mappings (0.11+) would make `gr` wait for timeoutlen
-    for _, lhs in ipairs({ 'grn', 'gra', 'grr', 'gri', 'grt', 'grx' }) do
-      pcall(vim.keymap.del, 'n', lhs)
-    end
-    pcall(vim.keymap.del, 'x', 'gra')
-
     vim.diagnostic.config({
       virtual_text = true,
       signs = {
@@ -37,7 +31,6 @@ return {
         bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>')
         bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>')
         bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>')
-        bufmap('n', 'gr', vim.lsp.buf.rename)
         bufmap({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action)
       end,
     })
