@@ -14,6 +14,28 @@ return {
     notifier = { enabled = true },
     bigfile = { enabled = true },
     gitbrowse = { enabled = true },
+    zen = {
+      enabled = true,
+      toggles = {
+        dim = false, -- don't highlight only the current paragraph
+        git_signs = false,
+        mini_diff_signs = false,
+      },
+    },
+    styles = {
+      zen = {
+        -- solid background around zen window instead of dimmed editor
+        backdrop = { transparent = false, blend = 99 },
+        -- plain text: no line numbers, sign column (git signs, diagnostics) and dropbar winbar
+        wo = {
+          winbar = "",
+          number = false,
+          relativenumber = false,
+          signcolumn = "no",
+          foldcolumn = "0",
+        },
+      },
+    },
     rename = { enabled = true },
     indent = {
       enabled = true,
@@ -28,6 +50,7 @@ return {
     { "<leader>gl", function() Snacks.lazygit() end,                      desc = "Lazygit" },
     { "<leader>go", function() Snacks.gitbrowse() end,                    desc = "Open in browser", mode = { "n", "v" } },
     { "<leader>n",  function() Snacks.notifier.show_history() end,        desc = "Notification history" },
+    { "<leader>z",  function() Snacks.zen() end,                          desc = "Zen mode" },
 
     {
       "<space>",

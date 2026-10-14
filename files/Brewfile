@@ -26,3 +26,6 @@ brew "gofumpt"
 brew "prettier"
 
 cask "font-jetbrains-mono-nerd-font"
+
+# markdown
+brew "marksman"

@@ -46,6 +46,14 @@ return {
       capabilities = require('blink.cmp').get_lsp_capabilities(),
     })
 
+    vim.lsp.config('gopls', {
+      settings = {
+        gopls = {
+          templateExtensions = { 'html', 'tmpl', 'gotmpl' },
+        },
+      },
+    })
+
     vim.lsp.config('jsonls', {
       settings = {
         json = {
@@ -98,6 +106,7 @@ return {
         'typescriptreact',
         'vue',
         'templ',
+        'gotmpl',
       },
     })
 
@@ -109,6 +118,7 @@ return {
       'yamlls',
       'lua_ls',
       'emmet_language_server',
+      'marksman',
     })
   end
 }

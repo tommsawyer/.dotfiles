@@ -35,6 +35,16 @@ vim.opt.linebreak = true
 vim.opt.cmdheight = 0
 vim.opt.mouse = ''
 vim.opt.winborder = "single"
-vim.filetype.add({ extension = { templ = "templ" } })
+vim.filetype.add({
+  extension = { templ = "templ" },
+  pattern = {
+    -- go templates in hugo layouts
+    [".*/layouts/.*%.html"] = function(path)
+      if vim.fs.root(path, { "hugo.toml", "hugo.yaml", "hugo.json", "config.toml", "config.yaml" }) then
+        return "gotmpl"
+      end
+    end,
+  },
+})
 
 vim.cmd("abbr rt return")
