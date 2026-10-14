@@ -35,6 +35,32 @@ return {
       end,
     })
 
+    -- go: add missing / remove unused imports on save (gopls organizeImports),
+    -- conform then formats with gofumpt
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = vim.api.nvim_create_augroup('UserGoImports', { clear = true }),
+      pattern = '*.go',
+      callback = function(args)
+        local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'gopls' })[1]
+        if not client then
+          return
+        end
+
+        local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
+        params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
+        local result = client:request_sync('textDocument/codeAction', params, 1000, args.buf)
+        for _, action in ipairs(result and result.result or {}) do
+          if not action.edit then
+            local resolved = client:request_sync('codeAction/resolve', action, 1000, args.buf)
+            action = resolved and resolved.result or action
+          end
+          if action.edit then
+            vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+          end
+        end
+      end,
+    })
+
     vim.lsp.config('*', {
       capabilities = require('blink.cmp').get_lsp_capabilities(),
     })
