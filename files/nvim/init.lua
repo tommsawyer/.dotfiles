@@ -15,3 +15,6 @@ require("mappings")
 require("plugins")
 require("options")
 require("autocommands")
+
+-- translate mappings created before langmapper was loaded
+require("langmapper").automapping({ global = true, buffer = true })

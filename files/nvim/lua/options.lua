@@ -48,3 +48,16 @@ vim.filetype.add({
 })
 
 vim.cmd("abbr rt return")
+
+-- russian layout (Russian - PC): normal/visual commands work without switching layout
+vim.opt.langmap = table.concat({
+  [[ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ;QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>~]],
+  [[йцукенгшщзхъфывапролджэячсмитьбюё;qwertyuiop[]asdfghjkl\;'zxcvbnm\,.`]],
+}, ",")
+
+-- :ц -> :w, :й -> :q etc. (only for whole ex commands, not for / search)
+for ru, en in pairs({ ["ц"] = "w", ["й"] = "q", ["цй"] = "wq", ["йф"] = "qa", ["цйф"] = "wqa", ["ч"] = "x" }) do
+  vim.keymap.set("ca", ru, function()
+    return (vim.fn.getcmdtype() == ":" and vim.fn.getcmdline() == ru) and en or ru
+  end, { expr = true })
+end
