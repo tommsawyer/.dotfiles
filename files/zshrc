@@ -10,8 +10,6 @@ export GOPATH=$HOME/Projects/go
 export GOBIN=$GOPATH/bin
 export PATH="$PATH:$GOBIN"
 export PATH="$HOME/.local/bin:$PATH"
-export CDPATH=$GOPATH/src
-export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=bg+:#283457,bg:#16161e,border:#27a1b9,fg:#c0caf5,gutter:#16161e \
   --color=header:#ff9e64,hl+:#2ac3de,hl:#2ac3de,info:#545c7e,marker:#ff007c \
@@ -20,8 +18,6 @@ export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
 export EDITOR=nvim
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs'
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 alias vim='nvim'
 alias tm='tmux new -s ${PWD##*/}'
