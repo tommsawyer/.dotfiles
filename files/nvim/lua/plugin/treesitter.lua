@@ -40,7 +40,12 @@ return {
         group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
         callback = function(args)
           if pcall(vim.treesitter.start, args.buf) then
-            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            -- only where nvim-treesitter has indent queries (not kotlin, templ, ...),
+            -- otherwise indentexpr returns 0 and new lines start at column 0
+            local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+            if lang and vim.treesitter.query.get(lang, "indents") then
+              vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            end
           end
         end,
       })
