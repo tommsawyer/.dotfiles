@@ -24,7 +24,8 @@ brew:
 	brew bundle --file="$(DOTFILES)/files/Brewfile"
 
 npm:
-	npm install -g @olrtg/emmet-language-server
+	# into ~/.local, not the global npm prefix: that one may be root-owned (EACCES)
+	npm install -g --prefix "$(HOME)/.local" @olrtg/emmet-language-server
 
 oh-my-zsh:
 	[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
