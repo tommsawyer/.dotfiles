@@ -1,0 +1,6 @@
+{
+  "runtime.version": "LuaJIT",
+  "diagnostics.globals": ["vim", "Snacks"],
+  "diagnostics.disable": ["undefined-doc-name"],
+  "workspace.checkThirdParty": false
+}
