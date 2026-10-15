@@ -2,18 +2,11 @@ return {
   "nvim-tree/nvim-tree.lua",
   config = function()
     require("nvim-tree").setup {
+      view = {
+        -- grows with the longest visible line, within limits
+        width = { min = 30, max = "40%", padding = 1 },
+      },
       renderer = {
-        indent_markers = {
-          enable = true,
-          inline_arrows = true,
-          icons = {
-            corner = "└",
-            edge = "│",
-            item = "│",
-            bottom = "─",
-            none = " ",
-          },
-        },
         root_folder_label = false,
         icons = {
           show = {
