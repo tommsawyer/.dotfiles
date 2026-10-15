@@ -4,7 +4,9 @@
 
 # Styles...
 foreground: &foreground "#dcd7ba"
-background: &background "#1f1f28"
+# changed from upstream "#1f1f28": use the terminal background as is, so it matches iTerm
+# even when k9s falls back to 256 colors (no COLORTERM=truecolor, e.g. in an old tmux server)
+background: &background "default"
 black: &black "#090618"
 blue: &blue "#7e9cd8"
 green: &green "#76946a"
