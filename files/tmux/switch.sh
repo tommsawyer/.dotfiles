@@ -1,7 +1,7 @@
 #!/bin/sh
 # prefix s: fzf over the windows of all sessions, with a live preview of the selected one.
 # enter: switch to it; ctrl-x: kill it; a name that matches nothing + enter: new session
-# with that name. Linked to ~/.local/bin/tmux-switch by `make symlinks`.
+# with that name. Lives in ~/.config/tmux (the whole folder is linked by `make symlinks`).
 
 if [ "$1" = list ]; then
   tmux list-windows -a -F "#{session_name}:#{window_index}	#{window_name}	#{pane_current_path}" |

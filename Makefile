@@ -32,10 +32,11 @@ oh-my-zsh:
 	[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 
 symlinks:
-	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
+	mkdir -p "$(HOME)/.config" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
 	$(call link,$(DOTFILES)/files/zshrc,$(HOME)/.zshrc)
-	$(call link,$(DOTFILES)/files/tmux.conf,$(HOME)/.tmux.conf)
-	$(call link,$(DOTFILES)/files/tmux/switch.sh,$(HOME)/.local/bin/tmux-switch)
+	@# tmux used to be linked to ~/.tmux.conf, which tmux reads before ~/.config/tmux
+	@for f in "$(HOME)/.tmux.conf" "$(HOME)/.local/bin/tmux-switch"; do [ -L "$$f" ] && rm "$$f" && echo "removed old link $$f"; done; true
+	$(call link,$(DOTFILES)/files/tmux,$(HOME)/.config/tmux)
 	$(call link,$(DOTFILES)/files/nvim,$(HOME)/.config/nvim)
 	$(call link,$(DOTFILES)/files/bat,$(HOME)/.config/bat)
 	$(call link,$(DOTFILES)/files/lazygit/config.yml,$(LAZYGIT_DIR)/config.yml)
@@ -61,7 +62,7 @@ nvim-sync:
 check:
 	@echo "zsh"; zsh -n files/zshrc
 	@# a throwaway server: -n only parses and misses unknown options
-	@echo "tmux"; tmux -L dotfiles-check -f /dev/null new-session -d \; source-file files/tmux.conf; \
+	@echo "tmux"; tmux -L dotfiles-check -f /dev/null new-session -d \; source-file files/tmux/tmux.conf; \
 		rc=$$?; tmux -L dotfiles-check kill-server 2>/dev/null; exit $$rc
 	@echo "sh"; shellcheck files/tmux/*.sh
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
@@ -73,7 +74,7 @@ check:
 	@echo "all good"
 
 clean:
-	rm -f "$(HOME)/.zshrc" "$(HOME)/.tmux.conf" "$(HOME)/.local/bin/tmux-switch" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(K9S_DIR)/config.yaml" "$(K9S_DIR)/skins/kanagawa.yaml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
+	rm -f "$(HOME)/.zshrc" "$(HOME)/.config/tmux" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(K9S_DIR)/config.yaml" "$(K9S_DIR)/skins/kanagawa.yaml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
 .PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync check clean
