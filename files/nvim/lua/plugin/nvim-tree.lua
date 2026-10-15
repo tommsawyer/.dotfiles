@@ -40,7 +40,15 @@ return {
       Snacks.rename.on_rename_file(data.old_name, data.new_name)
     end)
 
-    vim.keymap.set('n', '<leader><leader>', '<Cmd>NvimTreeToggle<CR>', { desc = "File tree" })
+    -- opening the tree from a project file also reveals that file in it
+    vim.keymap.set('n', '<leader><leader>', function()
+      local file = vim.bo.buftype == "" and vim.uv.fs_realpath(vim.api.nvim_buf_get_name(0))
+      local root = vim.uv.fs_realpath(vim.uv.cwd())
+      require("nvim-tree.api").tree.toggle({
+        find_file = file and vim.startswith(file, root .. "/") or false,
+        focus = true,
+      })
+    end, { desc = "File tree" })
     vim.keymap.set('n', '<leader>a', ':NvimTreeFindFile<CR>', { desc = "Reveal file in tree" })
   end
 }
