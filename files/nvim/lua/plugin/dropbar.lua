@@ -56,6 +56,10 @@ return {
       },
       -- code structure only: no table fields, values, ifs and returns in the breadcrumbs
       sources = {
+        -- preview files, not folders: a folder is a raw `ls -lhA`, its sub-menu (o) looks better
+        path = {
+          preview = function(path) return vim.fn.isdirectory(path) == 0 end,
+        },
         lsp = {
           valid_symbols = {
             "File", "Module", "Namespace", "Package", "Class", "Struct", "Interface", "Enum",
