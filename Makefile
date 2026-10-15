@@ -56,8 +56,22 @@ spell:
 nvim-sync:
 	nvim --headless "+Lazy! sync" +qa
 
+# fast sanity checks for the configs, run after changing them
+check:
+	@echo "zsh"; zsh -n files/zshrc
+	@# a throwaway server: -n only parses and misses unknown options
+	@echo "tmux"; tmux -L dotfiles-check -f /dev/null new-session -d \; source-file files/tmux.conf; \
+		rc=$$?; tmux -L dotfiles-check kill-server 2>/dev/null; exit $$rc
+	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
+		files/lazygit/config.yml files/k9s/config.yaml files/k9s/skins/kanagawa.yaml
+	@echo "lua"; lua-language-server --check="$(DOTFILES)/files/nvim" --configpath="$(DOTFILES)/.luarc.json" \
+		--checklevel=Warning >/dev/null || { echo "run it without >/dev/null to see the problems"; exit 1; }
+	@# goes through ~/.config/nvim, so needs `make symlinks`; startup errors are printed, silenced ones are not
+	@echo "nvim"; out=$$(nvim --headless +qa 2>&1); [ -z "$$out" ] || { echo "$$out"; exit 1; }
+	@echo "all good"
+
 clean:
 	rm -f "$(HOME)/.zshrc" "$(HOME)/.tmux.conf" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(K9S_DIR)/config.yaml" "$(K9S_DIR)/skins/kanagawa.yaml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync clean
+.PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync check clean
