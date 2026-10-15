@@ -12,6 +12,8 @@ export GOPATH=$HOME/Projects/go
 export GOBIN=$GOPATH/bin
 export PATH="$PATH:$GOBIN"
 export PATH="$HOME/.local/bin:$PATH"
+# JDK for Gradle (keg-only, brew does not link it)
+[ -d /opt/homebrew/opt/openjdk@21 ] && export JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=fg:#DCD7BA,bg:#1F1F28,hl:#7E9CD8,fg+:#DCD7BA,bg+:#223249,hl+:#7FB4CA \
   --color=info:#C0A36E,prompt:#957FB8,pointer:#FF9E3B,marker:#98BB6C,spinner:#957FB8 \

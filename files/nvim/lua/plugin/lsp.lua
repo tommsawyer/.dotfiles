@@ -137,6 +137,7 @@ return {
       'lua_ls',
       'emmet_language_server',
       'marksman',
+      'sourcekit', -- swift, comes with Xcode (kotlin is started by kotlin.nvim)
     })
   end
 }

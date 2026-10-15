@@ -9,8 +9,10 @@ return {
         javascript = { "prettier" },
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
+        swift = { "swift_format" },
       },
 
+      -- kotlin has no formatter here: falls back to kotlin-lsp (IntelliJ code style)
       format_on_save = {
         timeout_ms = 500,
         lsp_format = "fallback",
