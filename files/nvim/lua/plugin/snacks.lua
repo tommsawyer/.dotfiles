@@ -37,12 +37,6 @@ return {
       },
     },
     rename = { enabled = true },
-    indent = {
-      enabled = true,
-      indent = { char = "▏" },
-      scope = { char = "▏" },
-      animate = { enabled = false },
-    },
   },
 
   keys = {
