@@ -37,8 +37,8 @@ return {
       },
     },
     rename = { enabled = true },
-    -- indent scopes on `=`: [= ]= jump to the edges, i= a= text objects
-    -- (the default [i ]i ii ai are conditionals from treesitter-textobjects here)
+    -- indent scopes as i= a= text objects ([= ]= are in mappings.lua);
+    -- the default [i ]i ii ai are conditionals from treesitter-textobjects here
     scope = {
       enabled = true,
       treesitter = { enabled = false }, -- by indentation only (treesitter scopes are odd in yaml)
@@ -52,8 +52,6 @@ return {
         jump = {
           ["[i"] = false,
           ["]i"] = false,
-          ["[="] = { min_size = 1, bottom = false, cursor = false, edge = true, desc = "Top edge of scope" },
-          ["]="] = { min_size = 1, bottom = true, cursor = false, edge = true, desc = "Bottom edge of scope" },
         },
       },
     },
