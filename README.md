@@ -29,6 +29,7 @@ After that:
 |---|---|
 | `files/zshrc` | `~/.zshrc` |
 | `files/tmux.conf` | `~/.tmux.conf` |
+| `files/tmux/switch.sh` | `~/.local/bin/tmux-switch` (`prefix s`) |
 | `files/nvim` | `~/.config/nvim` |
 | `files/bat` | `~/.config/bat` |
 | `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
