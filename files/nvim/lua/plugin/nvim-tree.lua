@@ -25,6 +25,7 @@ return {
         special_files = {},
       },
       filters = {
+        dotfiles = true, -- hidden by default, H toggles
         custom = {
           '.*_templ.go',
           '.*_templ.txt',
