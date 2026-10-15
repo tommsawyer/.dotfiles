@@ -10,9 +10,13 @@ return {
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
         swift = { "swift_format" },
+        python = { "ruff_organize_imports", "ruff_format" },
+        sh = { "shfmt" },
+        bash = { "shfmt" },
       },
 
-      -- kotlin has no formatter here: falls back to kotlin-lsp (IntelliJ code style)
+      -- kotlin and ruby have no formatter here: fall back to their LSP
+      -- (kotlin-lsp with IntelliJ style, ruby-lsp with the project's rubocop)
       format_on_save = {
         timeout_ms = 500,
         lsp_format = "fallback",

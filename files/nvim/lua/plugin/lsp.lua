@@ -89,9 +89,44 @@ return {
             enable = false,
             url = "",
           },
-          schemas = require('schemastore').yaml.schemas(),
+          schemas = require('schemastore').yaml.schemas({
+            extra = {
+              -- same url as the catalog entry, so it replaces it: keep the catalog globs and add included files
+              {
+                name = 'gitlab-ci',
+                description = 'GitLab CI: main file and files included from .gitlab/ci/',
+                url = 'https://gitlab.com/gitlab-org/gitlab-foss/-/raw/master/app/assets/javascripts/editor/schema/ci.json',
+                fileMatch = {
+                  '**/.gitlab-ci.yml', '**/.gitlab-ci.yaml', '**/*.gitlab-ci.yml', '**/*.gitlab-ci.yaml',
+                  '**/.gitlab/ci/*.yml', '**/.gitlab/ci/*.yaml',
+                },
+              },
+            },
+          }),
+          -- gitlab ci `!reference [job, script]`
+          customTags = { '!reference sequence' },
         },
       },
+    })
+
+    vim.lsp.config('basedpyright', {
+      settings = {
+        basedpyright = {
+          disableOrganizeImports = true, -- ruff does it
+          analysis = { typeCheckingMode = 'standard' }, -- default "recommended" is very noisy
+        },
+      },
+    })
+
+    -- ruff: lint + format + imports; hover comes from basedpyright
+    vim.api.nvim_create_autocmd('LspAttach', {
+      group = vim.api.nvim_create_augroup('UserRuffNoHover', { clear = true }),
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client.name == 'ruff' then
+          client.server_capabilities.hoverProvider = false
+        end
+      end,
     })
 
     vim.lsp.config('lua_ls', {
@@ -138,6 +173,10 @@ return {
       'emmet_language_server',
       'marksman',
       'sourcekit', -- swift, comes with Xcode (kotlin is started by kotlin.nvim)
+      'ruby_lsp',
+      'basedpyright',
+      'ruff',
+      'bashls',
     })
   end
 }
