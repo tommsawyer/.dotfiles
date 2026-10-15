@@ -38,6 +38,37 @@ return {
         end,
         -- same labels as flash, in the same order
         pick = { pivots = "asdfghjklqwertyuiopzxcvbnm" },
+        -- in data files the key path is the structure: take it from treesitter (the LSP
+        -- symbols below are code-only), elsewhere the default (path + LSP or treesitter)
+        sources = function(buf)
+          local sources = require("dropbar.sources")
+          local ft = vim.bo[buf].ft
+          if ft == "yaml" or ft == "json" or ft == "jsonc" or ft == "toml" then
+            return { sources.path, sources.treesitter }
+          end
+          if ft == "markdown" then return { sources.path, sources.markdown } end
+          if vim.bo[buf].bt == "terminal" then return { sources.terminal } end
+          return {
+            sources.path,
+            require("dropbar.utils").source.fallback({ sources.lsp, sources.treesitter }),
+          }
+        end,
+      },
+      -- code structure only: no table fields, values, ifs and returns in the breadcrumbs
+      sources = {
+        lsp = {
+          valid_symbols = {
+            "File", "Module", "Namespace", "Package", "Class", "Struct", "Interface", "Enum",
+            "Constructor", "Method", "Function",
+          },
+        },
+        treesitter = {
+          valid_types = {
+            "namespace", "package", "class", "struct", "interface", "enum",
+            "constructor", "method", "function",
+            "pair", "block_mapping_pair", "table", -- keys in json / yaml / toml
+          },
+        },
       },
       menu = {
         win_configs = { border = "none" }, -- just the background, like the completion menu
