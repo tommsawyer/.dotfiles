@@ -3,6 +3,7 @@ local parsers = {
   "css",
   "dockerfile",
   "embedded_template",
+  "git_config",
   "go",
   "gomod",
   "gosum",
@@ -14,6 +15,7 @@ local parsers = {
   "kotlin",
   "json",
   "lua",
+  "make",
   "markdown",
   "markdown_inline",
   "nginx",
@@ -29,6 +31,7 @@ local parsers = {
   "vim",
   "vimdoc",
   "yaml",
+  "zsh",
 }
 
 return {

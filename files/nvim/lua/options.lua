@@ -36,7 +36,7 @@ vim.opt.cmdheight = 0
 vim.opt.mouse = ''
 vim.opt.winborder = "single"
 vim.filetype.add({
-  extension = { templ = "templ" },
+  extension = { templ = "templ", gitconfig = "gitconfig" },
   pattern = {
     -- go templates in hugo layouts
     [".*/layouts/.*%.html"] = function(path)
