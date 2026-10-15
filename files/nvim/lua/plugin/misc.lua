@@ -20,5 +20,4 @@ return {
     end,
   },
   { "nvim-tree/nvim-web-devicons" }, -- better icons
-  { "Bekaboo/dropbar.nvim" },        -- breadcrumbs in winbar
 }
