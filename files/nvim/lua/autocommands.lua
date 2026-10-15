@@ -29,11 +29,20 @@ api.nvim_create_autocmd("VimEnter", {
   nested = true, -- so FileType, LSP, treesitter and lazy-loaded plugins fire for that file
   callback = function()
     if vim.fn.argc() > 0 then return end -- `nvim file`, `nvim .`, git commit
-    local cwd = vim.uv.fs_realpath(vim.uv.cwd()) .. "/"
+    -- +Man!, stdin, -q, -S, -c 'e x' leave something else in the start buffer: keep it
+    local buf = api.nvim_get_current_buf()
+    if api.nvim_buf_get_name(buf) ~= "" or vim.bo[buf].buftype ~= "" or vim.bo[buf].modified
+        or api.nvim_buf_line_count(buf) > 1 or api.nvim_buf_get_lines(buf, 0, 1, false)[1] ~= "" then
+      return
+    end
+    local cwd = vim.uv.cwd() -- nil when cwd was deleted
+    local root = cwd and vim.uv.fs_realpath(cwd)
+    if not root then return end
+    root = root .. "/"
     for _, f in ipairs(vim.v.oldfiles) do
       -- realpath: oldfiles may go through symlinks; nil means the file is gone
       local real = vim.uv.fs_realpath(f)
-      if real and vim.startswith(real, cwd) and not real:find("/.git/", 1, true) then
+      if real and vim.startswith(real, root) and not real:find("/.git/", 1, true) then
         vim.cmd.edit(vim.fn.fnameescape(real))
         return
       end

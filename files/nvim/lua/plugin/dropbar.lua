@@ -1,9 +1,14 @@
--- path of the file under the cursor in the drop-down menu, nil for symbols (functions etc.)
-local function menu_path()
+-- menu and the entry component under the cursor in the drop-down menu
+local function menu_component()
   local menu = require("dropbar.utils").menu.get_current()
   if not menu then return end
   local cursor = vim.api.nvim_win_get_cursor(menu.win)
-  local component = menu.entries[cursor[1]]:first_clickable(cursor[2])
+  return menu, menu.entries[cursor[1]]:first_clickable(cursor[2])
+end
+
+-- path of the file or folder under the cursor in the menu, nil for symbols (functions etc.)
+local function menu_path()
+  local _, component = menu_component()
   return component and component.data and component.data.path
 end
 
@@ -20,7 +25,8 @@ return {
         -- the default needs a treesitter parser or LSP; show at least the path for any file
         -- (tmux.conf, gitconfig...), keeping the default exclusions
         enable = function(buf, win)
-          if vim.fn.win_gettype(win) ~= "" or vim.wo[win].winbar ~= "" or vim.bo[buf].ft == "help" then
+          if not vim.api.nvim_buf_is_valid(buf) or not vim.api.nvim_win_is_valid(win)
+              or vim.fn.win_gettype(win) ~= "" or vim.wo[win].winbar ~= "" or vim.bo[buf].ft == "help" then
             return false
           end
           local name = vim.api.nvim_buf_get_name(buf)
@@ -38,11 +44,8 @@ return {
         keymaps = {
           -- like o in nvim-tree (and <CR> here): folder -> its sub-menu, file -> open it
           ["o"] = function()
-            local menu = require("dropbar.utils").menu.get_current()
-            if not menu then return end
-            local cursor = vim.api.nvim_win_get_cursor(menu.win)
-            local component = menu.entries[cursor[1]]:first_clickable(cursor[2])
-            if component then
+            local menu, component = menu_component()
+            if menu and component then
               menu:click_on(component, nil, 1, "l")
             end
           end,
@@ -61,7 +64,8 @@ return {
             close_menus()
             vim.ui.input({ prompt = "New file in " .. vim.fn.fnamemodify(dir, ":~:.") .. "/" }, function(name)
               if not name or name == "" then return end
-              local file = vim.fs.joinpath(dir, name)
+              -- absolute or ~ paths are taken as is
+              local file = name:match("^[/~]") and vim.fs.normalize(name) or vim.fs.joinpath(dir, name)
               vim.fn.mkdir(vim.fs.dirname(file), "p")
               vim.cmd.edit(vim.fn.fnameescape(file))
             end)

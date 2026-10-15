@@ -113,7 +113,7 @@ return {
   },
   {
     "windwp/nvim-ts-autotag",
-    ft = { "html", "xml", "templ", "gotmpl", "eruby", "javascriptreact", "typescriptreact", "vue", "svelte" },
+    event = { "BufReadPre", "BufNewFile" }, -- it picks the filetypes it supports itself
     opts = {
       opts = {
         enable_close = true,

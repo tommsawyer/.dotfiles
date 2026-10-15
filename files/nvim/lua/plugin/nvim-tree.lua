@@ -43,9 +43,10 @@ return {
     -- opening the tree from a project file also reveals that file in it
     vim.keymap.set('n', '<leader><leader>', function()
       local file = vim.bo.buftype == "" and vim.uv.fs_realpath(vim.api.nvim_buf_get_name(0))
-      local root = vim.uv.fs_realpath(vim.uv.cwd())
+      local cwd = vim.uv.cwd() -- nil when cwd was deleted
+      local root = cwd and vim.uv.fs_realpath(cwd)
       require("nvim-tree.api").tree.toggle({
-        find_file = file and vim.startswith(file, root .. "/") or false,
+        find_file = file and root and vim.startswith(file, root .. "/") or false,
         focus = true,
       })
     end, { desc = "File tree" })
