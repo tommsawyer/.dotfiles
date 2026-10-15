@@ -195,7 +195,8 @@
         "Red Component": 0.1764705926179886
       },
       "Use Bold Font": true,
-      "Use Italic Font": true
+      "Use Italic Font": true,
+      "Use Separate Colors for Light and Dark Mode": false
     }
   ]
 }
