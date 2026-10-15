@@ -38,6 +38,8 @@ symlinks:
 	$(call link,$(DOTFILES)/files/bat,$(HOME)/.config/bat)
 	$(call link,$(DOTFILES)/files/lazygit/config.yml,$(LAZYGIT_DIR)/config.yml)
 	$(call link,$(DOTFILES)/files/iterm/profile.json,$(ITERM_PROFILES_DIR)/dotfiles.json)
+	# drop dangling links left from renamed profiles, iTerm complains about them on start
+	@find "$(ITERM_PROFILES_DIR)" -type l ! -exec test -e {} \; -print -delete
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
 		git config --global --add include.path "$(DELTA_CONFIG)"
