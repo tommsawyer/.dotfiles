@@ -37,6 +37,26 @@ return {
       },
     },
     rename = { enabled = true },
+    -- indent scopes on `=`: [= ]= jump to the edges, i= a= text objects
+    -- (the default [i ]i ii ai are conditionals from treesitter-textobjects here)
+    scope = {
+      enabled = true,
+      treesitter = { enabled = false }, -- by indentation only (treesitter scopes are odd in yaml)
+      keys = {
+        textobject = {
+          ii = false,
+          ai = false,
+          ["i="] = { min_size = 2, edge = false, cursor = false, desc = "inner scope" },
+          ["a="] = { min_size = 2, cursor = false, desc = "full scope" },
+        },
+        jump = {
+          ["[i"] = false,
+          ["]i"] = false,
+          ["[="] = { min_size = 1, bottom = false, cursor = false, edge = true, desc = "Top edge of scope" },
+          ["]="] = { min_size = 1, bottom = true, cursor = false, edge = true, desc = "Bottom edge of scope" },
+        },
+      },
+    },
   },
 
   keys = {
