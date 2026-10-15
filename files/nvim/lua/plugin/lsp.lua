@@ -30,7 +30,6 @@ return {
         bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>', 'Type definitions (Trouble)')
         bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>', 'Implementations (Trouble)')
         bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>', 'Symbols (Trouble)')
-        bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>', 'References (Trouble)')
         bufmap({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, 'Code action')
       end,
     })

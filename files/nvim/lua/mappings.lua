@@ -24,3 +24,5 @@ vim.keymap.set('n', '<C-l>', moveWindow("l"), { desc = "Window right (split if n
 
 vim.keymap.set('n', '{', ':<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>', { silent = true, desc = "Previous paragraph" })
 vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>', { silent = true, desc = "Next paragraph" })
+
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR><Esc>', { desc = "Clear search highlight" })
