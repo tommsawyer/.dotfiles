@@ -110,6 +110,7 @@ return {
   },
   {
     "windwp/nvim-ts-autotag",
+    ft = { "html", "xml", "templ", "gotmpl", "eruby", "javascriptreact", "typescriptreact", "vue", "svelte" },
     opts = {
       opts = {
         enable_close = true,
@@ -123,20 +124,17 @@ return {
   },
   {
     "Wansmer/treesj",
-    config = function()
-      local tsj = require('treesj')
-
-      tsj.setup({
-        use_default_keymaps = false,
-        check_syntax_error = true,
-        max_join_length = 120,
-        cursor_behavior = 'hold',
-        notify = true,
-        dot_repeat = true,
-      })
-
-      vim.keymap.set('n', 'gJ', tsj.join, { desc = "Join block" })
-      vim.keymap.set('n', 'gS', tsj.split, { desc = "Split block" })
-    end
+    keys = {
+      { "gJ", function() require("treesj").join() end,  desc = "Join block" },
+      { "gS", function() require("treesj").split() end, desc = "Split block" },
+    },
+    opts = {
+      use_default_keymaps = false,
+      check_syntax_error = true,
+      max_join_length = 120,
+      cursor_behavior = 'hold',
+      notify = true,
+      dot_repeat = true,
+    },
   }
 }

@@ -2,6 +2,7 @@ return {
   'saghen/blink.cmp',
   dependencies = 'rafamadriz/friendly-snippets',
   version = '*',
+  event = { 'InsertEnter', 'CmdlineEnter' }, -- files load it earlier through lspconfig
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
