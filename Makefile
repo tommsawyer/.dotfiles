@@ -2,6 +2,7 @@
 DOTFILES := $(CURDIR)
 LAZYGIT_DIR := $(HOME)/Library/Application Support/lazygit
 ITERM_PROFILES_DIR := $(HOME)/Library/Application Support/iTerm2/DynamicProfiles
+K9S_DIR := $(HOME)/Library/Application Support/k9s
 DELTA_CONFIG := $(DOTFILES)/files/git/delta.gitconfig
 
 # on a fresh mac brew is not on PATH yet, and each recipe line is a new shell
@@ -31,12 +32,14 @@ oh-my-zsh:
 	[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 
 symlinks:
-	mkdir -p "$(HOME)/.config" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)"
+	mkdir -p "$(HOME)/.config" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
 	$(call link,$(DOTFILES)/files/zshrc,$(HOME)/.zshrc)
 	$(call link,$(DOTFILES)/files/tmux.conf,$(HOME)/.tmux.conf)
 	$(call link,$(DOTFILES)/files/nvim,$(HOME)/.config/nvim)
 	$(call link,$(DOTFILES)/files/bat,$(HOME)/.config/bat)
 	$(call link,$(DOTFILES)/files/lazygit/config.yml,$(LAZYGIT_DIR)/config.yml)
+	$(call link,$(DOTFILES)/files/k9s/config.yaml,$(K9S_DIR)/config.yaml)
+	$(call link,$(DOTFILES)/files/k9s/skins/kanagawa.yaml,$(K9S_DIR)/skins/kanagawa.yaml)
 	$(call link,$(DOTFILES)/files/iterm/profile.json,$(ITERM_PROFILES_DIR)/dotfiles.json)
 	# drop dangling links left from renamed profiles, iTerm complains about them on start
 	@find "$(ITERM_PROFILES_DIR)" -type l ! -exec test -e {} \; -print -delete
@@ -54,7 +57,7 @@ nvim-sync:
 	nvim --headless "+Lazy! sync" +qa
 
 clean:
-	rm -f "$(HOME)/.zshrc" "$(HOME)/.tmux.conf" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
+	rm -f "$(HOME)/.zshrc" "$(HOME)/.tmux.conf" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(K9S_DIR)/config.yaml" "$(K9S_DIR)/skins/kanagawa.yaml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
 .PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync clean

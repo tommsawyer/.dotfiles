@@ -34,6 +34,9 @@ brew "marksman"
 # git
 brew "git-delta"
 
+# kubernetes
+brew "k9s"
+
 # kotlin
 cask "kotlin-lsp"
 

@@ -1,0 +1,13 @@
+k9s:
+  # modification commands (delete, kill, edit, ...) are disabled; `k9s --write` for a one-off write session
+  readOnly: true
+  refreshRate: 2
+  skipLatestRevCheck: true
+  ui:
+    skin: kanagawa
+    logoless: true
+    splashless: true
+  logger:
+    tail: 200
+    buffer: 5000
+    sinceSeconds: 300
