@@ -62,3 +62,9 @@ api.nvim_create_autocmd("BufReadPost", {
   end,
   group = api.nvim_create_augroup("RestoreCursor", { clear = true }),
 })
+
+-- no comment leader on o/O/<CR>; ftplugins set formatoptions per buffer, so after them
+api.nvim_create_autocmd("FileType", {
+  callback = function() vim.opt_local.formatoptions:remove({ "c", "r", "o" }) end,
+  group = api.nvim_create_augroup("FormatOptions", { clear = true }),
+})
