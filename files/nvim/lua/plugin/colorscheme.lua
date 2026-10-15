@@ -1,12 +1,19 @@
 return {
-  "folke/tokyonight.nvim",
+  "rebelot/kanagawa.nvim",
   lazy = false,
   priority = 1000,
   opts = {
-    style = "night",
+    theme = "wave",
+    background = { dark = "wave" },
+    colors = {
+      theme = {
+        -- sign/number column without its own darker background
+        all = { ui = { bg_gutter = "none" } },
+      },
+    },
   },
   config = function(_, opts)
-    require("tokyonight").setup(opts)
-    vim.cmd("colorscheme tokyonight-night")
+    require("kanagawa").setup(opts)
+    vim.cmd("colorscheme kanagawa-wave")
   end
 }

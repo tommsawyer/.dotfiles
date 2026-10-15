@@ -37,7 +37,7 @@ symlinks:
 	$(call link,$(DOTFILES)/files/nvim,$(HOME)/.config/nvim)
 	$(call link,$(DOTFILES)/files/bat,$(HOME)/.config/bat)
 	$(call link,$(DOTFILES)/files/lazygit/config.yml,$(LAZYGIT_DIR)/config.yml)
-	$(call link,$(DOTFILES)/files/iterm/tokyonight.json,$(ITERM_PROFILES_DIR)/tokyonight.json)
+	$(call link,$(DOTFILES)/files/iterm/profile.json,$(ITERM_PROFILES_DIR)/dotfiles.json)
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
 		git config --global --add include.path "$(DELTA_CONFIG)"
@@ -52,7 +52,7 @@ nvim-sync:
 	nvim --headless "+Lazy! sync" +qa
 
 clean:
-	rm -f "$(HOME)/.zshrc" "$(HOME)/.tmux.conf" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(ITERM_PROFILES_DIR)/tokyonight.json"
+	rm -f "$(HOME)/.zshrc" "$(HOME)/.tmux.conf" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
 .PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync clean
