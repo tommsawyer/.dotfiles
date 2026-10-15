@@ -36,7 +36,6 @@ brew "git-delta"
 
 # kotlin
 cask "kotlin-lsp"
-brew "openjdk@21"
 
 # swift (sourcekit-lsp comes with Xcode)
 brew "swift-format"
