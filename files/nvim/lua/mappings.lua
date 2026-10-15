@@ -17,10 +17,10 @@ local function moveWindow(direction)
   end
 end
 
-vim.keymap.set('n', '<C-h>', moveWindow("h"))
-vim.keymap.set('n', '<C-j>', moveWindow("j"))
-vim.keymap.set('n', '<C-k>', moveWindow("k"))
-vim.keymap.set('n', '<C-l>', moveWindow("l"))
+vim.keymap.set('n', '<C-h>', moveWindow("h"), { desc = "Window left (split if none)" })
+vim.keymap.set('n', '<C-j>', moveWindow("j"), { desc = "Window down (split if none)" })
+vim.keymap.set('n', '<C-k>', moveWindow("k"), { desc = "Window up (split if none)" })
+vim.keymap.set('n', '<C-l>', moveWindow("l"), { desc = "Window right (split if none)" })
 
-vim.keymap.set('n', '{', ':<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>', { silent = true })
-vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>', { silent = true })
+vim.keymap.set('n', '{', ':<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>', { silent = true, desc = "Previous paragraph" })
+vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>', { silent = true, desc = "Next paragraph" })

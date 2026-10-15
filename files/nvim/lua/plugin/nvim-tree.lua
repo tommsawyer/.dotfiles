@@ -39,7 +39,7 @@ return {
       Snacks.rename.on_rename_file(data.old_name, data.new_name)
     end)
 
-    vim.keymap.set('n', '<leader><leader>', '<Cmd>NvimTreeToggle<CR>')
-    vim.keymap.set('n', '<leader>a', ':NvimTreeFindFile<CR>')
+    vim.keymap.set('n', '<leader><leader>', '<Cmd>NvimTreeToggle<CR>', { desc = "File tree" })
+    vim.keymap.set('n', '<leader>a', ':NvimTreeFindFile<CR>', { desc = "Reveal file in tree" })
   end
 }

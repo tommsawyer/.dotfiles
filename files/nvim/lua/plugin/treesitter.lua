@@ -76,7 +76,7 @@ return {
       for lhs, query in pairs(selects) do
         vim.keymap.set({ "x", "o" }, lhs, function()
           select.select_textobject(query, "textobjects")
-        end)
+        end, { desc = query:gsub("^@", ""):gsub("%.", " ") })
       end
 
       local move = require("nvim-treesitter-textobjects.move")
@@ -90,10 +90,10 @@ return {
       for key, query in pairs(moves) do
         vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
           move.goto_next_start(query, "textobjects")
-        end)
+        end, { desc = "Next " .. query:match("@(%w+)") })
         vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
           move.goto_previous_start(query, "textobjects")
-        end)
+        end, { desc = "Previous " .. query:match("@(%w+)") })
       end
     end
   },
@@ -124,8 +124,8 @@ return {
         dot_repeat = true,
       })
 
-      vim.keymap.set('n', 'gJ', tsj.join)
-      vim.keymap.set('n', 'gS', tsj.split)
+      vim.keymap.set('n', 'gJ', tsj.join, { desc = "Join block" })
+      vim.keymap.set('n', 'gS', tsj.split, { desc = "Split block" })
     end
   }
 }

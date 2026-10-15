@@ -8,7 +8,7 @@ return {
     })
 
     vim.keymap.set("n", "<leader>t", "<cmd>Trouble diagnostics toggle focus=true<cr>",
-      { silent = true, noremap = true }
+      { silent = true, noremap = true, desc = "Diagnostics (Trouble)" }
     )
   end
 }

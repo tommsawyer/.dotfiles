@@ -21,17 +21,17 @@ return {
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
       callback = function(args)
-        local bufmap = function(mode, lhs, rhs)
-          vim.keymap.set(mode, lhs, rhs, { buffer = args.buf })
+        local bufmap = function(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, desc = desc })
         end
 
-        bufmap('n', 'K', vim.lsp.buf.hover)
-        bufmap('n', 'gd', vim.lsp.buf.definition)
-        bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>')
-        bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>')
-        bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>')
-        bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>')
-        bufmap({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action)
+        bufmap('n', 'K', vim.lsp.buf.hover, 'Hover')
+        bufmap('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
+        bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>', 'Type definitions (Trouble)')
+        bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>', 'Implementations (Trouble)')
+        bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>', 'Symbols (Trouble)')
+        bufmap('n', 'gfr', '<cmd>Trouble lsp_references focus=true<cr>', 'References (Trouble)')
+        bufmap({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, 'Code action')
       end,
     })
 

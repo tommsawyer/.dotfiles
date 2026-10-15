@@ -13,10 +13,10 @@ return {
     end,
     config = function()
       require("nvim-surround").setup()
-      vim.keymap.set("n", "sa", "<Plug>(nvim-surround-normal)")
-      vim.keymap.set("n", "sd", "<Plug>(nvim-surround-delete)")
-      vim.keymap.set("n", "sr", "<Plug>(nvim-surround-change)")
-      vim.keymap.set("x", "sa", "<Plug>(nvim-surround-visual)")
+      vim.keymap.set("n", "sa", "<Plug>(nvim-surround-normal)", { desc = "Surround add" })
+      vim.keymap.set("n", "sd", "<Plug>(nvim-surround-delete)", { desc = "Surround delete" })
+      vim.keymap.set("n", "sr", "<Plug>(nvim-surround-change)", { desc = "Surround replace" })
+      vim.keymap.set("x", "sa", "<Plug>(nvim-surround-visual)", { desc = "Surround selection" })
     end,
   },
   { "nvim-tree/nvim-web-devicons" }, -- better icons
