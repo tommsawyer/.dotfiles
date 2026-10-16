@@ -2,7 +2,7 @@ return {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre', 'BufNewFile' },
   dependencies = {
-    'saghen/blink.cmp',
+    'saghen/blink.cmp', -- loaded first: it adds its completion capabilities to vim.lsp.config('*')
     'b0o/schemastore.nvim',
   },
 
@@ -113,10 +113,6 @@ return {
       end,
     })
 
-    vim.lsp.config('*', {
-      capabilities = require('blink.cmp').get_lsp_capabilities(),
-    })
-
     vim.lsp.config('gopls', {
       settings = {
         gopls = {
@@ -172,14 +168,8 @@ return {
     })
 
     -- ruff: lint + format + imports; hover comes from basedpyright
-    vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('UserRuffNoHover', { clear = true }),
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client and client.name == 'ruff' then
-          client.server_capabilities.hoverProvider = false
-        end
-      end,
+    vim.lsp.config('ruff', {
+      on_attach = function(client) client.server_capabilities.hoverProvider = false end,
     })
 
     vim.lsp.config('lua_ls', {
@@ -191,29 +181,13 @@ return {
             checkThirdParty = false,
             library = { vim.env.VIMRUNTIME },
           },
-          telemetry = { enable = false },
         },
       },
     })
 
+    -- the default filetypes plus go templates
     vim.lsp.config('emmet_language_server', {
-      filetypes = {
-        'astro',
-        'css',
-        'eruby',
-        'html',
-        'htmldjango',
-        'javascriptreact',
-        'less',
-        'pug',
-        'sass',
-        'scss',
-        'svelte',
-        'typescriptreact',
-        'vue',
-        'templ',
-        'gotmpl',
-      },
+      filetypes = vim.list_extend(vim.deepcopy(vim.lsp.config.emmet_language_server.filetypes), { 'templ', 'gotmpl' }),
     })
 
     vim.lsp.enable({
