@@ -1,6 +1,6 @@
 ## Dotfiles
 
-macOS: zsh (oh-my-zsh), tmux, neovim, lazygit, delta — all in the kanagawa (wave) theme.
+macOS: zsh (oh-my-zsh), tmux, neovim, lazygit, delta, k9s — all in the kanagawa (wave) theme.
 
 ### Install
 
@@ -23,6 +23,16 @@ After that:
   the theme changes, so this is needed only once)
 - `nvim` installs its plugins on the first start
 
+### Make targets
+
+| Target | What it does |
+|---|---|
+| `make install` | everything below except `check` |
+| `make symlinks` | links the configs (the list is `LINKS` in the Makefile) |
+| `make check` | fast sanity checks: zsh, tmux, shellcheck, yaml, lua-language-server, nvim startup |
+| `make nvim-sync` | updates nvim plugins headless (`Lazy! sync`, writes `lazy-lock.json`) |
+| `make clean` | removes the links |
+
 ### Layout
 
 | Path | Linked to |
@@ -32,5 +42,6 @@ After that:
 | `files/nvim` | `~/.config/nvim` |
 | `files/bat` | `~/.config/bat` |
 | `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
+| `files/k9s` | `~/Library/Application Support/k9s/` (`config.yaml`, `skins/kanagawa.yaml`) |
 | `files/git/delta.gitconfig` | included from `~/.gitconfig` |
 | `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` |

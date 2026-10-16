@@ -9,11 +9,18 @@ DELTA_CONFIG := $(DOTFILES)/files/git/delta.gitconfig
 BREW_PREFIX := $(shell [ "$$(uname -m)" = arm64 ] && echo /opt/homebrew || echo /usr/local)
 export PATH := $(BREW_PREFIX)/bin:$(PATH)
 
-# $(call link,source,target): symlink target -> source, moving a real file away to *.backup
-define link
-	@if [ -e "$(2)" ] && [ ! -L "$(2)" ]; then mv "$(2)" "$(2).backup" && echo "backed up $(2)"; fi
-	ln -sfn "$(1)" "$(2)"
+# what `make symlinks` links and `make clean` removes: one "file in the repo|link" per line
+define LINKS
+files/zshrc|$(HOME)/.zshrc
+files/tmux|$(HOME)/.config/tmux
+files/nvim|$(HOME)/.config/nvim
+files/bat|$(HOME)/.config/bat
+files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
+files/k9s/config.yaml|$(K9S_DIR)/config.yaml
+files/k9s/skins/kanagawa.yaml|$(K9S_DIR)/skins/kanagawa.yaml
+files/iterm/profile.json|$(ITERM_PROFILES_DIR)/dotfiles.json
 endef
+export LINKS
 
 install: homebrew brew npm oh-my-zsh symlinks spell
 
@@ -33,16 +40,11 @@ oh-my-zsh:
 
 symlinks:
 	mkdir -p "$(HOME)/.config" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
-	$(call link,$(DOTFILES)/files/zshrc,$(HOME)/.zshrc)
-	@# tmux used to be linked to ~/.tmux.conf, which tmux reads before ~/.config/tmux
-	@for f in "$(HOME)/.tmux.conf" "$(HOME)/.local/bin/tmux-switch"; do [ -L "$$f" ] && rm "$$f" && echo "removed old link $$f"; done; true
-	$(call link,$(DOTFILES)/files/tmux,$(HOME)/.config/tmux)
-	$(call link,$(DOTFILES)/files/nvim,$(HOME)/.config/nvim)
-	$(call link,$(DOTFILES)/files/bat,$(HOME)/.config/bat)
-	$(call link,$(DOTFILES)/files/lazygit/config.yml,$(LAZYGIT_DIR)/config.yml)
-	$(call link,$(DOTFILES)/files/k9s/config.yaml,$(K9S_DIR)/config.yaml)
-	$(call link,$(DOTFILES)/files/k9s/skins/kanagawa.yaml,$(K9S_DIR)/skins/kanagawa.yaml)
-	$(call link,$(DOTFILES)/files/iterm/profile.json,$(ITERM_PROFILES_DIR)/dotfiles.json)
+	@# a real file in the way is moved to *.backup
+	@printf '%s\n' "$$LINKS" | while IFS='|' read -r src dst; do \
+		if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then mv "$$dst" "$$dst.backup" && echo "backed up $$dst"; fi; \
+		ln -sfn "$(DOTFILES)/$$src" "$$dst" && echo "$$dst -> $$src"; \
+	done
 	# drop dangling links left from renamed profiles, iTerm complains about them on start
 	@find "$(ITERM_PROFILES_DIR)" -type l ! -exec test -e {} \; -print -delete
 	bat cache --build
@@ -74,7 +76,7 @@ check:
 	@echo "all good"
 
 clean:
-	rm -f "$(HOME)/.zshrc" "$(HOME)/.config/tmux" "$(HOME)/.config/nvim" "$(HOME)/.config/bat" "$(LAZYGIT_DIR)/config.yml" "$(K9S_DIR)/config.yaml" "$(K9S_DIR)/skins/kanagawa.yaml" "$(ITERM_PROFILES_DIR)/dotfiles.json"
+	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
 .PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync check clean
