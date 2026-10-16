@@ -2,6 +2,7 @@
 brew "neovim"
 brew "tmux"
 brew "git"
+brew "git-delta"
 brew "node"
 brew "go"
 
@@ -10,49 +11,38 @@ brew "bat"
 brew "fd"
 brew "fzf"
 brew "htop"
+brew "k9s"
 brew "lazygit"
 brew "ripgrep"
 brew "tree-sitter-cli"
 
-# language servers
+# language servers (sourcekit-lsp for swift comes with Xcode)
+brew "basedpyright"
+brew "bash-language-server"
 brew "gopls"
 brew "lua-language-server"
+brew "marksman"
+brew "ruby-lsp"
 brew "templ"
 brew "typescript"
 brew "vscode-langservers-extracted"
 brew "yaml-language-server"
-
-# formatters
-brew "gofumpt"
-brew "prettier"
-
-cask "font-jetbrains-mono-nerd-font"
-
-# markdown
-brew "marksman"
-
-# git
-brew "git-delta"
-
-# ruby
-brew "ruby-lsp"
-
-# python
-brew "basedpyright"
-brew "ruff"
-
-# shell
-brew "bash-language-server"
-brew "shellcheck"
-brew "shfmt"
-
-# kubernetes
-brew "k9s"
-
-# kotlin
 cask "kotlin-lsp"
 
-# swift (sourcekit-lsp comes with Xcode)
+# formatters and linters
+brew "gofumpt"
+brew "prettier"
+brew "ruff"
+brew "shellcheck"
+brew "shfmt"
 brew "swift-format"
+
+# kotlin: JDK for Gradle (JAVA_HOME in zshrc)
+brew "openjdk@21"
+
+# swift
 brew "xcode-build-server"
 brew "xcbeautify"
+
+# fonts
+cask "font-jetbrains-mono-nerd-font"
