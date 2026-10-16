@@ -17,9 +17,74 @@ api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI"
   end,
   group = reloadGrp,
 })
-api.nvim_create_autocmd("FileChangedShellPost", {
+
+-- instead of reloading, apply the diff with the disk to the buffer and flash it, like yy does:
+-- the cursor, folds and marks stay put, and one `u` undoes the whole outside change
+-- (unsaved edits it overwrote too, so no "load from disk?" prompts either).
+-- 'autoread' would reload clean buffers silently, bypassing FileChangedShell, so it's off
+vim.o.autoread = false
+local diffNs = api.nvim_create_namespace("DiskDiff")
+
+local function flash(buf, hunks, old)
+  local ids = {}
+  for _, h in ipairs(hunks) do
+    local start_a, count_a, start_b, count_b = unpack(h)
+    if count_b > 0 then
+      ids[#ids + 1] = api.nvim_buf_set_extmark(buf, diffNs, start_b - 1, 0, {
+        end_row = start_b - 1 + count_b, hl_group = count_a > 0 and "DiffChange" or "DiffAdd", hl_eol = true,
+      })
+    else -- removed lines: show them for a moment where they were
+      local lines = {}
+      for i = start_a, math.min(start_a + count_a - 1, start_a + 9) do
+        lines[#lines + 1] = { { old[i], "DiffDelete" } }
+      end
+      ids[#ids + 1] = api.nvim_buf_set_extmark(buf, diffNs, math.max(start_b - 1, 0), 0, {
+        virt_lines = lines, virt_lines_above = start_b == 0,
+      })
+    end
+  end
+  vim.defer_fn(function()
+    if not api.nvim_buf_is_valid(buf) then return end
+    for _, id in ipairs(ids) do api.nvim_buf_del_extmark(buf, diffNs, id) end
+  end, 1000)
+end
+
+local function apply_disk(buf)
+  if not api.nvim_buf_is_valid(buf) then return end
+  local ok, new = pcall(vim.fn.readfile, api.nvim_buf_get_name(buf))
+  if not ok then return end
+  local old = api.nvim_buf_get_lines(buf, 0, -1, false)
+  local hunks = vim.text.diff(table.concat(old, "\n") .. "\n", table.concat(new, "\n") .. "\n", { result_type = "indices" })
+  ---@cast hunks integer[][]
+  if #hunks == 0 then return end
+  -- a separate undo step: don't join the user's last edit or the previous outside change
+  local function undo_break() api.nvim_buf_call(buf, function() vim.cmd("let &l:undolevels = &l:undolevels") end) end
+  undo_break()
+  -- bottom up, so the line numbers of the hunks above stay valid
+  for i = #hunks, 1, -1 do
+    local start_a, count_a, start_b, count_b = unpack(hunks[i])
+    local from = count_a == 0 and start_a or start_a - 1
+    api.nvim_buf_set_lines(buf, from, from + count_a, false, vim.list_slice(new, start_b, start_b + count_b - 1))
+  end
+  undo_break()
+  vim.bo[buf].modified = false
+  flash(buf, hunks, old)
+end
+
+api.nvim_create_autocmd("FileChangedShell", {
   callback = function(ev)
-    vim.notify("перезагружен с диска: " .. vim.fn.fnamemodify(ev.file, ":~:."), vim.log.levels.INFO)
+    local reason, bo = vim.v.fcs_reason, vim.bo[ev.buf]
+    vim.v.fcs_choice = "" -- handled here: no prompt, no reload
+    if reason == "deleted" then
+      vim.notify("удалён с диска: " .. vim.fn.fnamemodify(ev.file, ":~:."), vim.log.levels.WARN)
+    elseif reason == "changed" or reason == "conflict" then
+      if bo.fileformat ~= "unix" or bo.bomb or not vim.tbl_contains({ "", "utf-8" }, bo.fileencoding) then
+        vim.v.fcs_choice = "reload" -- readfile() would see these bytes differently from the buffer
+      else
+        -- the buffer must not be changed from inside FileChangedShell
+        vim.schedule(function() apply_disk(ev.buf) end)
+      end
+    end
   end,
   group = reloadGrp,
 })
