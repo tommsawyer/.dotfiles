@@ -84,6 +84,7 @@ return {
         ["ia"] = "@parameter.inner",
         ["ac"] = "@call.outer",
         ["ic"] = "@call.inner",
+        -- textobjects queries have no @statement.inner, so both are the whole statement
         ["as"] = "@statement.outer",
         ["is"] = "@statement.outer",
       }
@@ -94,12 +95,12 @@ return {
       end
 
       local move = require("nvim-treesitter-textobjects.move")
+      -- no ]s [s for statements: those jump between misspelled words (spell is on in markdown)
       local moves = {
         f = "@function.outer",
         i = "@conditional.outer",
         l = "@loop.outer",
         c = "@call.outer",
-        s = "@statement.outer",
       }
       for key, query in pairs(moves) do
         vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
