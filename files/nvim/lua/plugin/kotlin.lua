@@ -1,8 +1,8 @@
--- official kotlin-lsp (JetBrains, brings its own JRE): brew install --cask kotlin-lsp
+-- official kotlin-lsp (JetBrains, brings its own JRE): brew install --cask kotlin-lsp;
+-- the kotlin-lsp on PATH links to kotlin-server-*/kotlin-lsp.sh, kotlin.nvim wants that folder
 local function kotlin_lsp_dir()
-  local dirs = vim.fn.glob("/opt/homebrew/Caskroom/kotlin-lsp/*/kotlin-server-*", false, true)
-  table.sort(dirs)
-  return dirs[#dirs]
+  local bin = vim.fn.exepath("kotlin-lsp")
+  return bin ~= "" and vim.fs.dirname(vim.fn.resolve(bin)) or nil
 end
 
 return {

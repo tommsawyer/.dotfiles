@@ -1,4 +1,7 @@
-[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+# apple silicon or intel; sets HOMEBREW_PREFIX
+for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  [ -x $b ] && eval "$($b shellenv zsh)" && break
+done
 
 export ZSH_DISABLE_COMPFIX=true
 export ZSH=$HOME/.oh-my-zsh
@@ -13,7 +16,7 @@ export GOBIN=$GOPATH/bin
 export PATH="$PATH:$GOBIN"
 export PATH="$HOME/.local/bin:$PATH"
 # JDK for Gradle (keg-only, brew does not link it)
-[ -d /opt/homebrew/opt/openjdk@21 ] && export JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home
+[ -d "$HOMEBREW_PREFIX/opt/openjdk@21" ] && export JAVA_HOME="$HOMEBREW_PREFIX/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=fg:#DCD7BA,bg:#1F1F28,hl:#7E9CD8,fg+:#DCD7BA,bg+:#223249,hl+:#7FB4CA \
   --color=info:#C0A36E,prompt:#957FB8,pointer:#FF9E3B,marker:#98BB6C,spinner:#957FB8 \
@@ -21,10 +24,11 @@ export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=scrollbar:#54546D,query:#DCD7BA:regular"
 export EDITOR=nvim
 
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs'
+# respects .gitignore (no node_modules, build output), shows dotfiles
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 
 alias vim='nvim'
-alias tm='tmux new -s ${PWD##*/}'
+alias tm='tmux new -A -s ${PWD##*/}' # attaches if the session exists
 alias rg='rg --hidden'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 alias lg='lazygit'
