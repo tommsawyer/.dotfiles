@@ -25,7 +25,7 @@ export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
 export EDITOR=nvim
 
 # respects .gitignore (no node_modules, build output), shows dotfiles
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
 
 alias vim='nvim'
 alias tm='tmux new -A -s ${PWD##*/}' # attaches if the session exists
