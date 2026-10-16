@@ -1,3 +1,6 @@
+-- generated and noisy files, hidden from the file and grep pickers
+local exclude = { ".git/", "node_modules", "*_templ.go", "*_templ.txt", "go.sum" }
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -62,36 +65,8 @@ return {
     { "<leader>n",  function() Snacks.notifier.show_history() end,        desc = "Notification history" },
     { "<leader>z",  function() Snacks.zen() end,                          desc = "Zen mode" },
 
-    {
-      "<space>",
-      function()
-        Snacks.picker.files({
-          exclude = {
-            ".git/",
-            "node_modules",
-            "*_templ.go",
-            "*_templ.txt",
-            "go.sum",
-          },
-        })
-      end,
-      desc = "Files"
-    },
-    {
-      "<leader>f",
-      function()
-        Snacks.picker.grep({
-          exclude = {
-            ".git/",
-            "*node_modules*",
-            "*_templ.go",
-            "*_templ.txt",
-            "go.sum",
-          },
-        })
-      end,
-      desc = "Live Grep"
-    },
+    { "<space>",    function() Snacks.picker.files({ exclude = exclude }) end, desc = "Files" },
+    { "<leader>f",  function() Snacks.picker.grep({ exclude = exclude }) end,  desc = "Live Grep" },
     { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP workspace symbols" },
     { "<leader>h",  function() Snacks.picker.help() end,                  desc = "Help tags" },
     { "<leader>b",  function() Snacks.picker.buffers() end,               desc = "Buffers" },
