@@ -67,7 +67,7 @@ return {
 
     { "<space>",    function() Snacks.picker.files({ exclude = exclude }) end, desc = "Files" },
     { "<leader>f",  function() Snacks.picker.grep({ exclude = exclude }) end,  desc = "Live Grep" },
-    { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Definitions" },
+    { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP workspace symbols" },
     { "<leader>h",  function() Snacks.picker.help() end,                  desc = "Help tags" },
     { "<leader>b",  function() Snacks.picker.buffers() end,               desc = "Buffers" },
   },
