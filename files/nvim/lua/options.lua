@@ -41,6 +41,8 @@ vim.filetype.add({
   },
 })
 
+vim.cmd("abbr rt return")
+
 -- russian layout (Russian - PC): normal/visual commands work without switching layout
 vim.opt.langmap = table.concat({
   [[ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ;QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>~]],
