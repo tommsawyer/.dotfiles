@@ -7,18 +7,24 @@ local ns = vim.api.nvim_create_namespace("sidekick_thinking")
 local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
 
 -- spinner at the end of the line the agent works on, while its pane shows "esc to interrupt".
--- sidekick knows nothing about the agent being busy, so peek at the agent's screen twice a second;
--- gives up if the agent never got busy in 20s (it didn't start, or the prompt got lost)
+-- sidekick knows nothing about the agent being busy, so peek at the agent's screen twice a second.
+-- never spins forever: gives up if the agent never got busy in 20s (it didn't start, or the prompt
+-- got lost), stops once the pane is gone, and after 10 minutes in any case
 local function thinking(buf, row)
   local timer, id, frame, busy, idle, start = assert(vim.uv.new_timer()), nil, 0, false, 0, vim.uv.now()
 
   local function poll()
     local state = require("sidekick.cli.state").get({ attached = true })[1]
     local pane = state and state.session and state.session.tmux_pane_id
-    if not pane then return end -- the agent is still starting
+    if not pane then -- still starting, or already closed
+      idle = idle + 1
+      return
+    end
     vim.system({ "tmux", "capture-pane", "-p", "-t", pane }, { text = true }, function(out)
-      local screen = (out.stdout or ""):lower()
-      if screen:find("esc to interrupt", 1, true) or screen:find("esc interrupt", 1, true) then
+      -- only the footer counts: the hint can also be in the output above (a diff of this very file)
+      local lines = vim.split(vim.trim(out.stdout or ""), "\n", { plain = true })
+      local footer = table.concat(lines, "\n", math.max(1, #lines - 4)):lower()
+      if footer:find("esc to interrupt", 1, true) or footer:find("esc interrupt", 1, true) then
         busy, idle = true, 0
       else
         idle = idle + 1
@@ -28,8 +34,8 @@ local function thinking(buf, row)
 
   timer:start(0, 100, vim.schedule_wrap(function()
     if timer:is_closing() then return end
-    local valid = vim.api.nvim_buf_is_valid(buf)
-    if not valid or (busy and idle >= 2) or (not busy and vim.uv.now() - start > 20000) then
+    local valid, elapsed = vim.api.nvim_buf_is_valid(buf), vim.uv.now() - start
+    if not valid or (busy and idle >= 2) or (not busy and elapsed > 20000) or elapsed > 600000 then
       timer:close()
       if valid and id then vim.api.nvim_buf_del_extmark(buf, ns, id) end
       return
