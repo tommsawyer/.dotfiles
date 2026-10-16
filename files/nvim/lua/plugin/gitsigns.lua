@@ -1,33 +1,28 @@
 return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPre", "BufNewFile" },
-  config = function()
-    require('gitsigns').setup({
-      on_attach = function()
-        local gs = package.loaded.gitsigns
-
-        local function map(mode, l, r, opts)
-          opts = opts or {}
-          vim.keymap.set(mode, l, r, opts)
-        end
-
-        -- Navigation
-        map('n', ']g', function()
-          if vim.wo.diff then return ']c' end -- built-in next diff change (noremap: not the treesitter ]c)
-          vim.schedule(function() gs.nav_hunk("next", { navigation_message = false }) end)
-          return '<Ignore>'
-        end, { expr = true, desc = "Next git hunk" })
-
-        map('n', '[g', function()
-          if vim.wo.diff then return '[c' end
-          vim.schedule(function() gs.nav_hunk("prev", { navigation_message = false }) end)
-          return '<Ignore>'
-        end, { expr = true, desc = "Previous git hunk" })
-
-        vim.keymap.set("n", "<leader>gu", ":Gitsigns reset_hunk<CR>", { silent = true, desc = "Reset hunk" })
-        vim.keymap.set("n", "<leader>gb", ":Gitsigns blame_line<CR>", { silent = true, desc = "Blame line" })
-        vim.keymap.set("n", "<leader>gp", ":Gitsigns preview_hunk<CR>", { silent = true, desc = "Preview hunk" })
+  opts = {
+    -- keys only in buffers gitsigns is attached to (files in a git repo)
+    on_attach = function(buf)
+      local gs = require("gitsigns")
+      local function map(lhs, rhs, opts)
+        vim.keymap.set("n", lhs, rhs, vim.tbl_extend("force", { buffer = buf }, opts))
       end
-    })
-  end
+
+      map("]g", function()
+        if vim.wo.diff then return "]c" end -- built-in next diff change (noremap: not the treesitter ]c)
+        vim.schedule(function() gs.nav_hunk("next", { navigation_message = false }) end)
+        return "<Ignore>"
+      end, { expr = true, desc = "Next git hunk" })
+      map("[g", function()
+        if vim.wo.diff then return "[c" end
+        vim.schedule(function() gs.nav_hunk("prev", { navigation_message = false }) end)
+        return "<Ignore>"
+      end, { expr = true, desc = "Previous git hunk" })
+
+      map("<leader>gu", gs.reset_hunk, { desc = "Reset hunk" })
+      map("<leader>gb", gs.blame_line, { desc = "Blame line" })
+      map("<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
+    end,
+  },
 }
