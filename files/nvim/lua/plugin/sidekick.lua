@@ -48,6 +48,7 @@ local function thinking(buf, row)
       id = id,
       virt_text = { { spinner[frame % #spinner + 1] .. " AI думает", "DiagnosticHint" } },
       virt_text_pos = "eol",
+      hl_mode = "combine", -- no background of its own: the cursorline's or the editor's shows through
     })
     if frame % 5 == 1 then poll() end
   end))
