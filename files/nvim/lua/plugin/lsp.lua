@@ -19,9 +19,61 @@ return {
       },
     })
 
+    -- progress of LSP servers as one small notification per server (laststatus = 0, so there is
+    -- no statusline for vim.lsp.status()); plus "starting..." for servers that take more than
+    -- a second to answer initialize (ruby-lsp installing its gems, for example)
+    local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+    local function lsp_notify(name, text, done)
+      vim.notify(name .. ': ' .. text, vim.log.levels.INFO, {
+        id = 'lsp_progress_' .. name,
+        style = 'minimal',
+        icon = done and ' ' or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1],
+      })
+    end
+
+    vim.api.nvim_create_autocmd('LspProgress', {
+      group = vim.api.nvim_create_augroup('UserLspProgress', { clear = true }),
+      callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        local value = ev.data.params.value
+        if not client or type(value) ~= 'table' then return end
+        if value.kind == 'end' then return lsp_notify(client.name, 'готов', true) end
+        local parts = vim.tbl_filter(function(s) return s ~= '' end, {
+          value.title or '', value.message or '', value.percentage and (value.percentage .. '%') or '',
+        })
+        lsp_notify(client.name, table.concat(parts, ' '))
+      end,
+    })
+
+    local starting = {} ---@type table<string, boolean> servers that did not attach yet
+    local spinners = {} ---@type table<string, any> uv timers of their "starting..." notifications
+    vim.lsp.config('*', {
+      before_init = function(_, config)
+        local name = config.name
+        starting[name] = true
+        vim.defer_fn(function()
+          if not starting[name] or spinners[name] then return end
+          spinners[name] = assert(vim.uv.new_timer())
+          spinners[name]:start(0, 100, vim.schedule_wrap(function() lsp_notify(name, 'запускается…') end))
+        end, 1000)
+      end,
+    })
+
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
       callback = function(args)
+        local attached = vim.lsp.get_client_by_id(args.data.client_id)
+        if attached and starting[attached.name] then
+          starting[attached.name] = nil
+          local timer = spinners[attached.name]
+          if timer then
+            spinners[attached.name] = nil
+            timer:stop()
+            timer:close()
+            lsp_notify(attached.name, 'готов', true)
+          end
+        end
+
         local bufmap = function(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, desc = desc })
         end
