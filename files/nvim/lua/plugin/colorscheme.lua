@@ -23,6 +23,8 @@ return {
         -- plain background in the others, so splits show where the cursor is
         WinBar = { fg = ui.fg_dim, bg = ui.bg_p1 },
         WinBarNC = { fg = ui.fg_dim, bg = ui.bg },
+        -- one-line notifications (LSP progress) sit on that band in the top right corner
+        SnacksNotifierMinimal = { fg = ui.fg_dim, bg = ui.bg_p1 },
       }
     end,
   },
