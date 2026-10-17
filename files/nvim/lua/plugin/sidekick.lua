@@ -38,34 +38,39 @@ return {
     },
   },
   keys = {
-    { "<leader>ii", function() cli().toggle() end,                                desc = "AI: toggle CLI" },
-    { "<leader>ic", function() cli().select({ filter = { installed = true } }) end, desc = "AI: choose CLI" },
-    { "<leader>id", function() cli().close() end,                                 desc = "AI: detach CLI session" },
+    { "<leader>ii", function() cli().toggle() end,                                                  desc = "AI: toggle CLI" },
+    { "<leader>ic", function() cli().select({ filter = { installed = true } }) end,                 desc = "AI: choose CLI" },
+    { "<leader>id", function() cli().close() end,                                                   desc = "AI: detach CLI session" },
     -- main cases: explain the selection / position, or send it and type what to do with it
-    { "<leader>ie", function() cli().send({ prompt = "explain", submit = true, focus = true }) end, mode = { "n", "x" }, desc = "AI: explain this" },
-    { "<leader>is", function() cli().send({ msg = "{this}", focus = true }) end,   mode = { "n", "x" }, desc = "AI: send this" },
-    { "<leader>if", function() cli().send({ msg = "{file}", focus = true }) end,   desc = "AI: send file" },
-    { "<leader>ip", function() cli().prompt() end,                                 mode = { "n", "x" }, desc = "AI: pick a prompt" },
-    -- mini vibe coding: select a spot, say what to write (empty = figure it out), the agent edits right there
-    { "<leader>iw", function()
-      local where = cli().render({ msg = "{this}" }) -- grab the selection before the input steals focus
-      if vim.fn.mode():match("^[vV\22]") then vim.cmd("normal! \27") end
-      vim.ui.input({ prompt = "AI: что дописать? (пусто - сам) " }, function(task)
-        if not task then return end -- <esc>
-        if vim.trim(task) == "" then
-          task = "сам разберись по контексту (комментарии, TODO, недописанный код, окружение), чего здесь не хватает, и допиши"
-        end
-        cli().send({
-          msg = table.concat({
-            "Допиши код в " .. where .. ": " .. task,
-            "Правь файл сам и только в этом месте, остальное не трогай.",
-            "Следуй стилю и соглашениям окружающего кода. Без объяснений, просто сделай.",
-          }, "\n"),
-          submit = true,
-        })
-      end)
-    end, mode = { "n", "x" }, desc = "AI: write code here" },
+    { "<leader>ie", function() cli().send({ prompt = "explain", submit = true, focus = true }) end, mode = { "n", "x" },            desc = "AI: explain this" },
+    { "<leader>is", function() cli().send({ msg = "{this}", focus = true }) end,                    mode = { "n", "x" },            desc = "AI: send this" },
+    { "<leader>if", function() cli().send({ msg = "{file}", focus = true }) end,                    desc = "AI: send file" },
+    { "<leader>ip", function() cli().prompt() end,                                                  mode = { "n", "x" },            desc = "AI: pick a prompt" },
+    {
+      "<leader>iw",
+      function()
+        local where = cli().render({ msg = "{this}" }) -- grab the selection before the input steals focus
+        if vim.fn.mode():match("^[vV\22]") then vim.cmd("normal! \27") end
+        vim.ui.input({ prompt = "AI: что дописать? (пусто - сам) " }, function(task)
+          if not task then return end -- <esc>
+          if vim.trim(task) == "" then
+            task =
+            "сам разберись по контексту (комментарии, TODO, недописанный код, окружение), чего здесь не хватает, и допиши"
+          end
+          cli().send({
+            msg = table.concat({
+              "Допиши код в " .. where .. ": " .. task,
+              "Правь файл сам и только в этом месте, остальное не трогай.",
+              "Следуй стилю и соглашениям окружающего кода. Без объяснений, просто сделай.",
+            }, "\n"),
+            submit = true,
+          })
+        end)
+      end,
+      mode = { "n", "x" },
+      desc = "AI: write code here"
+    },
     -- jump between nvim and the agent (C-. reaches apps thanks to tmux extended keys)
-    { "<c-.>",      function() cli().focus() end,                                 mode = { "n", "t", "i", "x" }, desc = "AI: focus CLI" },
+    { "<c-.>", function() cli().focus() end, mode = { "n", "t", "i", "x" }, desc = "AI: focus CLI" },
   },
 }
