@@ -3,57 +3,6 @@
 -- <leader>i... because <leader>a is "reveal in tree" here
 local function cli() return require("sidekick.cli") end
 
-local ns = vim.api.nvim_create_namespace("sidekick_thinking")
-local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-
--- spinner at the end of the line the agent works on, while its pane shows "esc to interrupt".
--- sidekick knows nothing about the agent being busy, so peek at the agent's screen twice a second.
--- never spins forever: gives up if the agent never got busy in 20s (it didn't start, or the prompt
--- got lost), stops once the pane is gone, and after 10 minutes in any case
-local function thinking(buf, row)
-  local timer, id, frame, busy, idle, start = assert(vim.uv.new_timer()), nil, 0, false, 0, vim.uv.now()
-
-  local function poll()
-    local state = require("sidekick.cli.state").get({ attached = true })[1]
-    local pane = state and state.session and state.session.tmux_pane_id
-    if not pane then -- still starting, or already closed
-      idle = idle + 1
-      return
-    end
-    vim.system({ "tmux", "capture-pane", "-p", "-t", pane }, { text = true }, function(out)
-      -- only the footer counts: the hint can also be in the output above (a diff of this very file)
-      local lines = vim.split(vim.trim(out.stdout or ""), "\n", { plain = true })
-      local footer = table.concat(lines, "\n", math.max(1, #lines - 4)):lower()
-      if footer:find("esc to interrupt", 1, true) or footer:find("esc interrupt", 1, true) then
-        busy, idle = true, 0
-      else
-        idle = idle + 1
-      end
-    end)
-  end
-
-  timer:start(0, 100, vim.schedule_wrap(function()
-    if timer:is_closing() then return end
-    local valid, elapsed = vim.api.nvim_buf_is_valid(buf), vim.uv.now() - start
-    if not valid or (busy and idle >= 2) or (not busy and elapsed > 20000) or elapsed > 600000 then
-      timer:close()
-      if valid and id then vim.api.nvim_buf_del_extmark(buf, ns, id) end
-      return
-    end
-    -- the mark follows the edits; if a reload of the file dropped it, put it back on the same line
-    local pos = id and vim.api.nvim_buf_get_extmark_by_id(buf, ns, id, {}) or {}
-    row = pos[1] or math.min(row, vim.api.nvim_buf_line_count(buf) - 1)
-    frame = frame + 1
-    id = vim.api.nvim_buf_set_extmark(buf, ns, row, 0, {
-      id = id,
-      virt_text = { { spinner[frame % #spinner + 1] .. " AI думает", "DiagnosticHint" } },
-      virt_text_pos = "eol",
-      hl_mode = "combine", -- no background of its own: the cursorline's or the editor's shows through
-    })
-    if frame % 5 == 1 then poll() end
-  end))
-end
-
 return {
   "folke/sidekick.nvim",
   cmd = "Sidekick",
@@ -100,7 +49,6 @@ return {
     -- mini vibe coding: select a spot, say what to write (empty = figure it out), the agent edits right there
     { "<leader>iw", function()
       local where = cli().render({ msg = "{this}" }) -- grab the selection before the input steals focus
-      local buf, row = vim.api.nvim_get_current_buf(), math.min(vim.fn.line("v"), vim.fn.line(".")) - 1
       if vim.fn.mode():match("^[vV\22]") then vim.cmd("normal! \27") end
       vim.ui.input({ prompt = "AI: что дописать? (пусто - сам) " }, function(task)
         if not task then return end -- <esc>
@@ -115,7 +63,6 @@ return {
           }, "\n"),
           submit = true,
         })
-        thinking(buf, row)
       end)
     end, mode = { "n", "x" }, desc = "AI: write code here" },
     -- jump between nvim and the agent (C-. reaches apps thanks to tmux extended keys)
