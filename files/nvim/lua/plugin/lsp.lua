@@ -74,16 +74,13 @@ return {
           end
         end
 
-        local bufmap = function(mode, lhs, rhs, desc)
-          vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, desc = desc })
-        end
-
-        bufmap('n', 'K', vim.lsp.buf.hover, 'Hover')
-        bufmap('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
-        bufmap('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>', 'Type definitions (Trouble)')
-        bufmap('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>', 'Implementations (Trouble)')
-        bufmap('n', '<leader>s', '<cmd>Trouble symbols<cr>', 'Symbols (Trouble)')
-        bufmap({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, 'Code action')
+        local buf = args.buf
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buf = buf, desc = 'Hover' })
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buf = buf, desc = 'Go to definition' })
+        vim.keymap.set('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>', { buf = buf, desc = 'Type definitions (Trouble)' })
+        vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>', { buf = buf, desc = 'Implementations (Trouble)' })
+        vim.keymap.set('n', '<leader>s', '<cmd>Trouble symbols<cr>', { buf = buf, desc = 'Symbols (Trouble)' })
+        vim.keymap.set({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, { buf = buf, desc = 'Code action' })
       end,
     })
 
