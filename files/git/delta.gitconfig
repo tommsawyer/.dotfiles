@@ -1,6 +1,8 @@
 # delta (https://github.com/dandavison/delta) as git pager, included from ~/.gitconfig
 [core]
-  pager = delta
+  # only for git itself: n / N jump between files (their Δ labels are useless in lazygit, where
+  # navigate does not work), side by side fits a full-width terminal
+  pager = delta --navigate --side-by-side
 
 [interactive]
   diffFilter = delta --color-only
@@ -9,19 +11,20 @@
   conflictStyle = zdiff3
 
 [delta]
-  navigate = true # n / N jump between files
   line-numbers = true
   syntax-theme = kanagawa
 
-# kanagawa wave colors (diff backgrounds from the nvim theme, emphasis blended stronger)
+# kanagawa wave colors; added lines are blue, not green: red vs blue tells apart better.
+# +/- markers mark the lines without relying on color
+  keep-plus-minus-markers       = true
   minus-style                   = syntax "#43242B"
   minus-non-emph-style          = syntax "#43242B"
-  minus-emph-style              = syntax "#582b31"
+  minus-emph-style              = syntax "#6E2A33"
   minus-empty-line-marker-style = syntax "#43242B"
-  line-numbers-minus-style      = "#C34043"
-  plus-style                    = syntax "#2B3328"
-  plus-non-emph-style           = syntax "#2B3328"
-  plus-emph-style               = syntax "#3d483f"
-  plus-empty-line-marker-style  = syntax "#2B3328"
-  line-numbers-plus-style       = "#76946A"
+  line-numbers-minus-style      = "#FF9E3B"
+  plus-style                    = syntax "#223249"
+  plus-non-emph-style           = syntax "#223249"
+  plus-emph-style               = syntax "#2D4F67"
+  plus-empty-line-marker-style  = syntax "#223249"
+  line-numbers-plus-style       = "#7FB4CA"
   line-numbers-zero-style       = "#54546D"

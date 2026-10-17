@@ -31,7 +31,8 @@ gui:
 git:
   diffRenderers:
     - type: stdinFilter
-      command: delta --paging=never
+      # side by side only when the diff view is wide enough (+ maximizes it)
+      command: delta --{{colorScheme}} --paging=never --width={{width}} {{if ge .width 140}}--side-by-side{{end}}
 
 os:
   editPreset: nvim # e opens the file in nvim inside the popup
