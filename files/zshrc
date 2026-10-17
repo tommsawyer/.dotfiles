@@ -28,10 +28,22 @@ export EDITOR=nvim
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
 
 alias vim='nvim'
-alias tm='tmux new -A -s ${PWD##*/}' # attaches if the session exists
 alias rg='rg --hidden'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 alias lg='lazygit'
+
+# tmux session named after the current folder: created there if missing, then attached
+# (outside tmux) or switched to (inside tmux, where attaching would nest).
+# "=name:" is the exact session name; without the colon tmux reads the dot in .dotfiles as window.pane
+function tm {
+  local name=${PWD##*/}
+  command tmux has-session -t "=$name:" 2>/dev/null || command tmux new-session -d -s "$name" -c "$PWD"
+  if [ -n "$TMUX" ]; then
+    command tmux switch-client -t "=$name:"
+  else
+    command tmux attach-session -t "=$name:"
+  fi
+}
 
 # Habit trainer: everyday git commands typed in a terminal (including oh-my-zsh
 # aliases like gst, gd, gp) print the lazygit way instead of running.
