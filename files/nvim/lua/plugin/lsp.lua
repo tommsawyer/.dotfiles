@@ -82,6 +82,14 @@ return {
         vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>',
           { buf = buf, desc = 'Implementations (Trouble)' })
         vim.keymap.set('n', '<leader>s', '<cmd>Trouble symbols<cr>', { buf = buf, desc = 'Symbols (Trouble)' })
+        -- built-in gr*/gO defaults open quickfix; send the lists to Trouble too
+        vim.keymap.set('n', 'grr', '<cmd>Trouble lsp_references focus=true<cr>',
+          { buf = buf, desc = 'References (Trouble)' })
+        vim.keymap.set('n', 'gri', '<cmd>Trouble lsp_implementations focus=true<cr>',
+          { buf = buf, desc = 'Implementations (Trouble)' })
+        vim.keymap.set('n', 'grt', '<cmd>Trouble lsp_type_definitions focus=true<cr>',
+          { buf = buf, desc = 'Type definitions (Trouble)' })
+        vim.keymap.set('n', 'gO', '<cmd>Trouble symbols<cr>', { buf = buf, desc = 'Symbols (Trouble)' })
         vim.keymap.set({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, { buf = buf, desc = 'Code action' })
       end,
     })
