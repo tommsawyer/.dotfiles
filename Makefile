@@ -75,8 +75,15 @@ check:
 	@echo "nvim"; out=$$(nvim --headless +qa 2>&1); [ -z "$$out" ] || { echo "$$out"; exit 1; }
 	@echo "all good"
 
+# lua_ls has no formatting cli: open each file in nvim and save it, conform formats through lua_ls
+fmt:
+	@nvim --headless +'lua for _, f in ipairs(vim.fn.globpath("files/nvim", "**/*.lua", false, true)) do \
+		vim.cmd.edit(f); \
+		assert(vim.wait(10000, function() return #vim.lsp.get_clients({ bufnr = 0, name = "lua_ls" }) > 0 end), "lua_ls did not attach"); \
+		vim.cmd("silent write") end' +qa
+
 clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync check clean
+.PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync check fmt clean

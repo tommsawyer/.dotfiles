@@ -2,33 +2,33 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-vim.opt.splitkeep = "screen"                -- text does not jump when a split opens
+vim.opt.splitkeep = "screen" -- text does not jump when a split opens
 vim.opt.swapfile = false
-vim.opt.writebackup = false                 -- no temporary copy while writing a file (it confuses file watchers)
-vim.opt.undofile = true                     -- undo history survives restarts (~/.local/state/nvim/undo)
-vim.opt.confirm = true                      -- :q on a modified buffer asks instead of failing
+vim.opt.writebackup = false  -- no temporary copy while writing a file (it confuses file watchers)
+vim.opt.undofile = true      -- undo history survives restarts (~/.local/state/nvim/undo)
+vim.opt.confirm = true       -- :q on a modified buffer asks instead of failing
 vim.opt.timeoutlen = 500
-vim.opt.updatetime = 300                    -- CursorHold sooner: checktime in autocommands.lua
+vim.opt.updatetime = 300     -- CursorHold sooner: checktime in autocommands.lua
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.cursorline = true
 vim.opt.number = true
-vim.opt.signcolumn = "yes"                  -- always there, so signs do not shift the text
+vim.opt.signcolumn = "yes" -- always there, so signs do not shift the text
 vim.opt.wrap = false
-vim.opt.linebreak = true                    -- where wrap is on (markdown), break at words
+vim.opt.linebreak = true   -- where wrap is on (markdown), break at words
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
-vim.opt.fillchars:append({ eob = " " })     -- no ~ after the end of the buffer
-vim.opt.whichwrap:append("<,>,[,],h,l")     -- h / l / arrows move to the previous / next line
-vim.opt.laststatus = 0                      -- no status line at all, dropbar shows the file
+vim.opt.fillchars:append({ eob = " " }) -- no ~ after the end of the buffer
+vim.opt.whichwrap:append("<,>,[,],h,l") -- h / l / arrows move to the previous / next line
+vim.opt.laststatus = 0                  -- no status line at all, dropbar shows the file
 vim.opt.cmdheight = 0
 vim.opt.showmode = false
-vim.opt.showcmd = false                     -- nowhere to show it with cmdheight = 0 anyway
+vim.opt.showcmd = false -- nowhere to show it with cmdheight = 0 anyway
 vim.opt.ruler = false
 vim.opt.mouse = ""
 vim.opt.winborder = "single"
-vim.opt.inccommand = "split"                -- :s preview of all matches in a split
+vim.opt.inccommand = "split" -- :s preview of all matches in a split
 vim.filetype.add({
   extension = { templ = "templ", gitconfig = "gitconfig" },
   pattern = {

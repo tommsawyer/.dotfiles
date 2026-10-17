@@ -20,7 +20,7 @@ api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI"
 
 -- plain `nvim` in a project opens the file edited there last (from shada oldfiles)
 api.nvim_create_autocmd("VimEnter", {
-  nested = true, -- so FileType, LSP, treesitter and lazy-loaded plugins fire for that file
+  nested = true,                         -- so FileType, LSP, treesitter and lazy-loaded plugins fire for that file
   callback = function()
     if vim.fn.argc() > 0 then return end -- `nvim file`, `nvim .`, git commit
     -- +Man!, stdin, -q, -S, -c 'e x' leave something else in the start buffer: keep it

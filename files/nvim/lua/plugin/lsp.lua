@@ -77,8 +77,10 @@ return {
         local buf = args.buf
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buf = buf, desc = 'Hover' })
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buf = buf, desc = 'Go to definition' })
-        vim.keymap.set('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>', { buf = buf, desc = 'Type definitions (Trouble)' })
-        vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>', { buf = buf, desc = 'Implementations (Trouble)' })
+        vim.keymap.set('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>',
+          { buf = buf, desc = 'Type definitions (Trouble)' })
+        vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>',
+          { buf = buf, desc = 'Implementations (Trouble)' })
         vim.keymap.set('n', '<leader>s', '<cmd>Trouble symbols<cr>', { buf = buf, desc = 'Symbols (Trouble)' })
         vim.keymap.set({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, { buf = buf, desc = 'Code action' })
       end,
@@ -141,7 +143,8 @@ return {
               {
                 name = 'gitlab-ci',
                 description = 'GitLab CI: main file and files included from .gitlab/ci/',
-                url = 'https://gitlab.com/gitlab-org/gitlab-foss/-/raw/master/app/assets/javascripts/editor/schema/ci.json',
+                url =
+                'https://gitlab.com/gitlab-org/gitlab-foss/-/raw/master/app/assets/javascripts/editor/schema/ci.json',
                 fileMatch = {
                   '**/.gitlab-ci.yml', '**/.gitlab-ci.yaml', '**/*.gitlab-ci.yml', '**/*.gitlab-ci.yaml',
                   '**/.gitlab/ci/*.yml', '**/.gitlab/ci/*.yaml',
@@ -158,7 +161,7 @@ return {
     vim.lsp.config('basedpyright', {
       settings = {
         basedpyright = {
-          disableOrganizeImports = true, -- ruff does it
+          disableOrganizeImports = true,                -- ruff does it
           analysis = { typeCheckingMode = 'standard' }, -- default "recommended" is very noisy
         },
       },

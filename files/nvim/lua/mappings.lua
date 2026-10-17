@@ -22,8 +22,10 @@ vim.keymap.set('n', '<C-j>', moveWindow("j"), { desc = "Window down (split if no
 vim.keymap.set('n', '<C-k>', moveWindow("k"), { desc = "Window up (split if none)" })
 vim.keymap.set('n', '<C-l>', moveWindow("l"), { desc = "Window right (split if none)" })
 
-vim.keymap.set('n', '{', ':<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>', { silent = true, desc = "Previous paragraph" })
-vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>', { silent = true, desc = "Next paragraph" })
+vim.keymap.set('n', '{', ':<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>',
+  { silent = true, desc = "Previous paragraph" })
+vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>',
+  { silent = true, desc = "Next paragraph" })
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR><Esc>', { desc = "Clear search highlight" })
 
@@ -48,7 +50,7 @@ local function indentJump(dir, smaller)
       line = l
     end
     if line ~= vim.fn.line(".") then
-      if vim.fn.mode() == "n" then vim.cmd("normal! m'") end -- so <C-o> comes back
+      if vim.fn.mode() == "n" then vim.cmd("normal! m'") end                        -- so <C-o> comes back
       vim.api.nvim_win_set_cursor(0, { line, #vim.fn.getline(line):match("^%s*") }) -- first non-blank
     end
   end
