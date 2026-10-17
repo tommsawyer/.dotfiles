@@ -9,7 +9,7 @@ if [ "$1" = list ]; then
   exit
 fi
 
-# =name: exact session name (a leading dot or a prefix of another name is not misread);
+# "=name:" is an exact session name; without the colon tmux reads a dot as window.pane (.dotfiles);
 # '=' quoted: fzf runs these in $SHELL, and zsh expands an unquoted =word to the path of a command
 out=$("$0" list | fzf \
   --print-query \
@@ -17,14 +17,14 @@ out=$("$0" list | fzf \
   --header 'enter: switch · ctrl-x: kill · new name + enter: new session' \
   --preview "tmux capture-pane -ep -t '='{1}':'" \
   --preview-window 'right,55%,border-left' \
-  --bind "ctrl-x:execute-silent(tmux kill-session -t '='{1})+reload($0 list)")
+  --bind "ctrl-x:execute-silent(tmux kill-session -t '='{1}':')+reload($0 list)")
 
 query=$(printf '%s\n' "$out" | sed -n 1p)
 target=$(printf '%s\n' "$out" | sed -n 2p | awk '{ print $1 }')
 
 if [ -n "$target" ]; then
-  tmux switch-client -t "=$target"
+  tmux switch-client -t "=$target:"
 elif [ -n "$query" ]; then
-  tmux has-session -t "=$query" 2>/dev/null || tmux new-session -d -s "$query" -c "$HOME"
-  tmux switch-client -t "=$query"
+  tmux has-session -t "=$query:" 2>/dev/null || tmux new-session -d -s "$query" -c "$HOME"
+  tmux switch-client -t "=$query:"
 fi
