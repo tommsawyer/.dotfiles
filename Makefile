@@ -22,7 +22,7 @@ files/iterm/profile.json|$(ITERM_PROFILES_DIR)/dotfiles.json
 endef
 export LINKS
 
-install: homebrew brew npm oh-my-zsh symlinks spell
+install: homebrew brew npm oh-my-zsh symlinks iterm spell
 
 homebrew:
 	@command -v brew >/dev/null 2>&1 || \
@@ -50,6 +50,11 @@ symlinks:
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
 		git config --global --add include.path "$(DELTA_CONFIG)"
+
+# global prefs, a profile cannot hold them; iTerm picks them up on restart
+iterm:
+	@# Minimal theme: the title bar and tabs take the terminal background
+	defaults write com.googlecode.iterm2 TabStyleWithAutomaticOption -int 5
 
 spell:
 	mkdir -p "$(HOME)/.local/share/nvim/site/spell"
@@ -86,4 +91,4 @@ clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm oh-my-zsh symlinks spell nvim-sync check fmt clean
+.PHONY: install homebrew brew npm oh-my-zsh symlinks iterm spell nvim-sync check fmt clean
