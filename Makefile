@@ -12,6 +12,7 @@ export PATH := $(BREW_PREFIX)/bin:$(PATH)
 # what `make symlinks` links and `make clean` removes: one "file in the repo|link" per line
 define LINKS
 files/zshrc|$(HOME)/.zshrc
+files/hushlogin|$(HOME)/.hushlogin
 files/tmux|$(HOME)/.config/tmux
 files/nvim|$(HOME)/.config/nvim
 files/bat|$(HOME)/.config/bat
