@@ -20,6 +20,7 @@ files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
 files/k9s/config.yaml|$(K9S_DIR)/config.yaml
 files/k9s/skins/onedark-warmer.yaml|$(K9S_DIR)/skins/onedark-warmer.yaml
 files/iterm/profile.json|$(ITERM_PROFILES_DIR)/dotfiles.json
+files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
 
@@ -37,7 +38,7 @@ npm:
 	npm install -g --prefix "$(HOME)/.local" @olrtg/emmet-language-server
 
 symlinks:
-	mkdir -p "$(HOME)/.config" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
+	mkdir -p "$(HOME)/.config" "$(HOME)/.claude" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
 	@# a real file in the way is moved to *.backup
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r src dst; do \
 		if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then mv "$$dst" "$$dst.backup" && echo "backed up $$dst"; fi; \
@@ -72,6 +73,7 @@ check:
 	@echo "sh"; shellcheck files/tmux/*.sh
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
 		files/lazygit/config.yml files/k9s/config.yaml files/k9s/skins/onedark-warmer.yaml
+	@echo "json"; jq empty files/claude/settings.json
 	@echo "lua"; lua-language-server --check="$(DOTFILES)/files/nvim" --configpath="$(DOTFILES)/.luarc.json" \
 		--checklevel=Warning >/dev/null || { echo "run it without >/dev/null to see the problems"; exit 1; }
 	@# goes through ~/.config/nvim, so needs `make symlinks`; startup errors are printed, silenced ones are not

@@ -1,0 +1,103 @@
+{
+  "model": "opus",
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "mattpocock-skills@claude-plugins-official": true,
+    "interfaces@interfaces": true
+  },
+  "extraKnownMarketplaces": {
+    "interfaces": {
+      "source": {
+        "source": "github",
+        "repo": "jakubkrehel/skills"
+      }
+    }
+  },
+  "theme": "dark-ansi",
+  "feedbackDrafts": "off",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state idle"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state working"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state tool"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state working"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state wait"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state wait"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state done"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state end"
+          }
+        ]
+      }
+    ]
+  }
+}
