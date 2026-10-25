@@ -21,6 +21,8 @@ return {
   "Bekaboo/dropbar.nvim",
   config = function()
     require("dropbar").setup({
+      -- a thin › with a space on both sides instead of the nerd font chevron with one after it
+      icons = { ui = { bar = { separator = " › " } } },
       bar = {
         -- the default needs a treesitter parser or LSP; show at least the path for any file
         -- (tmux.conf, gitconfig...), keeping the default exclusions
@@ -119,6 +121,24 @@ return {
     vim.api.nvim_create_autocmd("ColorScheme", {
       callback = link_pick_hl,
       group = vim.api.nvim_create_augroup("DropBarPickHl", { clear = true }),
+    })
+
+    -- dropbar dims the icons of a window it leaves (winhighlight Xxx:XxxNC) and undims on enter;
+    -- winhighlight is kept per buffer in a window, so a file opened from the menu leaves the
+    -- previous buffer saved dimmed, and <C-o> back to it brings icons on the inactive background
+    vim.api.nvim_create_autocmd("BufWinEnter", {
+      callback = function()
+        -- later: a buffer put into another window (from the menu) is entered while focus stays put
+        local win = vim.api.nvim_get_current_win()
+        vim.schedule(function()
+          if win ~= vim.api.nvim_get_current_win() then return end
+          local kept = vim.tbl_filter(function(pair)
+            return not pair:match("^DropBar.*:DropBar.*NC$")
+          end, vim.split(vim.wo.winhighlight, ",", { trimempty = true }))
+          vim.opt_local.winhighlight = table.concat(kept, ",")
+        end)
+      end,
+      group = vim.api.nvim_create_augroup("DropBarUndimShown", { clear = true }),
     })
 
     vim.keymap.set("n", "<leader>;", require("dropbar.api").pick, { desc = "Pick in breadcrumbs" })
