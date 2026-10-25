@@ -1,6 +1,6 @@
 #!/bin/sh
-# prefix s and ctrl-g in zsh: fzf over tmux sessions, then directories from zoxide history that
-# have no session yet (via sesh), with a live preview of the selected session's active pane.
+# prefix s and ctrl-g in zsh: fzf over tmux sessions, with a live preview of the selected
+# session's active pane (a directory gets its session with `tm`).
 # enter: open it (connect.sh: switch inside tmux, attach outside); ctrl-x: kill a session;
 # a name that matches nothing + enter: new session with that name.
 # Lives in ~/.config/tmux (the whole folder is linked by `make symlinks`).
@@ -10,20 +10,16 @@ dir=$(dirname "$0")
 if [ "$1" = list ]; then
   tmux list-sessions -F "#{session_name}	#{session_windows}	#{pane_current_path}" 2>/dev/null |
     awk -F '\t' -v home="$HOME" '{ sub("^" home, "~", $3); printf "%-20s %-10s %s\n", $1, $2 " win", $3 }'
-  # -d drops directories an open session already sits in
-  sesh list -t -z -d --format '{source}	{path}' |
-    awk -F '\t' -v home="$HOME" '$1 == "zoxide" { sub("^" home, "~", $2); print $2 }'
   exit
 fi
 
 # "=name:" is an exact session name; without the colon tmux reads a dot as window.pane (.dotfiles);
-# '=' quoted: fzf runs these in $SHELL, and zsh expands an unquoted =word to the path of a command;
-# a directory row has no session, so it previews as a listing (eval expands the ~ fzf quotes)
+# '=' quoted: fzf runs these in $SHELL, and zsh expands an unquoted =word to the path of a command
 out=$("$0" list | fzf \
   --print-query \
   --prompt 'session> ' \
   --header 'enter: open · ctrl-x: kill · new name + enter: new session' \
-  --preview "tmux capture-pane -ep -t '='{1}':' 2>/dev/null || eval ls -A {1}" \
+  --preview "tmux capture-pane -ep -t '='{1}':'" \
   --preview-window 'right,55%,border-left' \
   --bind "ctrl-x:execute-silent(tmux kill-session -t '='{1}':')+reload($0 list)")
 
