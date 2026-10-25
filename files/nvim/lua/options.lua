@@ -20,8 +20,19 @@ vim.opt.linebreak = true   -- where wrap is on (markdown), break at words
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 vim.opt.fillchars:append({ eob = " " }) -- no ~ after the end of the buffer
+-- no split lines: the separator column stays but is blank, windows differ by background and winbar
+vim.opt.fillchars:append({
+  vert = " ",
+  horiz = " ",
+  horizup = " ",
+  horizdown = " ",
+  vertleft = " ",
+  vertright = " ",
+  verthoriz = " ",
+})
 vim.opt.whichwrap:append("<,>,[,],h,l") -- h / l / arrows move to the previous / next line
 vim.opt.laststatus = 0                  -- no status line at all, dropbar shows the file
+vim.opt.statusline = " "                -- blank where nvim still needs one (between stacked windows)
 vim.opt.cmdheight = 0
 vim.opt.showmode = false
 vim.opt.showcmd = false -- nowhere to show it with cmdheight = 0 anyway
