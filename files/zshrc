@@ -20,10 +20,10 @@ export PATH="$HOME/.local/bin:$PATH"
 # JDK for Gradle (keg-only, brew does not link it)
 [ -d "$HOMEBREW_PREFIX/opt/openjdk@21" ] && export JAVA_HOME="$HOMEBREW_PREFIX/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
-  --color=fg:#D4BE98,bg:#1d2021,hl:#7DAEA3,fg+:#DDC7A1,bg+:#3C3836,hl+:#89B482 \
-  --color=info:#D8A657,prompt:#D3869B,pointer:#E78A4E,marker:#A9B665,spinner:#D3869B \
-  --color=header:#89B482,border:#504945,gutter:#1d2021,separator:#504945 \
-  --color=scrollbar:#504945,query:#D4BE98:regular"
+  --color=fg:#A7AAB0,bg:#232326,hl:#57A5E5,fg+:#A7AAB0,bg+:#37383D,hl+:#51A8B3 \
+  --color=info:#DBB671,prompt:#BB70D2,pointer:#C49060,marker:#8FB573,spinner:#BB70D2 \
+  --color=header:#51A8B3,border:#5A5B5E,gutter:#232326,separator:#5A5B5E \
+  --color=scrollbar:#5A5B5E,query:#A7AAB0:regular"
 export EDITOR=nvim
 
 # respects .gitignore (no node_modules, build output), shows dotfiles

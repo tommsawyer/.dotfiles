@@ -4,7 +4,7 @@ k9s:
   refreshRate: 2
   skipLatestRevCheck: true
   ui:
-    skin: gruvbox-material
+    skin: onedark-warmer
     logoless: true
     splashless: true
   logger:

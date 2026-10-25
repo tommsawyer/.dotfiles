@@ -1,21 +1,21 @@
 # -----------------------------------------------------------------------------
-# Gruvbox Material Skin
+# OneDark Warmer Skin
 # -----------------------------------------------------------------------------
 
 # Styles...
-foreground: &foreground "#d4be98"
-# the terminal background as is, not "#1d2021", so it matches iTerm
+foreground: &foreground "#a7aab0"
+# the terminal background as is, not "#232326", so it matches iTerm
 # even when k9s falls back to 256 colors (no COLORTERM=truecolor, e.g. in an old tmux server)
 background: &background "default"
-black: &black "#141617"
-blue: &blue "#7daea3"
-green: &green "#a9b665"
-grey: &grey "#928374"
-orange: &orange "#e78a4e"
-purple: &purple "#d3869b"
-red: &red "#ea6962"
-yellow: &yellow "#d8a657"
-yellow_bright: &yellow_bright "#ddc7a1"
+black: &black "#1B1C1E"
+blue: &blue "#57a5e5"
+green: &green "#8fb573"
+grey: &grey "#818387"
+orange: &orange "#c49060"
+purple: &purple "#bb70d2"
+red: &red "#de5d68"
+yellow: &yellow "#dbb671"
+yellow_bright: &yellow_bright "#e2c792"
 
 # Skin...
 k9s:

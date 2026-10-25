@@ -12,19 +12,20 @@
 
 [delta]
   line-numbers = true
-  syntax-theme = gruvbox-material
+  syntax-theme = onedark-warmer
 
-# gruvbox-material colors; added lines are blue, not green: red vs blue tells apart better.
+# onedark warmer colors; added lines are blue, not green: red vs blue tells apart better.
+# deleted lines are red at 15% / 30% over the background, the theme's diff_delete is barely visible
 # +/- markers mark the lines without relying on color
   keep-plus-minus-markers       = true
-  minus-style                   = syntax "#3c1f1e"
-  minus-non-emph-style          = syntax "#3c1f1e"
-  minus-emph-style              = syntax "#442E2D"
-  minus-empty-line-marker-style = syntax "#3c1f1e"
-  line-numbers-minus-style      = "#EA6962"
-  plus-style                    = syntax "#0D3138"
-  plus-non-emph-style           = syntax "#0D3138"
-  plus-emph-style               = syntax "#2e3b3b"
-  plus-empty-line-marker-style  = syntax "#0D3138"
-  line-numbers-plus-style       = "#7DAEA3"
-  line-numbers-zero-style       = "#504945"
+  minus-style                   = syntax "#3F2C30"
+  minus-non-emph-style          = syntax "#3F2C30"
+  minus-emph-style              = syntax "#5B343A"
+  minus-empty-line-marker-style = syntax "#3F2C30"
+  line-numbers-minus-style      = "#DE5D68"
+  plus-style                    = syntax "#1A2A37"
+  plus-non-emph-style           = syntax "#1A2A37"
+  plus-emph-style               = syntax "#2C485F"
+  plus-empty-line-marker-style  = syntax "#1A2A37"
+  line-numbers-plus-style       = "#57A5E5"
+  line-numbers-zero-style       = "#5A5B5E"

@@ -4,29 +4,29 @@ gui:
   border: single
   theme:
     activeBorderColor:
-      - "#7DAEA3"
+      - "#57A5E5"
       - "bold"
     inactiveBorderColor:
-      - "#504945"
+      - "#5A5B5E"
     searchingActiveBorderColor:
-      - "#E78A4E"
+      - "#C49060"
       - "bold"
     optionsTextColor:
-      - "#7DAEA3"
+      - "#57A5E5"
     selectedLineBgColor:
-      - "#3C3836"
+      - "#37383D"
     cherryPickedCommitFgColor:
-      - "#141617"
+      - "#1B1C1E"
     cherryPickedCommitBgColor:
-      - "#D3869B"
+      - "#BB70D2"
     markedBaseCommitFgColor:
-      - "#141617"
+      - "#1B1C1E"
     markedBaseCommitBgColor:
-      - "#D8A657"
+      - "#DBB671"
     unstagedChangesColor:
-      - "#EA6962"
+      - "#DE5D68"
     defaultFgColor:
-      - "#D4BE98"
+      - "#A7AAB0"
 
 git:
   diffRenderers:
