@@ -50,6 +50,8 @@ alias -- -='cd -'
 alias -g ...='../..'
 alias -g ....='../../..'
 alias md='mkdir -p'
+# mkdir -p and cd into it
+take() { mkdir -p -- "$1" && cd -- "$1" }
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 alias ls='ls -G'
 export PAGER=less LESS=-R
