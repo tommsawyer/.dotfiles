@@ -4,7 +4,7 @@ k9s:
   refreshRate: 2
   skipLatestRevCheck: true
   ui:
-    skin: kanagawa
+    skin: gruvbox-material
     logoless: true
     splashless: true
   logger:

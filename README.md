@@ -3,13 +3,13 @@
 </p>
 
 <p align="center">
-  Конфиги для macOS: zsh, tmux, neovim, lazygit, delta и k9s в одной теме kanagawa (wave).
+  Конфиги для macOS: zsh, tmux, neovim, lazygit, delta и k9s в одной теме gruvbox-material (dark).
 </p>
 
 <details>
 <summary><b>Скриншот</b></summary>
 <br>
-<img src="assets/screenshot.png" alt="tmux и neovim: дерево файлов, хлебные крошки, тема kanagawa">
+<img src="assets/screenshot.png" alt="tmux и neovim: дерево файлов, хлебные крошки, тема gruvbox-material">
 </details>
 
 ## Содержание
@@ -78,7 +78,7 @@ make install
 
 После установки остаются два шага:
 
-1. **iTerm2:** Settings → Profiles → выбрать «Kanagawa» → Other Actions → Set
+1. **iTerm2:** Settings → Profiles → выбрать «Gruvbox Material» → Other Actions → Set
    as Default. Сам профиль (цвета, шрифт, без меток команд) подключается из
    [`files/iterm/profile.json`](files/iterm/profile.json) как dynamic profile.
    Его guid не меняется, так что это делается один раз.
@@ -136,7 +136,7 @@ Prefix — `C-f`. Всё, кроме `tm`, настроено в
 
 Стоит сверху. Слева имя сессии, оно желтеет, пока нажат prefix. Дальше окна,
 у каждого — что сейчас делает AI-агент (берётся из заголовка его панели).
-Справа git-ветка, контекст kubectl и время. Палитра kanagawa записана
+Справа git-ветка, контекст kubectl и время. Палитра gruvbox-material записана
 комментарием в конфиге. `extended-keys` пропускает `Shift-Enter` и подобные
 комбинации в nvim и Claude Code.
 
@@ -309,7 +309,7 @@ snacks gitbrowse. Сам lazygit открывается в tmux по `C-f g`.
 
 ### Внешний вид
 
-- Тема kanagawa-wave и её переопределения (дерево, winbar) —
+- Тема gruvbox-material и её переопределения (winbar) —
   [`lua/plugin/colorscheme.lua`](files/nvim/lua/plugin/colorscheme.lua).
 - Нет ни статус-бара, ни командной строки, мышь выключена. Это и остальные
   опции — в [`lua/options.lua`](files/nvim/lua/options.lua).
@@ -342,7 +342,7 @@ docker-compose), всё в [`files/zshrc`](files/zshrc). Настройки то
 
 Основной способ работать с git. Запускается через `lg` или `C-f g`.
 Настройки в [`files/lazygit/config.yml`](files/lazygit/config.yml): цвета
-kanagawa, `e` открывает файл в nvim. Диффы рисует delta, при ширине от 140
+gruvbox-material, `e` открывает файл в nvim. Диффы рисует delta, при ширине от 140
 колонок — в две колонки.
 
 В терминале `git status`, `commit`, `push` и другие частые команды (включая
@@ -356,7 +356,7 @@ Pager для git, [`files/git/delta.gitconfig`](files/git/delta.gitconfig).
 Подключается в `~/.gitconfig` через `include.path`, это делает
 `make symlinks`. Дифф показывается в две колонки, `n` / `N` прыгают между
 файлами. Добавленные строки синие, а не зелёные, чтобы лучше отличаться от
-красных. Конфликты в стиле `zdiff3`, подсветка синтаксиса — тема kanagawa из
+красных. Конфликты в стиле `zdiff3`, подсветка синтаксиса — тема gruvbox-material из
 bat.
 
 ### k9s
@@ -365,7 +365,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 удалить, отредактировать и убить ничего нельзя. Для разовой правки есть
 `k9s --write`. Логи показывают последние 200 строк за 5 минут. Настройки в
 [`files/k9s/config.yaml`](files/k9s/config.yaml), скин — в
-`files/k9s/skins/kanagawa.yaml`.
+`files/k9s/skins/gruvbox-material.yaml`.
 
 ### zoxide и fzf
 
@@ -378,13 +378,13 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `Alt-C` | перейти в папку |
 
 История zoxide нужна и для `tm`, и для `C-f s`. fzf ищет файлы через `rg` с
-учётом `.gitignore` и показывает скрытые. Цвета kanagawa заданы в
+учётом `.gitignore` и показывает скрытые. Цвета gruvbox-material заданы в
 `FZF_DEFAULT_OPTS` в `zshrc`.
 
 ### Прочее
 
 - Тема bat — в [`files/bat/config`](files/bat/config) и
-  `themes/kanagawa.tmTheme`, кэш тем пересобирает `make symlinks`.
+  `themes/gruvbox-material.tmTheme`, кэш тем пересобирает `make symlinks`.
 - `glow` рендерит markdown в терминале.
 - Алиасы: `vim` → `nvim`, `rg` всегда с `--hidden`, `coverage` запускает
   `go test` и открывает HTML-отчёт о покрытии.
@@ -415,7 +415,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `files/nvim` | `~/.config/nvim` |
 | `files/bat` | `~/.config/bat` |
 | `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
-| `files/k9s/config.yaml`, `skins/kanagawa.yaml` | `~/Library/Application Support/k9s/` |
+| `files/k9s/config.yaml`, `skins/gruvbox-material.yaml` | `~/Library/Application Support/k9s/` |
 | `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` |
 | `files/git/delta.gitconfig` | подключается из `~/.gitconfig` |
 

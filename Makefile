@@ -18,7 +18,7 @@ files/nvim|$(HOME)/.config/nvim
 files/bat|$(HOME)/.config/bat
 files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
 files/k9s/config.yaml|$(K9S_DIR)/config.yaml
-files/k9s/skins/kanagawa.yaml|$(K9S_DIR)/skins/kanagawa.yaml
+files/k9s/skins/gruvbox-material.yaml|$(K9S_DIR)/skins/gruvbox-material.yaml
 files/iterm/profile.json|$(ITERM_PROFILES_DIR)/dotfiles.json
 endef
 export LINKS
@@ -74,7 +74,7 @@ check:
 		rc=$$?; tmux -L dotfiles-check kill-server 2>/dev/null; exit $$rc
 	@echo "sh"; shellcheck files/tmux/*.sh
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
-		files/lazygit/config.yml files/k9s/config.yaml files/k9s/skins/kanagawa.yaml
+		files/lazygit/config.yml files/k9s/config.yaml files/k9s/skins/gruvbox-material.yaml
 	@echo "lua"; lua-language-server --check="$(DOTFILES)/files/nvim" --configpath="$(DOTFILES)/.luarc.json" \
 		--checklevel=Warning >/dev/null || { echo "run it without >/dev/null to see the problems"; exit 1; }
 	@# goes through ~/.config/nvim, so needs `make symlinks`; startup errors are printed, silenced ones are not

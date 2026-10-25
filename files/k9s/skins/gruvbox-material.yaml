@@ -1,21 +1,21 @@
 # -----------------------------------------------------------------------------
-# Kanagawa Skin
+# Gruvbox Material Skin
 # -----------------------------------------------------------------------------
 
 # Styles...
-foreground: &foreground "#dcd7ba"
-# changed from upstream "#1f1f28": use the terminal background as is, so it matches iTerm
+foreground: &foreground "#d4be98"
+# the terminal background as is, not "#1d2021", so it matches iTerm
 # even when k9s falls back to 256 colors (no COLORTERM=truecolor, e.g. in an old tmux server)
 background: &background "default"
-black: &black "#090618"
-blue: &blue "#7e9cd8"
-green: &green "#76946a"
-grey: &grey "#727169"
-orange: &orange "#ffa066"
-purple: &purple "#957fb8"
-red: &red "#c34043"
-yellow: &yellow "#c0a36e"
-yellow_bright: &yellow_bright "#e6c384"
+black: &black "#141617"
+blue: &blue "#7daea3"
+green: &green "#a9b665"
+grey: &grey "#928374"
+orange: &orange "#e78a4e"
+purple: &purple "#d3869b"
+red: &red "#ea6962"
+yellow: &yellow "#d8a657"
+yellow_bright: &yellow_bright "#ddc7a1"
 
 # Skin...
 k9s:
