@@ -12,6 +12,8 @@ return {
       WinBarNC = { fg = "$light_grey", bg = "$bg0" },
       -- one-line notifications (LSP progress) sit on that band in the top right corner
       SnacksNotifierMinimal = { fg = "$light_grey", bg = "$bg1" },
+      -- picker title as a label on the frame, like flash labels
+      SnacksPickerTitle = { fg = "$bg0", bg = "$green", fmt = "bold" },
       -- groups the theme leaves to plugin / nvim defaults (blue-gray folder icons, a light green
       -- message); the window picker labels look like flash labels
       NvimTreeFolderIcon = { fg = "$blue" },

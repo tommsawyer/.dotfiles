@@ -9,8 +9,14 @@ return {
   opts = {
     picker = {
       enabled = true,
+      prompt = "❯ ",
       layout = {
         preset = "select",
+        -- rounded frame over an editor dimmed with the theme's bg_d (onedark warmer)
+        layout = { border = "rounded", backdrop = { blend = 40, bg = "#1b1c1e" } },
+      },
+      formatters = {
+        file = { filename_first = true }, -- name first, then the dimmed path
       },
     },
     input = { enabled = true },
