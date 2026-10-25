@@ -5,9 +5,91 @@ done
 
 export ZSH_DISABLE_COMPFIX=true
 export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="robbyrussell"
+# no theme, the prompt is below
+ZSH_THEME=""
 plugins=(aliases macos git tmux golang docker-compose)
 source $ZSH/oh-my-zsh.sh
+
+# Prompt: "dotfiles/files/tmux ❯", the path from the repo root (outside a repo from ~),
+# ❯ red after a failed command. Right: the exit code with the signal name (130 INT), how
+# long the command took (from 0.5s), background jobs. The branch only outside tmux, its
+# status line has it. After Enter the line collapses to "dotfiles ❯ cmd" with only the
+# start time on the right, so scrollback keeps when it ran.
+zmodload zsh/datetime
+autoload -Uz add-zsh-hook add-zle-hook-widget
+
+_prompt_preexec() { _prompt_start=$EPOCHREALTIME }
+
+# 850ms, 12.4s, 3m05s, 1h02m into REPLY
+_prompt_duration() {
+  local -F d=$1
+  local LC_NUMERIC=C
+  local -i s=$1 ms=$(( d * 1000 ))
+  if (( d < 1 )); then REPLY="${ms}ms"
+  elif (( d < 60 )); then printf -v REPLY '%.1fs' d
+  elif (( s < 3600 )); then printf -v REPLY '%dm%02ds' $(( s / 60 )) $(( s % 60 ))
+  else printf -v REPLY '%dh%02dm' $(( s / 3600 )) $(( s % 3600 / 60 ))
+  fi
+}
+
+_prompt_precmd() {
+  local ret=$? dir branch
+  local -a right
+  # only after a command ran: an empty Enter or ^C keeps what the last command left
+  if [[ -n $_prompt_start ]]; then
+    _prompt_ok=$(( ! ret ))
+    _prompt_right=()
+    if (( ret )); then
+      local sig; (( ret > 128 )) && sig=${signals[ret - 127]}
+      _prompt_right+="%F{#E16D77}✘ $ret${sig:+ $sig}%f"
+    fi
+    local -F took=$(( EPOCHREALTIME - _prompt_start ))
+    (( took >= 0.5 )) && _prompt_duration $took && _prompt_right+="%F{#DBB671}$REPLY%f"
+    unset _prompt_start
+  fi
+  right=($_prompt_right)
+  (( ${#jobstates} )) && right+="%F{#57A5E5}⚙ ${#jobstates}%f"
+
+  # one git call for both; physical paths, so a link into a repo (~/.config/tmux) resolves too
+  local -a git=(${(f)"$(command git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null)"})
+  if [[ -n $git[1] && ${PWD:A}/ == $git[1]/* ]]; then
+    dir=${git[1]:t}${${PWD:A}#$git[1]}
+    if [[ -z $TMUX ]]; then
+      branch=$git[2]
+      command git diff --quiet HEAD 2>/dev/null || branch+='*'
+    fi
+  else
+    dir=${(%):-%~}
+  fi
+
+  [[ -n $SSH_CONNECTION ]] && dir="%n@%m:$dir"
+
+  _prompt_left="%F{#57A5E5}${dir//\%/%%}%f"
+  [[ -n $branch ]] && _prompt_left+=" %F{#818387}${branch//\%/%%}%f"
+  local c='#BB70D2'; (( _prompt_ok )) || c='#E16D77'
+  _prompt_char="%F{$c}❯%f"
+  PROMPT="$_prompt_left $_prompt_char "
+  local sep=' %F{#5A5B5E}·%f '
+  RPROMPT=${(pj:$sep:)right}
+}
+
+# redraws the finished line with only the start time on the right, the left part stays put
+_prompt_collapse() {
+  [[ $CONTEXT == start ]] || return 0
+  PROMPT="$_prompt_left $_prompt_char " RPROMPT="%F{#5A5B5E}%D{%H:%M:%S}%f"
+  zle .reset-prompt
+}
+
+_prompt_ok=1
+_prompt_right=()
+add-zsh-hook preexec _prompt_preexec
+add-zsh-hook precmd _prompt_precmd
+add-zle-hook-widget line-finish _prompt_collapse
+# ^C on a typed line skips line-finish, collapse it here
+TRAPINT() {
+  zle && _prompt_collapse
+  return $(( 128 + $1 ))
+}
 
 command -v fzf >/dev/null && source <(fzf --zsh)
 # remembers visited directories: `z`/`zi` jumps, and the history behind `tm` and prefix s
