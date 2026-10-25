@@ -8,7 +8,8 @@ return {
 
   config = function()
     vim.diagnostic.config({
-      virtual_text = true,
+      -- message only on the cursor line, the rest just has signs and underlines
+      virtual_text = { current_line = true },
       signs = {
         text = {
           [vim.diagnostic.severity.ERROR] = '\u{f057} ',
