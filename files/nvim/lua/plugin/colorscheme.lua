@@ -22,6 +22,8 @@ return {
       -- place of its DropBarKindDir / DropBarKindFile there, the bar keeps those)
       DropBarMenuKindDir = { fg = "$blue" },
       DropBarMenuKindFile = { fg = "$fg" },
+      -- and on its background (bg_d), not the completion menu one (NormalFloat)
+      DropBarMenuNormalFloat = { fg = "$fg", bg = "$bg_d" },
       -- Trouble lists (references, symbols, diagnostics) on the file tree background, like a sidebar
       TroubleNormal = { bg = "$bg_d" },
       TroubleNormalNC = { bg = "$bg_d" },
