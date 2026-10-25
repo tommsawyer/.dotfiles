@@ -1,22 +1,5 @@
 {
   "model": "opus",
-  "enabledPlugins": {
-    "lua-lsp@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true,
-    "interfaces@interfaces": true
-  },
-  "extraKnownMarketplaces": {
-    "interfaces": {
-      "source": {
-        "source": "github",
-        "repo": "jakubkrehel/skills"
-      }
-    }
-  },
-  "theme": "dark-ansi",
-  "feedbackDrafts": "off",
   "hooks": {
     "SessionStart": [
       {
@@ -109,5 +92,22 @@
         ]
       }
     ]
-  }
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "mattpocock-skills@claude-plugins-official": true,
+    "interfaces@interfaces": true
+  },
+  "extraKnownMarketplaces": {
+    "interfaces": {
+      "source": {
+        "source": "github",
+        "repo": "jakubkrehel/skills"
+      }
+    }
+  },
+  "feedbackDrafts": "off",
+  "theme": "dark-ansi"
 }
