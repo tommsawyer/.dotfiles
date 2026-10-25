@@ -36,11 +36,7 @@ return {
           if stat and stat.size > 1024 * 1024 then
             return false
           end
-          -- the menu previews a file in a scratch buffer named dropbar_preview_N://<path> (nvim puts
-          -- the cwd in front: not a URI scheme for it): keep the bar there, it shows that path
-          -- (dropbar drops everything up to ://)
           return vim.bo[buf].bt == "terminal" or (vim.bo[buf].bt == "" and name ~= "")
-              or name:find("dropbar_preview_%d+://") ~= nil
         end,
         -- same labels as flash, in the same order
         pick = { pivots = "asdfghjklqwertyuiopzxcvbnm" },
