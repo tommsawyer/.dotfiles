@@ -10,6 +10,8 @@ plugins=(aliases macos git tmux golang docker-compose)
 source $ZSH/oh-my-zsh.sh
 
 command -v fzf >/dev/null && source <(fzf --zsh)
+# remembers visited directories: `z`/`zi` jumps, and the history behind `tm` and prefix s
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 export GOPATH=$HOME/.local/share/go
 export GOBIN=$GOPATH/bin
@@ -32,18 +34,32 @@ alias rg='rg --hidden'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 alias lg='lazygit'
 
-# tmux session named after the current folder: created there if missing, then attached
-# (outside tmux) or switched to (inside tmux, where attaching would nest).
-# "=name:" is the exact session name; without the colon tmux reads the dot in .dotfiles as window.pane
+# tmux session named after a folder: created there if missing, then attached (outside tmux)
+# or switched to (inside tmux, where attaching would nest). `tm` takes the current folder;
+# `tm x` an open session, a directory, or a word zoxide resolves (`tm dotf` -> ~/.dotfiles).
+# The logic lives in ~/.config/tmux/connect.sh, shared with the prefix s picker.
 function tm {
-  local name=${PWD##*/}
-  command tmux has-session -t "=$name:" 2>/dev/null || command tmux new-session -d -s "$name" -c "$PWD"
-  if [ -n "$TMUX" ]; then
-    command tmux switch-client -t "=$name:"
-  else
-    command tmux attach-session -t "=$name:"
-  fi
+  ~/.config/tmux/connect.sh "${1:-$PWD}"
 }
+
+# tm <tab>: open sessions and directories from zoxide history, then plain directories
+function _tm {
+  local -a targets
+  targets=(${(f)"$(sesh list -t -z -d 2>/dev/null | sed "s|^$HOME|~|")"})
+  # -Q: insert ~/x as is, not as \~/x
+  _wanted targets expl 'session or directory' compadd -Q -a targets
+  _directories
+}
+compdef _tm tm
+
+# ctrl-g: the prefix s picker right in the shell, attaches to the chosen session
+function _tm_pick {
+  zle -I
+  ~/.config/tmux/switch.sh </dev/tty
+  zle reset-prompt
+}
+zle -N _tm_pick
+bindkey '^G' _tm_pick
 
 # Habit trainer: everyday git commands typed in a terminal (including oh-my-zsh
 # aliases like gst, gd, gp) print the lazygit way instead of running.

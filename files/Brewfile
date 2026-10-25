@@ -14,7 +14,9 @@ brew "htop"
 brew "k9s"
 brew "lazygit"
 brew "ripgrep"
+brew "sesh"
 brew "tree-sitter-cli"
+brew "zoxide"
 
 # language servers (sourcekit-lsp for swift comes with Xcode)
 brew "basedpyright"
