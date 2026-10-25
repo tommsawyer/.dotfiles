@@ -126,6 +126,22 @@ return {
       group = vim.api.nvim_create_augroup("DropBarPickHl", { clear = true }),
     })
 
+    -- folder and file names in the menu coloured as in nvim-tree (colorscheme.lua), the bar keeps
+    -- its own; later: the menu buffer gets its filetype before dropbar opens the window and sets
+    -- its winhighlight
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "dropbar_menu",
+      callback = function(args)
+        vim.schedule(function()
+          for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+            vim.wo[win].winhighlight = vim.wo[win].winhighlight
+                .. ",DropBarKindDir:DropBarMenuKindDir,DropBarKindFile:DropBarMenuKindFile"
+          end
+        end)
+      end,
+      group = vim.api.nvim_create_augroup("DropBarMenuNames", { clear = true }),
+    })
+
     -- dropbar dims the icons of a window it leaves (winhighlight Xxx:XxxNC) and undims on enter;
     -- winhighlight is kept per buffer in a window, so a file opened from the menu leaves the
     -- previous buffer saved dimmed, and <C-o> back to it brings icons on the inactive background

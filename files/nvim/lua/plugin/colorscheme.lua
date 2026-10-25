@@ -15,10 +15,13 @@ return {
       DropBarIconUISeparatorNC = { fg = "$grey" },
       -- dropbar menu: the entry under the cursor on a quiet band (like the selected row in fzf),
       -- not the orange of IncSearch (its icon: dropbar.lua); the current one in blue bold text,
-      -- not a PmenuSel band; folder names blue as in nvim-tree, not orange
+      -- not a PmenuSel band
       DropBarMenuHoverEntry = { bg = "$bg3" },
       DropBarMenuCurrentContext = { fg = "$blue", fmt = "bold" },
-      DropBarKindFolder = { fg = "$blue" },
+      -- names in the menu as in nvim-tree: folders blue, files plain (dropbar.lua puts them in
+      -- place of its DropBarKindDir / DropBarKindFile there, the bar keeps those)
+      DropBarMenuKindDir = { fg = "$blue" },
+      DropBarMenuKindFile = { fg = "$fg" },
       -- Trouble lists (references, symbols, diagnostics) on the file tree background, like a sidebar
       TroubleNormal = { bg = "$bg_d" },
       TroubleNormalNC = { bg = "$bg_d" },
