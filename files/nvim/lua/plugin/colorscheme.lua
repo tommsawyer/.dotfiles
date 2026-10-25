@@ -13,8 +13,6 @@ return {
       -- breadcrumb separators: plain grey, not the italic of Comment they link to
       DropBarIconUISeparator = { fg = "$grey" },
       DropBarIconUISeparatorNC = { fg = "$grey" },
-      -- one-line notifications (LSP progress) sit on that band in the top right corner
-      SnacksNotifierMinimal = { fg = "$light_grey", bg = "$bg1" },
       -- Trouble lists (references, symbols, diagnostics) on the file tree background, like a sidebar
       TroubleNormal = { bg = "$bg_d" },
       TroubleNormalNC = { bg = "$bg_d" },

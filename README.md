@@ -218,8 +218,7 @@ Leader — `,`. Если начать комбинацию и подождать
 | `,t` | все диагностики |
 
 Списки открываются в Trouble
-([`lua/plugin/trouble.lua`](files/nvim/lua/plugin/trouble.lua)). Прогресс
-запуска серверов показывается уведомлениями в правом верхнем углу.
+([`lua/plugin/trouble.lua`](files/nvim/lua/plugin/trouble.lua)).
 
 Серверы описаны в [`lua/plugin/lsp.lua`](files/nvim/lua/plugin/lsp.lua).
 Включает их встроенный `vim.lsp.enable` (список в конце файла), а
