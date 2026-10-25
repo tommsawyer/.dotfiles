@@ -111,11 +111,14 @@ return {
       },
     })
 
-    -- pick labels look like flash labels; again after a colorscheme reload clears it
+    -- pick labels look like flash labels; the icon under the cursor in the menu on the same band
+    -- as its entry (colorscheme.lua), not reversed: dropbar sets that itself, so the theme
+    -- cannot undo it. Again after a colorscheme reload clears it
     local function link_pick_hl()
       -- flash defines FlashLabel only on its first jump; same default, so flash keeps it as is
       vim.api.nvim_set_hl(0, "FlashLabel", { link = "Substitute", default = true })
       vim.api.nvim_set_hl(0, "DropBarIconUIPickPivot", { link = "FlashLabel" })
+      vim.api.nvim_set_hl(0, "DropBarMenuHoverIcon", { link = "DropBarMenuHoverEntry" })
     end
     link_pick_hl()
     vim.api.nvim_create_autocmd("ColorScheme", {

@@ -13,6 +13,12 @@ return {
       -- breadcrumb separators: plain grey, not the italic of Comment they link to
       DropBarIconUISeparator = { fg = "$grey" },
       DropBarIconUISeparatorNC = { fg = "$grey" },
+      -- dropbar menu: the entry under the cursor on a quiet band (like the selected row in fzf),
+      -- not the orange of IncSearch (its icon: dropbar.lua); the current one in blue bold text,
+      -- not a PmenuSel band; folder names blue as in nvim-tree, not orange
+      DropBarMenuHoverEntry = { bg = "$bg3" },
+      DropBarMenuCurrentContext = { fg = "$blue", fmt = "bold" },
+      DropBarKindFolder = { fg = "$blue" },
       -- Trouble lists (references, symbols, diagnostics) on the file tree background, like a sidebar
       TroubleNormal = { bg = "$bg_d" },
       TroubleNormalNC = { bg = "$bg_d" },
