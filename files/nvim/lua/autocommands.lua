@@ -62,3 +62,45 @@ api.nvim_create_autocmd("FileType", {
   callback = function() vim.opt_local.formatoptions:remove({ "c", "r", "o" }) end,
   group = api.nvim_create_augroup("FormatOptions", { clear = true }),
 })
+
+-- error / warning counts of all buffers in this pane's tmux options, the tmux status line shows
+-- them next to the git branch (@nvim_diag in tmux.conf); nvim has no status line of its own to put them in
+local pane = vim.env.TMUX_PANE
+if pane then
+  local shown = "0/0"
+  local function tmux_diagnostics(count)
+    count = count or vim.diagnostic.count(nil)
+    local values = {
+      ["@nvim_errors"] = count[vim.diagnostic.severity.ERROR] or 0,
+      ["@nvim_warns"] = count[vim.diagnostic.severity.WARN] or 0,
+    }
+    local key = values["@nvim_errors"] .. "/" .. values["@nvim_warns"]
+    if key == shown then return end
+    shown = key
+    local cmd = { "tmux" }
+    for name, n in pairs(values) do
+      vim.list_extend(cmd, n > 0 and { "set", "-p", "-t", pane, name, tostring(n), ";" }
+        or { "set", "-pu", "-t", pane, name, ";" })
+    end
+    -- redraw now, not on the next status-interval
+    vim.list_extend(cmd, { "refresh-client", "-S" })
+    return vim.system(cmd)
+  end
+
+  -- DiagnosticChanged fires per buffer and per server, often many times in a row
+  local timer = assert(vim.uv.new_timer())
+  local diagGrp = api.nvim_create_augroup("TmuxDiagnostics", { clear = true })
+  api.nvim_create_autocmd("DiagnosticChanged", {
+    callback = function() timer:start(300, 0, vim.schedule_wrap(function() tmux_diagnostics() end)) end,
+    group = diagGrp,
+  })
+  -- the pane outlives nvim: clear the counts, waiting so tmux gets them before nvim exits
+  api.nvim_create_autocmd("VimLeavePre", {
+    callback = function()
+      timer:stop()
+      local job = tmux_diagnostics({})
+      if job then job:wait(500) end
+    end,
+    group = diagGrp,
+  })
+end
