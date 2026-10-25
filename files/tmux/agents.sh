@@ -44,7 +44,7 @@ pane=$("$0" list | fzf \
   --prompt 'agent> ' \
   --footer 'enter: jump · ctrl-r: refresh' \
   --preview 'tmux capture-pane -ep -t {1}' \
-  --preview-window 'right,40%,border-left' \
+  --preview-window 'right,55%,border-left' \
   --bind 'focus:transform-preview-label:printf " %s " {3}' \
   --bind "ctrl-r:reload($0 list)" | cut -f1)
 
