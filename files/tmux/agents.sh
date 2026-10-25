@@ -25,7 +25,7 @@ if [ "$1" = list ]; then
       $1 == "" || $4 ~ /^-?(zsh|bash|sh)$/ { next }
       {
         if ($1 == "wait") { rank = 0; icon = "\033[38;2;219;182;113m▲" }
-        else if ($1 == "working") { rank = 1; icon = "\033[38;2;81;168;179m✻" }
+        else if ($1 == "working") { rank = 1; icon = "\033[38;2;81;168;179m󰔟" }
         else if ($1 == "done") { rank = 2; icon = "\033[38;2;143;181;115m✔" }
         else { rank = 3; icon = "\033[38;2;90;91;94m○" }
         # the title goes last: awk pads by bytes, a cyrillic one would break the columns
