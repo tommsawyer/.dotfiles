@@ -69,7 +69,7 @@ make install
 ```
 
 `make install` ставит Homebrew и всё из [`files/Brewfile`](files/Brewfile)
-(включая шрифт JetBrains Mono Nerd Font), emmet language server, oh-my-zsh и
+(включая шрифт JetBrains Mono Nerd Font), emmet language server и
 русский словарь для проверки орфографии. Потом создаёт симлинки на конфиги.
 
 > [!NOTE]
@@ -334,9 +334,15 @@ snacks gitbrowse. Сам lazygit открывается в tmux по `C-f g`.
 
 ## Консольные утилиты
 
-Shell — zsh с oh-my-zsh (тема robbyrussell, плагины git, tmux, golang,
-docker-compose), всё в [`files/zshrc`](files/zshrc). Настройки только для
-этой машины кладутся в `~/.zshcustom`, этого файла в репозитории нет.
+Shell — zsh без фреймворков, всё в [`files/zshrc`](files/zshrc). Настройки
+только для этой машины кладутся в `~/.zshcustom`, этого файла в репозитории
+нет.
+
+Промпт — `.dotfiles/files/tmux ❯`, путь от корня репозитория, `❯` краснеет
+после ошибки. Справа код выхода с именем сигнала (`✘ 130 INT`), время
+выполнения от 0.5s и фоновые задачи. Ветка показывается только вне tmux,
+внутри она в статусной строке. После Enter справа остаётся только время
+запуска, так что в прокрутке видно, когда что выполнялось.
 
 ### lazygit
 
@@ -398,7 +404,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 | Цель | Что делает |
 |---|---|
-| `make install` | Homebrew, Brewfile, emmet, oh-my-zsh, симлинки, настройки iTerm2, словарь |
+| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
 | `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, lua-language-server, запуск nvim |
 | `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |

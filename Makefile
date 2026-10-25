@@ -23,7 +23,7 @@ files/iterm/profile.json|$(ITERM_PROFILES_DIR)/dotfiles.json
 endef
 export LINKS
 
-install: homebrew brew npm oh-my-zsh symlinks iterm spell
+install: homebrew brew npm symlinks iterm spell
 
 homebrew:
 	@command -v brew >/dev/null 2>&1 || \
@@ -35,9 +35,6 @@ brew:
 # into ~/.local, not the global npm prefix: that one may be root-owned (EACCES)
 npm:
 	npm install -g --prefix "$(HOME)/.local" @olrtg/emmet-language-server
-
-oh-my-zsh:
-	[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 
 symlinks:
 	mkdir -p "$(HOME)/.config" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
@@ -92,4 +89,4 @@ clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm oh-my-zsh symlinks iterm spell nvim-sync check fmt clean
+.PHONY: install homebrew brew npm symlinks iterm spell nvim-sync check fmt clean

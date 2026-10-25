@@ -3,12 +3,68 @@ for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do
   [ -x $b ] && eval "$($b shellenv zsh)" && break
 done
 
-export ZSH_DISABLE_COMPFIX=true
-export ZSH=$HOME/.oh-my-zsh
-# no theme, the prompt is below
-ZSH_THEME=""
-plugins=(aliases macos git tmux golang docker-compose)
-source $ZSH/oh-my-zsh.sh
+# history: shared between open shells right away, with timestamps (`history` shows them)
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=10000
+setopt extended_history share_history hist_expire_dups_first hist_ignore_dups \
+  hist_ignore_space hist_verify
+alias history='fc -il 1'
+
+# completion: a menu walked with arrows, case-insensitive, matches inside words too;
+# -i skips completion dirs with unsafe permissions instead of asking about them
+zmodload zsh/complist
+autoload -Uz compinit && compinit -i
+autoload -Uz bashcompinit && bashcompinit
+setopt complete_in_word always_to_end
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' list-colors ''
+
+# emacs keys; up/down search history by what is typed; ctrl-w and alt-backspace stop at / and -
+bindkey -e
+WORDCHARS=''
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search edit-command-line
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+zle -N edit-command-line
+bindkey '^[[A' up-line-or-beginning-search '^[OA' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search '^[OB' down-line-or-beginning-search
+bindkey '^[[H' beginning-of-line '^[[F' end-of-line '^[[3~' delete-char
+bindkey '^[[1;5C' forward-word '^[[1;5D' backward-word
+bindkey '^[[Z' reverse-menu-complete
+# ctrl-x ctrl-e: the line in $EDITOR
+bindkey '^X^E' edit-command-line
+# quotes ? and & in a pasted or typed url
+autoload -Uz url-quote-magic bracketed-paste-magic
+zle -N self-insert url-quote-magic
+zle -N bracketed-paste bracketed-paste-magic
+
+# a folder name alone cds into it, cd keeps a stack (`cd -<tab>`)
+setopt auto_cd auto_pushd pushd_ignore_dups pushd_minus
+setopt interactive_comments long_list_jobs
+# no ctrl-s / ctrl-q freezing the terminal
+unsetopt flow_control
+alias -- -='cd -'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias md='mkdir -p'
+export LSCOLORS=Gxfxcxdxbxegedabagacad
+alias ls='ls -G'
+export PAGER=less LESS=-R
+
+# terminal / tmux pane title: the folder at the prompt, the command while it runs;
+# tmux.conf leaves both out of the tab label
+autoload -Uz add-zsh-hook
+_title_precmd() { print -Pn '\e]0;%~\a' }
+# the first word that is not VAR=x, sudo or a flag
+_title_preexec() {
+  setopt local_options extended_glob
+  print -rn -- $'\e]0;'"${${1[(wr)^(*=*|sudo|-*)]}//[[:cntrl:]]}"$'\a'
+}
+add-zsh-hook precmd _title_precmd
+add-zsh-hook preexec _title_preexec
 
 # Prompt: "dotfiles/files/tmux ❯", the path from the repo root (outside a repo from ~),
 # ❯ red after a failed command. Right: the exit code with the signal name (130 INT), how
@@ -16,7 +72,7 @@ source $ZSH/oh-my-zsh.sh
 # status line has it. After Enter the line collapses to "dotfiles ❯ cmd" with only the
 # start time on the right, so scrollback keeps when it ran.
 zmodload zsh/datetime
-autoload -Uz add-zsh-hook add-zle-hook-widget
+autoload -Uz add-zle-hook-widget
 
 _prompt_preexec() { _prompt_start=$EPOCHREALTIME }
 
@@ -143,8 +199,8 @@ function _tm_pick {
 zle -N _tm_pick
 bindkey '^G' _tm_pick
 
-# Habit trainer: everyday git commands typed in a terminal (including oh-my-zsh
-# aliases like gst, gd, gp) print the lazygit way instead of running.
+# Habit trainer: everyday git commands typed in a terminal print the lazygit way
+# instead of running.
 # Only when stdout is a terminal, so scripts, $(git ...), editors and tools keep
 # working. Run real git anyway with `command git ...` or `GIT_FORCE=1 git ...`.
 git() {
