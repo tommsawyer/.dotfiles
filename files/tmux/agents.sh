@@ -28,8 +28,11 @@ if [ "$1" = list ]; then
         else if ($1 == "working") { rank = 1; icon = "\033[38;2;81;168;179m󰔟" }
         else if ($1 == "done") { rank = 2; icon = "\033[38;2;143;181;115m✔" }
         else { rank = 3; icon = "\033[38;2;90;91;94m○" }
-        # the title goes last: awk pads by bytes, a cyrillic one would break the columns
-        printf "%d\t%s\t%s\033[0m %-16s %s\n", rank, $2, icon, $3, $5
+        # done and idle in grey, so the eye goes to the ones waiting and working
+        text = rank >= 2 ? "\033[38;2;129;131;135m" : ""
+        # the title goes last: awk pads by bytes, a cyrillic one would break the columns;
+        # session:window once more, hidden, for the preview label
+        printf "%d\t%s\t%s\033[0m %s%-16s %s\033[0m\t%s\n", rank, $2, icon, text, $3, $5, $3
       }' |
     sort -s -n -k1,1 | cut -f2-
   exit
@@ -41,9 +44,10 @@ pane=$("$0" list | fzf \
   --delimiter '\t' \
   --with-nth 2 \
   --prompt 'agent> ' \
-  --header 'enter: jump · ctrl-r: refresh' \
+  --footer 'enter: jump · ctrl-r: refresh' \
   --preview 'tmux capture-pane -ep -t {1}' \
   --preview-window 'right,40%,border-left' \
+  --bind 'focus:transform-preview-label:printf " %s " {3}' \
   --bind "ctrl-r:reload($0 list)" | cut -f1)
 
 [ -n "$pane" ] && tmux switch-client -t "$pane"
