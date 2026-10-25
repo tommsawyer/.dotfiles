@@ -13,7 +13,7 @@ return {
       vim.env.KOTLIN_LSP_DIR = kotlin_lsp_dir()
     end
     require("kotlin").setup({
-      inlay_hints = { enabled = true },
+      inlay_hints = { enabled = false },
     })
   end,
 }
