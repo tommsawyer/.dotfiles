@@ -314,8 +314,7 @@ snacks gitbrowse. Сам lazygit открывается в tmux по `C-f g`.
 - Нет ни статус-бара, ни командной строки, мышь выключена. Это и остальные
   опции — в [`lua/options.lua`](files/nvim/lua/options.lua).
 - Уведомления (история — `,n`) и zen-режим (`,z`) дают snacks.
-- Markdown рендерится прямо в буфере плагином render-markdown,
-  [`lua/plugin/markdown.lua`](files/nvim/lua/plugin/markdown.lua). Перенос
+- Markdown показывается как есть, только с подсветкой treesitter. Перенос
   строк и проверка орфографии (ru + en) включены в
   `after/ftplugin/markdown.lua`.
 - Подсказки клавиш — which-key,
