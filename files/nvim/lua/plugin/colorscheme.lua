@@ -19,6 +19,9 @@ return {
       -- blank (statusline in options.lua) and on the editor background, just a gap
       StatusLine = { bg = "$bg0" },
       StatusLineNC = { bg = "$bg0" },
+      -- the current indent scope: a guide a bit brighter than the rest (bg1), not purple;
+      -- between bg3 and grey, the palette has no step there
+      IblScope = { fg = "#46474c", fmt = "nocombine" },
       -- picker title as a label on the frame, like flash labels
       SnacksPickerTitle = { fg = "$bg0", bg = "$green", fmt = "bold" },
       -- groups the theme leaves to plugin / nvim defaults (blue-gray folder icons, a light green
