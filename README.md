@@ -191,8 +191,8 @@ Leader — `,`. Если начать комбинацию и подождать
 | `<C-h/j/k/l>` | в соседнее окно, а если его нет — новый сплит |
 
 - Прыжки по меткам — flash,
-  [`lua/plugin/flash.lua`](files/nvim/lua/plugin/flash.lua). При поиске через
-  `/` метки тоже появляются на совпадениях.
+  [`lua/plugin/flash.lua`](files/nvim/lua/plugin/flash.lua), прыжок по
+  `Enter`. Поиск через `/` обычный, без меток.
 - Текстовые объекты по структуре — treesitter-textobjects,
   [`lua/plugin/treesitter.lua`](files/nvim/lua/plugin/treesitter.lua). Там же
   список парсеров. Подсветку HTML внутри Go-шаблонов задаёт

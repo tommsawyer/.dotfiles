@@ -3,8 +3,9 @@ return {
   event = "VeryLazy",
   opts = {
     modes = {
+      -- / and ? stay plain search, jumps go through Enter
       search = {
-        enabled = true,
+        enabled = false,
       },
     },
   },
