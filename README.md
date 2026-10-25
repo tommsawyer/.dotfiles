@@ -106,6 +106,7 @@ Prefix — `C-f`. Всё, кроме `tm`, настроено в
 | `tm` | сессия для текущей папки |
 | `tm <имя>` | сессия по имени, пути или слову из zoxide (`tm dotf` → `~/.dotfiles`) |
 | `C-f s`, `Ctrl-G` в zsh | fzf со списком открытых сессий |
+| `C-f a` | fzf со списком панелей Claude Code во всех сессиях |
 | `C-f w` | стандартное дерево сессий |
 
 `tm` создаёт сессию, если её нет. Снаружи tmux команда подключается к сессии,
@@ -113,9 +114,22 @@ Prefix — `C-f`. Всё, кроме `tm`, настроено в
 объявлена в [`files/zshrc`](files/zshrc), логика лежит в
 [`files/tmux/connect.sh`](files/tmux/connect.sh).
 
-В fzf справа показывается превью: `Enter` открывает выбранное, `Ctrl-X`
-убивает сессию, новое имя и `Enter` создают сессию. Код в
+В списке сессий первой стоит та, где ты был до текущей, так что `C-f s` и
+`Enter` возвращают назад. Текущая сессия серая и стоит в самом низу. Справа
+показывается превью: `Enter` открывает выбранное, `Ctrl-X` убивает сессию,
+новое имя и `Enter` создают сессию. Код в
 [`files/tmux/switch.sh`](files/tmux/switch.sh).
+
+В списке агентов сначала идут те, кто ждёт ответа (▲), потом работающие (󰔟),
+закончившие (✔) и остальные. `Enter` переходит в панель агента, `Ctrl-R`
+обновляет список. Статус пишут хуки Claude Code из
+[`files/claude/settings.json`](files/claude/settings.json): они вызывают
+[`files/tmux/agents.sh`](files/tmux/agents.sh), а тот хранит статус в опции
+панели `@agent_state`.
+
+Оба списка, lazygit и k9s открываются в попапе, а окно под ним затемняется,
+как под плавающими окнами в nvim
+([`files/tmux/popup.sh`](files/tmux/popup.sh)).
 
 ### Окна и панели
 
@@ -126,17 +140,19 @@ Prefix — `C-f`. Всё, кроме `tm`, настроено в
 | `C-f h/j/k/l` | перейти между панелями |
 | `C-f J` / `C-f b` | присоединить панель / вынести в отдельное окно |
 | `C-f !` / `C-f @` | раскладки main-horizontal / even-horizontal |
-| `C-f g` / `C-f K` | плавающий lazygit / k9s |
+| `C-f g` / `C-f K` | lazygit / k9s в попапе |
 
 Всё открывается в текущей папке. Окна нумеруются с 1, после закрытия номера
-сдвигаются без дыр. Мышь включена. Плавающие панели занимают 90% экрана и
-закрываются вместе с программой, для них нужен tmux 3.7+.
+сдвигаются без дыр. Мышь включена. Попапы lazygit и k9s занимают 90% экрана и
+закрываются вместе с программой.
 
 ### Статус-бар
 
 Стоит сверху. Слева имя сессии, оно желтеет, пока нажат prefix. Дальше окна,
-у каждого — что сейчас делает AI-агент (берётся из заголовка его панели).
-Справа git-ветка, контекст kubectl и время. Палитра onedark записана
+у каждого — что сейчас делает AI-агент (берётся из заголовка его панели), а
+перед этим статус Claude: ▲ ждёт ответа, 󰔟 работает, ✔ закончил. Справа
+git-ветка с числом добавленных и удалённых строк, ошибки и предупреждения nvim
+из панелей текущего окна, контекст kubectl и время. Палитра onedark записана
 комментарием в конфиге. `extended-keys` пропускает `Shift-Enter` и подобные
 комбинации в nvim и Claude Code.
 
@@ -381,7 +397,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `Ctrl-R` | поиск по истории команд |
 | `Alt-C` | перейти в папку |
 
-История zoxide нужна и для `tm`, и для `C-f s`. fzf ищет файлы через `rg` с
+История zoxide нужна для `tm`. fzf ищет файлы через `rg` с
 учётом `.gitignore` и показывает скрытые. Цвета onedark заданы в
 `FZF_DEFAULT_OPTS` в `zshrc`.
 
@@ -404,7 +420,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 |---|---|
 | `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
-| `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, lua-language-server, запуск nvim |
+| `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, json, lua-language-server, запуск nvim |
 | `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |
 | `make nvim-sync` | обновляет плагины nvim без интерфейса (`Lazy! sync`, пишет `lazy-lock.json`) |
 | `make clean` | удаляет ссылки и подключение delta в `~/.gitconfig` |
@@ -421,6 +437,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
 | `files/k9s/config.yaml`, `skins/onedark-warmer.yaml` | `~/Library/Application Support/k9s/` |
 | `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` |
+| `files/claude/settings.json` | `~/.claude/settings.json` (настройки и хуки Claude Code) |
 | `files/git/delta.gitconfig` | подключается из `~/.gitconfig` |
 
 ### Как устроен конфиг nvim
