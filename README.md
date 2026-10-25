@@ -1,116 +1,192 @@
-## Dotfiles
+<p align="center">
+  <img src="assets/header.svg" width="720" alt="dotfiles">
+</p>
 
-Конфиги для macOS: zsh (oh-my-zsh), tmux, neovim, lazygit, delta, k9s. Везде тема kanagawa (wave).
+<p align="center">
+  Конфиги для macOS: zsh, tmux, neovim, lazygit, delta и k9s в одной теме kanagawa (wave).
+</p>
 
-### Установка
+<p align="center">
+  <img src="assets/screenshot.png" alt="tmux и neovim: дерево файлов, хлебные крошки, тема kanagawa">
+</p>
+
+## Главное
+
+- **Один проект — одна сессия tmux.** `tm dotf` открывает или создаёт сессию
+  по имени, пути или истории zoxide, `C-f s` переключает сессии через fzf.
+- **Neovim с минимальным интерфейсом:** без статус-бара и командной строки,
+  LSP без Mason, всё ставится через Brewfile.
+- **Русская раскладка не мешает.** Команды vim и маппинги работают и в ней,
+  `:ц` сохраняет файл.
+- **AI-агент рядом с кодом.** Claude или opencode открываются в панели tmux
+  справа, и им можно отправить место под курсором или весь файл.
+- **Git через lazygit.** Частые команды `git` в терминале подсказывают, как
+  сделать то же в lazygit.
+
+## Установка
+
+Нужны macOS и git (он появляется после `xcode-select --install`).
+Homebrew `make install` поставит сам, если его ещё нет.
 
 ```sh
-git clone <этот репозиторий> ~/.dotfiles
+git clone https://github.com/tommsawyer/.dotfiles ~/.dotfiles
 cd ~/.dotfiles
 make install
 ```
 
-`make install` ставит всё из `files/Brewfile` (включая шрифт JetBrains Mono
-Nerd Font), emmet language server, oh-my-zsh и русский словарь для проверки
-орфографии. Потом создаёт симлинки на конфиги. Если на месте ссылки лежит
-обычный файл, он переименовывается в `*.backup`.
+`make install` ставит Homebrew и всё из [`files/Brewfile`](files/Brewfile)
+(включая шрифт JetBrains Mono Nerd Font), emmet language server, oh-my-zsh и
+русский словарь для проверки орфографии. Потом создаёт симлинки на конфиги.
 
-После этого:
+> [!NOTE]
+> Если на месте ссылки лежит обычный файл, он переименовывается в `*.backup`.
+> Убрать все ссылки можно через `make clean`.
 
-- iTerm2: Settings → Profiles → выбрать «Kanagawa» → Other Actions → Set as
-  Default. Сам профиль (цвета, шрифт, без меток команд) подключается из
-  `files/iterm/profile.json` как dynamic profile. Его guid при смене темы не
-  меняется, так что это делается один раз.
-- `nvim` при первом запуске сам ставит плагины.
+После установки остаются два шага:
 
-### Цели make
+1. **iTerm2:** Settings → Profiles → выбрать «Kanagawa» → Other Actions → Set
+   as Default. Сам профиль (цвета, шрифт, без меток команд) подключается из
+   [`files/iterm/profile.json`](files/iterm/profile.json) как dynamic profile.
+   Его guid не меняется, так что это делается один раз.
+2. **Neovim:** при первом запуске `nvim` сам ставит плагины.
 
-| Цель | Что делает |
+> [!WARNING]
+> `git status`, `commit`, `push` и другие частые команды в терминале не
+> выполняются, а печатают, как сделать то же в lazygit. Настоящий git — через
+> `command git …` или `GIT_FORCE=1 git …`. Подробнее в разделе
+> [lazygit](#lazygit).
+
+## Проекты: tmux
+
+Каждый проект — отдельная сессия tmux, сессия называется по имени папки.
+Prefix — `C-f`. Всё, кроме `tm`, настроено в
+[`files/tmux/tmux.conf`](files/tmux/tmux.conf). После правок конфиг
+перечитывается по `C-f r`.
+
+### Открыть и переключить проект
+
+| Клавиша | Действие |
 |---|---|
-| `make install` | всё, что ниже, кроме `check` и `fmt` |
-| `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в Makefile) |
-| `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, lua-language-server, запуск nvim |
-| `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |
-| `make nvim-sync` | обновляет плагины nvim без интерфейса (`Lazy! sync`, пишет `lazy-lock.json`) |
-| `make clean` | удаляет ссылки |
+| `tm` | сессия для текущей папки |
+| `tm <имя>` | сессия по имени, пути или слову из zoxide (`tm dotf` → `~/.dotfiles`) |
+| `C-f s`, `Ctrl-G` в zsh | fzf со списком сессий и папок из истории zoxide |
+| `C-f w` | стандартное дерево сессий |
 
-### Что куда линкуется
+`tm` создаёт сессию, если её нет. Снаружи tmux команда подключается к сессии,
+внутри переключается на неё. По `Tab` дополняются сессии и папки. Функция
+объявлена в [`files/zshrc`](files/zshrc), логика лежит в
+[`files/tmux/connect.sh`](files/tmux/connect.sh).
 
-| Файл | Ссылка | Что там |
-|---|---|---|
-| `files/zshrc` | `~/.zshrc` | oh-my-zsh, fzf, zoxide, `tm`, `Ctrl-G`, подсказки lazygit вместо `git` |
-| `files/tmux` | `~/.config/tmux` | prefix `C-f`, `switch.sh` — переключение сессий по `prefix s`, `connect.sh` — общий код для `tm` и `switch.sh` |
-| `files/nvim` | `~/.config/nvim` | neovim, подробно ниже |
-| `files/bat` | `~/.config/bat` | тема kanagawa |
-| `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` | цвета, диффы через delta |
-| `files/k9s` | `~/Library/Application Support/k9s/` | только чтение, скин kanagawa |
-| `files/git/delta.gitconfig` | подключается из `~/.gitconfig` | delta как pager |
-| `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` | профиль iTerm2 |
+В fzf справа показывается превью: `Enter` открывает выбранное, `Ctrl-X`
+убивает сессию, новое имя и `Enter` создают сессию. Код в
+[`files/tmux/switch.sh`](files/tmux/switch.sh), папки берутся через sesh.
+
+### Окна и панели
+
+| Клавиша | Действие |
+|---|---|
+| `C-f \` / `C-f -` | разделить окно вбок / вниз |
+| `C-f c` | новое окно |
+| `C-f h/j/k/l` | перейти между панелями |
+| `C-f J` / `C-f b` | присоединить панель / вынести в отдельное окно |
+| `C-f !` / `C-f @` | раскладки main-horizontal / even-horizontal |
+| `C-f g` / `C-f K` | плавающий lazygit / k9s |
+
+Всё открывается в текущей папке. Окна нумеруются с 1, после закрытия номера
+сдвигаются без дыр. Мышь включена. Плавающие панели занимают 90% экрана и
+закрываются вместе с программой, для них нужен tmux 3.7+.
+
+### Статус-бар
+
+Стоит сверху. Слева имя сессии, оно желтеет, пока нажат prefix. Дальше окна,
+у каждого — что сейчас делает AI-агент (берётся из заголовка его панели).
+Справа git-ветка, контекст kubectl и время. Палитра kanagawa записана
+комментарием в конфиге. `extended-keys` пропускает `Shift-Enter` и подобные
+комбинации в nvim и Claude Code.
 
 ## Neovim
 
 Leader — `,`. Если начать комбинацию и подождать полсекунды, which-key покажет
-продолжения. Все пути ниже даны относительно `files/nvim/`.
+продолжения. Пути ниже даны относительно `files/nvim/`.
 
-### 1. Файлы
+### Файлы и поиск
 
-**1.1 Дерево файлов.** `,,` открывает и закрывает дерево. Если открыть его из
-файла проекта, этот файл будет подсвечен в дереве. `,a` показывает текущий файл в дереве. Плагин nvim-tree,
-настройки в [`lua/plugin/nvim-tree.lua`](files/nvim/lua/plugin/nvim-tree.lua):
-dotfiles скрыты (`H` показывает их), `*_templ.go` и `go.sum` тоже скрыты.
-При переименовании файла в дереве LSP обновляет импорты.
+| Клавиша | Действие |
+|---|---|
+| `<Space>` | поиск файлов |
+| `,f` | поиск текста по проекту |
+| `,b` / `,h` / `,d` | буферы / help / символы проекта |
+| `,,` | открыть или закрыть дерево файлов |
+| `,a` | показать текущий файл в дереве |
+| `,;` | выбрать элемент хлебных крошек по метке |
 
-**1.2 Хлебные крошки.** Над каждым окном показан путь к файлу и функция или
-класс, где стоит курсор. Это плагин dropbar, настройки в
-[`lua/plugin/dropbar.lua`](files/nvim/lua/plugin/dropbar.lua). `,;` выбирает
-элемент по метке. В открывшемся меню `o` открывает папку или файл, `t`
-показывает его в дереве, `a` создаёт новый файл рядом. В yaml, json и toml
-вместо символов LSP показываются ключи.
+- **Поиск** — пикеры snacks.nvim. Что не попадает в поиск, задано списком
+  `exclude` в начале [`lua/plugin/snacks.lua`](files/nvim/lua/plugin/snacks.lua).
+- **Дерево** — nvim-tree,
+  [`lua/plugin/nvim-tree.lua`](files/nvim/lua/plugin/nvim-tree.lua). Если
+  открыть его из файла проекта, файл будет подсвечен. Dotfiles, `*_templ.go` и
+  `go.sum` скрыты, `H` показывает dotfiles. При переименовании файла LSP
+  обновляет импорты.
+- **Хлебные крошки** над каждым окном показывают путь к файлу и функцию или
+  класс под курсором. В меню `o` открывает папку или файл, `t` показывает его
+  в дереве, `a` создаёт файл рядом. В yaml, json и toml вместо символов LSP
+  показываются ключи. Плагин dropbar,
+  [`lua/plugin/dropbar.lua`](files/nvim/lua/plugin/dropbar.lua).
+- **Открытие и перечитывание.** `nvim` без аргументов открывает последний
+  файл, который правили в этом проекте, курсор встаёт на прежнее место. Если
+  файл изменился на диске (например, его поправил агент), nvim перечитывает
+  его. Это [`lua/autocommands.lua`](files/nvim/lua/autocommands.lua).
 
-**1.3 Поиск.** `<Space>` ищет файлы, `,f` — текст по всему проекту, `,b` —
-буферы, `,h` — help, `,d` — символы проекта. Это пикеры snacks.nvim, настройки
-в [`lua/plugin/snacks.lua`](files/nvim/lua/plugin/snacks.lua). Что не попадает
-в поиск, задано списком `exclude` в начале файла.
+### Перемещение
 
-**1.4 Открытие и перечитывание.** Файл
-[`lua/autocommands.lua`](files/nvim/lua/autocommands.lua). Если запустить
-`nvim` без аргументов, откроется последний файл, который правили в этом
-проекте. Курсор встаёт на прежнее место. Если файл изменился на диске
-(например, его поправил агент), nvim перечитывает его.
+| Клавиша | Действие |
+|---|---|
+| `<CR>` | прыжок по меткам на экране |
+| `r` после оператора | действие в месте по метке без движения курсора (`yr` + метка + `iw` копирует слово) |
+| `S` | выделить узел treesitter |
+| `af`/`if`, `ai`/`ii`, `al`/`il` | функция, условие, цикл |
+| `aa`/`ia`, `ac`/`ic`, `as` | параметр, вызов, выражение |
+| `]f` `[f`, `]i` `[i`, `]l` `[l`, `]c` `[c` | к следующей / предыдущей функции, условию, циклу, вызову |
+| `]=` `[=` | к строке с другим отступом |
+| `]-` `[-` | к строке с меньшим отступом (выход из блока) |
+| `a=`/`i=` | блок по отступу |
+| `<C-h/j/k/l>` | в соседнее окно, а если его нет — новый сплит |
 
-### 2. Перемещение
+- Прыжки по меткам — flash,
+  [`lua/plugin/flash.lua`](files/nvim/lua/plugin/flash.lua). При поиске через
+  `/` метки тоже появляются на совпадениях.
+- Текстовые объекты по структуре — treesitter-textobjects,
+  [`lua/plugin/treesitter.lua`](files/nvim/lua/plugin/treesitter.lua). Там же
+  список парсеров. Подсветку HTML внутри Go-шаблонов задаёт
+  `after/queries/gotmpl/injections.scm`.
+- Прыжки по отступам, окна и то, что `{` и `}` не засоряют jumplist, — в
+  [`lua/mappings.lua`](files/nvim/lua/mappings.lua). Блок по отступу — scope
+  из snacks, линии отступов рисует indent-blankline
+  ([`lua/plugin/indent.lua`](files/nvim/lua/plugin/indent.lua)).
 
-**2.1 Прыжки.** `<CR>` — прыжок по меткам на экране. При поиске через `/`
-на совпадениях тоже появляются метки. После оператора `r` действует в месте
-по метке, не двигая курсор: например, `yr` + метка + `iw` копирует там слово. `S` выделяет узел treesitter.
-Плагин flash, [`lua/plugin/flash.lua`](files/nvim/lua/plugin/flash.lua).
+### LSP
 
-**2.2 По структуре кода.** Текстовые объекты `af`/`if` (функция), `ai`/`ii`
-(условие), `al`/`il` (цикл), `aa`/`ia` (параметр), `ac`/`ic` (вызов) и
-`as` (выражение). Прыжки `]f` `[f`, `]i` `[i`, `]l` `[l`, `]c` `[c`. Это
-treesitter-textobjects, настройки в
-[`lua/plugin/treesitter.lua`](files/nvim/lua/plugin/treesitter.lua). Там же
-список парсеров treesitter. Подсветку HTML внутри Go-шаблонов задаёт
-`after/queries/gotmpl/injections.scm`.
+| Клавиша | Действие |
+|---|---|
+| `K` | документация |
+| `gd` | определение |
+| `grn` | переименование |
+| `ga` | code action |
+| `]d` `[d` | следующая / предыдущая диагностика |
+| `grr` | ссылки |
+| `gri`, `gi` | реализации |
+| `grt`, `gy` | типы |
+| `gO`, `,s` | символы файла |
+| `,t` | все диагностики |
 
-**2.3 По отступам.** `]=` `[=` прыгают к ближайшей строке с другим отступом, `]-` `[-` —
-к строке с меньшим отступом (выход из блока). Эти прыжки описаны в
-[`lua/mappings.lua`](files/nvim/lua/mappings.lua). Текстовые объекты `a=`/`i=` —
-блок по отступу, это scope из snacks. Вертикальные линии отступов рисует
-indent-blankline, [`lua/plugin/indent.lua`](files/nvim/lua/plugin/indent.lua).
+Списки открываются в Trouble
+([`lua/plugin/trouble.lua`](files/nvim/lua/plugin/trouble.lua)). Прогресс
+запуска серверов показывается уведомлениями в правом верхнем углу.
 
-**2.4 Окна.** `<C-h/j/k/l>` переходит в соседнее окно, а если его нет, создаёт
-сплит. `{` и `}` не засоряют jumplist. Всё в
-[`lua/mappings.lua`](files/nvim/lua/mappings.lua).
-
-### 3. LSP, автодополнение, форматирование
-
-**3.1 Серверы.** [`lua/plugin/lsp.lua`](files/nvim/lua/plugin/lsp.lua).
-Серверы включаются встроенным `vim.lsp.enable` (список в конце файла), а
-nvim-lspconfig только поставляет их конфиги. Сами серверы ставятся через
-`files/Brewfile`, Mason не используется. Чтобы добавить сервер: добавить его в
-Brewfile, вписать в `vim.lsp.enable` и при необходимости настроить через
-`vim.lsp.config`. Сейчас отдельно настроены:
+Серверы описаны в [`lua/plugin/lsp.lua`](files/nvim/lua/plugin/lsp.lua).
+Включает их встроенный `vim.lsp.enable` (список в конце файла), а
+nvim-lspconfig только поставляет конфиги. Сами серверы ставятся через
+Brewfile, Mason не используется. Отдельно настроены:
 
 - gopls — понимает шаблоны;
 - jsonls и yamlls — схемы из schemastore, для yaml ещё GitLab CI;
@@ -118,82 +194,96 @@ Brewfile, вписать в `vim.lsp.enable` и при необходимост�
 - lua_ls;
 - emmet — работает и в templ.
 
-Прогресс запуска серверов показывается уведомлениями в правом верхнем углу.
+Чтобы добавить сервер, его нужно добавить в Brewfile, вписать в
+`vim.lsp.enable` и при необходимости настроить через `vim.lsp.config`.
 
-**3.2 Клавиши LSP.** Тот же файл. `K` — документация, `gd` — определение,
-`grn` — переименование, `ga` — code action, `]d` `[d` — диагностики. Списки
-открываются в Trouble: `grr` — ссылки, `gri`/`gi` — реализации, `grt`/`gy` —
-типы, `gO`/`,s` — символы файла, `,t` — все диагностики
-([`lua/plugin/trouble.lua`](files/nvim/lua/plugin/trouble.lua)).
+**Kotlin и Swift.** Для Kotlin стоит официальный kotlin-lsp,
+[`lua/plugin/kotlin.lua`](files/nvim/lua/plugin/kotlin.lua). Для Swift есть
+сборка, запуск и тесты на симуляторе: `,xx` открывает меню, `,xb` / `,xr` /
+`,xt` — сборка / запуск / тесты
+([`lua/plugin/xcode.lua`](files/nvim/lua/plugin/xcode.lua)). Отступ в 4
+пробела задан в `after/ftplugin/kotlin.lua` и `swift.lua`.
 
-**3.3 Автодополнение.** Плагин blink.cmp,
-[`lua/plugin/blink.lua`](files/nvim/lua/plugin/blink.lua). Клавиши стандартные:
-`<C-y>` — принять, `<C-n>`/`<C-p>` — выбор, `<C-space>` — открыть меню,
-`<C-e>` — закрыть. Источники — LSP и сниппеты friendly-snippets.
-Документация к пункту меню появляется через полсекунды. Подсказка по
-аргументам показывается сама.
+> [!NOTE]
+> В новом Xcode-проекте один раз нужно запустить `:XcodebuildSetup`.
 
-**3.4 Форматирование.** Файл форматируется при сохранении через conform,
-[`lua/plugin/conform.lua`](files/nvim/lua/plugin/conform.lua). Форматтеры
-назначены по типам файлов. Если форматтера нет, файл форматирует LSP. Swift
-форматируется, только если в проекте есть `.swift-format`. Импорты Go
-поправляются при сохранении, это автокоманда в `lsp.lua`.
+### Автодополнение и форматирование
 
-**3.5 Kotlin и Swift.** Для Kotlin стоит официальный kotlin-lsp, файл
-[`lua/plugin/kotlin.lua`](files/nvim/lua/plugin/kotlin.lua). Для Swift есть сборка, запуск и
-тесты на симуляторе: `,xx` открывает меню, `,xb`/`,xr`/`,xt` — сборка, запуск, тесты, файл
-[`lua/plugin/xcode.lua`](files/nvim/lua/plugin/xcode.lua). В новом
-Xcode-проекте один раз нужно запустить `:XcodebuildSetup`. Отступ в 4 пробела
-задан в `after/ftplugin/kotlin.lua` и `swift.lua`.
+| Клавиша | Действие |
+|---|---|
+| `<C-y>` | принять |
+| `<C-n>` / `<C-p>` | следующий / предыдущий пункт |
+| `<C-space>` | открыть меню |
+| `<C-e>` | закрыть меню |
 
-### 4. Редактирование
+- **Автодополнение** — blink.cmp,
+  [`lua/plugin/blink.lua`](files/nvim/lua/plugin/blink.lua). Источники — LSP и
+  сниппеты friendly-snippets. Документация к пункту появляется через
+  полсекунды, подсказка по аргументам показывается сама.
+- **Форматирование** при сохранении — conform,
+  [`lua/plugin/conform.lua`](files/nvim/lua/plugin/conform.lua). Форматтеры
+  назначены по типам файлов, если форматтера нет, форматирует LSP. Swift
+  форматируется, только если в проекте есть `.swift-format`. Импорты Go
+  поправляются при сохранении автокомандой в `lsp.lua`.
 
-- `sa{движение}{символ}` оборачивает текст, `sd{символ}` убирает обёртку,
-  `sr{старый}{новый}` меняет её. Это nvim-surround. Там же nvim-autopairs,
-  который сам закрывает скобки. Файл
-  [`lua/plugin/misc.lua`](files/nvim/lua/plugin/misc.lua).
-- `gS`/`gJ` разбивают блок на строки и склеивают обратно (treesj). Парные
-  HTML-теги закрываются и переименовываются сами (nvim-ts-autotag). Оба
-  плагина в `treesitter.lua`.
-- `gc` комментирует, это встроено в nvim. Комментарий не продолжается на
-  новой строке, это задано в `autocommands.lua`.
+### Редактирование
 
-### 5. Git
+| Клавиша | Действие |
+|---|---|
+| `sa{движение}{символ}` | обернуть текст |
+| `sd{символ}` / `sr{старый}{новый}` | убрать / заменить обёртку |
+| `gS` / `gJ` | разбить блок на строки / склеить обратно |
+| `gc` | закомментировать (встроено в nvim) |
 
-`]g` `[g` — переход между ханками. `,gp` показывает ханк, `,gu` откатывает
-его, `,gb` показывает blame строки. Это gitsigns,
-[`lua/plugin/gitsigns.lua`](files/nvim/lua/plugin/gitsigns.lua). `,go`
-открывает файл в браузере (snacks gitbrowse). Сам lazygit открывается в tmux
-по `C-f g`.
+Обёртки — nvim-surround, скобки сами закрывает nvim-autopairs, оба в
+[`lua/plugin/misc.lua`](files/nvim/lua/plugin/misc.lua). Разбивку блоков
+делает treesj, а парные HTML-теги закрывает и переименовывает nvim-ts-autotag,
+оба в `treesitter.lua`. Комментарий не продолжается на новой строке, это
+задано в `autocommands.lua`.
 
-### 6. AI-агенты
+### Git
+
+| Клавиша | Действие |
+|---|---|
+| `]g` `[g` | следующий / предыдущий ханк |
+| `,gp` / `,gu` | показать / откатить ханк |
+| `,gb` | blame строки |
+| `,go` | открыть файл в браузере |
+
+Ханки и blame — gitsigns,
+[`lua/plugin/gitsigns.lua`](files/nvim/lua/plugin/gitsigns.lua), браузер —
+snacks gitbrowse. Сам lazygit открывается в tmux по `C-f g`.
+
+### AI-агенты
+
+| Клавиша | Действие |
+|---|---|
+| `,ii` / `,ic` | показать или скрыть агента / выбрать агента |
+| `,ie` | попросить объяснить место под курсором |
+| `,is` / `,if` | отправить агенту это место / весь файл |
+| `,ip` | готовые промпты на русском |
+| `,iw` | «допиши код здесь» |
+| `<C-.>` | переключиться между nvim и агентом |
 
 Плагин sidekick, [`lua/plugin/sidekick.lua`](files/nvim/lua/plugin/sidekick.lua).
-Агент (claude, opencode, …) открывается в отдельной панели tmux справа. Эта панель
-переживает перезапуск nvim. Клавиши:
+Агент (claude, opencode, …) открывается в отдельной панели tmux справа и
+переживает перезапуск nvim.
 
-- `,ii` — показать или скрыть агента, `,ic` — выбрать агента;
-- `,ie` — попросить объяснить место под курсором, `,is` — отправить это место агенту, `,if` — отправить файл;
-- `,ip` — готовые промпты, на русском;
-- `,iw` — «допиши код здесь»;
-- `<C-.>` — переключиться между nvim и агентом.
+### Внешний вид
 
-### 7. Внешний вид
-
-- Тема kanagawa-wave и её переопределения (дерево, winbar):
+- Тема kanagawa-wave и её переопределения (дерево, winbar) —
   [`lua/plugin/colorscheme.lua`](files/nvim/lua/plugin/colorscheme.lua).
-- Интерфейс минимальный: нет ни статус-бара, ни командной строки, мышь
-  выключена. Это и остальные опции в
-  [`lua/options.lua`](files/nvim/lua/options.lua).
+- Нет ни статус-бара, ни командной строки, мышь выключена. Это и остальные
+  опции — в [`lua/options.lua`](files/nvim/lua/options.lua).
 - Уведомления (история — `,n`) и zen-режим (`,z`) дают snacks.
 - Markdown рендерится прямо в буфере плагином render-markdown,
   [`lua/plugin/markdown.lua`](files/nvim/lua/plugin/markdown.lua). Перенос
   строк и проверка орфографии (ru + en) включены в
   `after/ftplugin/markdown.lua`.
-- Подсказки клавиш: which-key,
+- Подсказки клавиш — which-key,
   [`lua/plugin/which-key.lua`](files/nvim/lua/plugin/which-key.lua).
 
-### 8. Русская раскладка и привычки
+### Русская раскладка и привычки
 
 - Обычные команды vim работают в русской раскладке через `langmap`, а `:ц` и
   `:й` срабатывают как `:w` и `:q`. Это задано в `options.lua`.
@@ -202,94 +292,102 @@ Xcode-проекте один раз нужно запустить `:XcodebuildS
 - hardtime не даёт жать `hjkl` много раз подряд и подсказывает движение
   получше, [`lua/plugin/hardtime.lua`](files/nvim/lua/plugin/hardtime.lua).
 
-### 9. Как устроен конфиг
+## Консольные утилиты
+
+Shell — zsh с oh-my-zsh (тема robbyrussell, плагины git, tmux, golang,
+docker-compose), всё в [`files/zshrc`](files/zshrc). Настройки только для
+этой машины кладутся в `~/.zshcustom`, этого файла в репозитории нет.
+
+### lazygit
+
+Основной способ работать с git. Запускается через `lg` или `C-f g`.
+Настройки в [`files/lazygit/config.yml`](files/lazygit/config.yml): цвета
+kanagawa, `e` открывает файл в nvim. Диффы рисует delta, при ширине от 140
+колонок — в две колонки.
+
+В терминале `git status`, `commit`, `push` и другие частые команды (включая
+алиасы вроде `gst`) не выполняются, а печатают, как сделать то же в lazygit.
+Этот перехват — функция `git` в `zshrc`. Скрипты и `$(git …)` он не трогает.
+Настоящий git вызывается через `command git …` или `GIT_FORCE=1 git …`.
+
+### delta
+
+Pager для git, [`files/git/delta.gitconfig`](files/git/delta.gitconfig).
+Подключается в `~/.gitconfig` через `include.path`, это делает
+`make symlinks`. Дифф показывается в две колонки, `n` / `N` прыгают между
+файлами. Добавленные строки синие, а не зелёные, чтобы лучше отличаться от
+красных. Конфликты в стиле `zdiff3`, подсветка синтаксиса — тема kanagawa из
+bat.
+
+### k9s
+
+Kubernetes, запускается через `C-f K` или `k9s`. Работает только на чтение:
+удалить, отредактировать и убить ничего нельзя. Для разовой правки есть
+`k9s --write`. Логи показывают последние 200 строк за 5 минут. Настройки в
+[`files/k9s/config.yaml`](files/k9s/config.yaml), скин — в
+`files/k9s/skins/kanagawa.yaml`.
+
+### zoxide и fzf
+
+| Клавиша | Действие |
+|---|---|
+| `z <слово>` | перейти в самую подходящую из посещённых папок |
+| `zi` | выбрать папку из списка |
+| `Ctrl-T` | вставить путь к файлу |
+| `Ctrl-R` | поиск по истории команд |
+| `Alt-C` | перейти в папку |
+
+История zoxide нужна и для `tm`, и для `C-f s`. fzf ищет файлы через `rg` с
+учётом `.gitignore` и показывает скрытые. Цвета kanagawa заданы в
+`FZF_DEFAULT_OPTS` в `zshrc`.
+
+### Прочее
+
+- Тема bat — в [`files/bat/config`](files/bat/config) и
+  `themes/kanagawa.tmTheme`, кэш тем пересобирает `make symlinks`.
+- `glow` рендерит markdown в терминале.
+- Алиасы: `vim` → `nvim`, `rg` всегда с `--hidden`, `coverage` запускает
+  `go test` и открывает HTML-отчёт о покрытии.
+- Полный список программ — в [`files/Brewfile`](files/Brewfile).
+
+## Устройство репозитория
+
+### Цели make
+
+| Цель | Что делает |
+|---|---|
+| `make install` | Homebrew, Brewfile, emmet, oh-my-zsh, симлинки, настройки iTerm2, словарь |
+| `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
+| `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, lua-language-server, запуск nvim |
+| `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |
+| `make nvim-sync` | обновляет плагины nvim без интерфейса (`Lazy! sync`, пишет `lazy-lock.json`) |
+| `make clean` | удаляет ссылки и подключение delta в `~/.gitconfig` |
+
+### Что куда линкуется
+
+| Файл | Ссылка |
+|---|---|
+| `files/zshrc` | `~/.zshrc` |
+| `files/hushlogin` | `~/.hushlogin` (убирает «Last login») |
+| `files/tmux` | `~/.config/tmux` |
+| `files/nvim` | `~/.config/nvim` |
+| `files/bat` | `~/.config/bat` |
+| `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
+| `files/k9s/config.yaml`, `skins/kanagawa.yaml` | `~/Library/Application Support/k9s/` |
+| `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` |
+| `files/git/delta.gitconfig` | подключается из `~/.gitconfig` |
+
+### Как устроен конфиг nvim
 
 [`init.lua`](files/nvim/init.lua) ставит lazy.nvim и подключает модули по
 порядку: `mappings` → `plugins` → `options` → `autocommands`. В конце
 langmapper переводит на русскую раскладку маппинги, созданные раньше него.
 [`lua/plugins.lua`](files/nvim/lua/plugins.lua) загружает все файлы из
-`lua/plugin/`. Один плагин — один файл, новый плагин — новый файл там же.
+`lua/plugin/`: один плагин — один файл, новый плагин — новый файл там же.
 Версии плагинов зафиксированы в `lazy-lock.json` и обновляются через
-`make nvim-sync`. После правок Lua нужно запустить `make fmt`, затем
-`make check`.
+`make nvim-sync`.
 
-## Проекты: tmux
+### Правка конфигов
 
-Каждый проект — отдельная сессия tmux, и сессия называется по имени папки.
-Prefix — `C-f`. Всё, что ниже, кроме `tm`, настроено в
-[`files/tmux/tmux.conf`](files/tmux/tmux.conf). После правок конфиг можно
-перечитать через `C-f r`.
-
-**Открыть проект.** `tm` открывает сессию для текущей папки. `tm x` принимает
-имя открытой сессии, путь или слово, которое zoxide превратит в папку
-(`tm dotf` → `~/.dotfiles`). Если сессии нет, она создаётся. Снаружи tmux команда
-подключается к сессии, внутри переключается на неё. По `Tab` дополняются
-сессии и папки. Функция `tm` объявлена в [`files/zshrc`](files/zshrc), а логика лежит
-в [`files/tmux/connect.sh`](files/tmux/connect.sh).
-
-**Переключиться.** `C-f s` (или `Ctrl-G` прямо в zsh) открывает fzf со
-списком сессий и папок из истории zoxide, у которых ещё нет сессии. Справа
-показывается превью. `enter` открывает выбранное, `ctrl-x` убивает сессию,
-а новое имя + `enter` создаёт сессию. Код в
-[`files/tmux/switch.sh`](files/tmux/switch.sh), папки берутся через sesh.
-Стандартное дерево сессий осталось на `C-f w`.
-
-**Окна и панели.** `C-f \` и `C-f -` делят окно вбок и вниз, `C-f c` создаёт
-новое окно. Всё открывается в текущей папке. `C-f h/j/k/l` переходит между
-панелями, `C-f J` присоединяет панель (join), `C-f b` выносит её в отдельное
-окно, `C-f !` и `C-f @` включают раскладки main-horizontal и even-horizontal.
-Окна нумеруются с 1, а после закрытия окна номера сдвигаются без дыр. Мышь
-включена.
-
-**Плавающие панели.** `C-f g` открывает lazygit, `C-f K` — k9s. Обе
-панели занимают 90% экрана и закрываются вместе с программой. Нужен tmux 3.7+.
-
-**Статус-бар.** Стоит сверху. Слева имя сессии, которое желтеет, пока нажат
-prefix. Дальше окна, у каждого — что сейчас делает AI-агент (берётся из
-заголовка его панели). Справа git-ветка, контекст kubectl и время. Цвета
-kanagawa, палитра записана комментарием в конфиге. `extended-keys` пропускает
-`Shift+Enter` и подобные комбинации в nvim и Claude Code.
-
-## Консольные утилиты
-
-Shell — zsh с oh-my-zsh (тема robbyrussell, плагины git, tmux, golang,
-docker-compose), всё в [`files/zshrc`](files/zshrc). Настройки, которые
-нужны только на этой машине, кладутся в `~/.zshcustom`, этого файла в
-репозитории нет.
-
-**lazygit** — основной способ работать с git. Запускается через `lg` или `C-f g`.
-Настройки в [`files/lazygit/config.yml`](files/lazygit/config.yml): цвета
-kanagawa, `e` открывает файл в nvim. Диффы рисует delta, а при ширине от 140
-колонок — в две колонки. В терминале `git status`, `commit`, `push` и
-другие частые команды (включая алиасы вроде `gst`) не выполняются, а печатают,
-как сделать то же в lazygit. Этот перехват — функция `git` в `zshrc`. Скрипты
-и `$(git …)` он не трогает. Настоящий git вызывается через `command git …`
-или `GIT_FORCE=1 git …`.
-
-**delta** — pager для git:
-[`files/git/delta.gitconfig`](files/git/delta.gitconfig). Он подключается в
-`~/.gitconfig` через `include.path`, это делает `make symlinks`. В самом git
-дифф показывается в две колонки, `n`/`N` прыгают между файлами. Добавленные
-строки синие, а не зелёные, чтобы лучше отличаться от красных. Конфликты в
-стиле `zdiff3`. Подсветка синтаксиса — тема kanagawa из bat.
-
-**k9s** — Kubernetes. Запускается через `C-f K` или `k9s`. Работает только на
-чтение: удалить, отредактировать и убить ничего нельзя. Для разовой правки
-запускай `k9s --write`. Логи показывают последние 200 строк за 5 минут.
-Настройки в [`files/k9s/config.yaml`](files/k9s/config.yaml), скин — в
-`files/k9s/skins/kanagawa.yaml`.
-
-**zoxide** запоминает папки, в которых ты бываешь. `z слово` переходит в
-лучшую подходящую папку, `zi` выбирает из списка. Эта же история нужна для `tm`
-и `C-f s`.
-
-**fzf**: `Ctrl-T` вставляет путь к файлу, `Ctrl-R` ищет по истории команд,
-`Alt-C` переходит в папку. Файлы ищутся через `rg` с учётом `.gitignore`,
-скрытые файлы показываются. Цвета kanagawa заданы в `FZF_DEFAULT_OPTS` в
-`zshrc`.
-
-**Прочее.** Тема bat — в [`files/bat/config`](files/bat/config) и
-`themes/kanagawa.tmTheme`, кэш тем пересобирает `make symlinks`. `glow`
-рендерит markdown в терминале. Алиасы: `vim` → `nvim`, `rg` всегда с
-`--hidden`, `coverage` запускает `go test` и открывает HTML-отчёт о покрытии.
-Полный список программ — в [`files/Brewfile`](files/Brewfile).
+После любой правки нужно запустить `make check`, после правки Lua — сначала
+`make fmt`.
