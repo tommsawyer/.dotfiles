@@ -58,6 +58,16 @@
         ]
       }
     ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/agents.sh state working"
+          }
+        ]
+      }
+    ],
     "PermissionRequest": [
       {
         "hooks": [
