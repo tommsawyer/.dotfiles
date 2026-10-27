@@ -41,6 +41,10 @@ return {
   -- only for files in the vault, not every markdown file
   event = { "BufReadPre " .. vault .. "/*.md", "BufNewFile " .. vault .. "/*.md" },
   cmd = "Obsidian",
+  init = function()
+    -- no <CR> ]o [o in notes: <CR> stays flash, the action is on ,oa
+    vim.g.obsidian_default_keymap = false
+  end,
   -- a function: obsidian.builtin is not on the runtimepath before the plugin loads
   opts = function()
     ---@type obsidian.config
@@ -54,7 +58,7 @@ return {
       footer = { enabled = false },
       statusline = { enabled = false },
       ui = { enable = false },
-      picker = { name = "snacks.pick" },
+      picker = { name = "snacks.picker" },
       daily_notes = { folder = "daily" },
       templates = {
         folder = "templates",
@@ -72,6 +76,27 @@ return {
     { "<leader>on", "<cmd>Obsidian new_from_template<cr>", desc = "New note from template" },
     { "<leader>ot", "<cmd>Obsidian today<cr>",             desc = "Today's note" },
     { "<leader>ob", "<cmd>Obsidian backlinks<cr>",         desc = "Backlinks" },
-    { "<leader>os", sync,                                  desc = "Sync notes" },
+    {
+      "<leader>oa",
+      -- follow the link, toggle the checkbox (a plain line becomes one), fold the heading
+      function() return require("obsidian.actions").smart_action() end,
+      expr = true,
+      desc = "Obsidian action",
+    },
+    {
+      "<leader>ox",
+      -- unchecked boxes in all notes: [ ] and the [~] [!] [>] states, not [x]
+      function()
+        Snacks.picker.grep({
+          dirs = { vault },
+          exclude = { "templates/" },
+          search = [[^\s*[-*] \[[ ~!>]\]],
+          regex = true,
+          live = false,
+        })
+      end,
+      desc = "Open todos",
+    },
+    { "<leader>os", sync, desc = "Sync notes" },
   },
 }
