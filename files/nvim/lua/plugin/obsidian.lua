@@ -65,7 +65,6 @@ return {
         -- a note made from templates/<name>.md goes into the folder next to it
         customizations = {
           ["1-1"] = { notes_subdir = "1-1" },
-          week = { notes_subdir = "weeks" },
           project = { notes_subdir = "projects" },
         },
       },
