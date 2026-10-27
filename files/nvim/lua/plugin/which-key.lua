@@ -10,6 +10,7 @@ return {
     spec = {
       { "<leader>g", group = "git" },
       { "<leader>i", group = "ai" },
+      { "<leader>o", group = "notes" },
       { "gr",        group = "lsp" },
       { "<leader>x", group = "xcode" },
     },
