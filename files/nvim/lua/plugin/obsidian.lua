@@ -85,12 +85,12 @@ return {
     },
     {
       "<leader>ox",
-      -- unchecked boxes in all notes: [ ] and the [~] [!] [>] states, not [x]
+      -- unchecked boxes with text in all notes: [ ] and the [~] [!] [>] states, not [x] or empty ones
       function()
         Snacks.picker.grep({
           dirs = { vault },
           exclude = { "templates/" },
-          search = [[^\s*[-*] \[[ ~!>]\]],
+          search = [=[^\s*[-*] \[[ ~!>]\]\s+\S]=], -- [=[ ]=]: a ] in the regex next to the closing ]] would end a [[ ]] string early
           regex = true,
           live = false,
         })
