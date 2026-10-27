@@ -352,8 +352,9 @@ snacks gitbrowse. Сам lazygit открывается в tmux по `C-f g`.
   опции — в [`lua/options.lua`](files/nvim/lua/options.lua).
 - Уведомления (история — `,n`) и zen-режим (`,z`) дают snacks.
 - Markdown показывается как есть, только с подсветкой treesitter. Перенос
-  строк и проверка орфографии (ru + en) включены в
-  `after/ftplugin/markdown.lua`.
+  строк включён в `after/ftplugin/markdown.lua`. Проверка орфографии (ru + en)
+  выключена, `,c` включает и выключает её в текущем окне; `]s` `[s` — к
+  следующей / предыдущей ошибке, `zg` — добавить слово в словарь.
 - Подсказки клавиш — which-key,
   [`lua/plugin/which-key.lua`](files/nvim/lua/plugin/which-key.lua).
 

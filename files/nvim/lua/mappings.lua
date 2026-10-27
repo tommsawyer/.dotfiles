@@ -28,6 +28,7 @@ vim.keymap.set('n', '}', ':<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>'
   { silent = true, desc = "Next paragraph" })
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR><Esc>', { desc = "Clear search highlight" })
+vim.keymap.set('n', '<leader>c', '<cmd>setlocal spell!<CR>', { desc = "Toggle spell check" })
 
 -- [= ]=: nearest line above / below whose indent differs from the current one;
 -- [- ]-: nearest line above / below with a smaller indent (parent block header / exit from the block).
