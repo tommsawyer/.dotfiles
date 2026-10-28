@@ -1,4 +1,4 @@
--- only tables are rendered, the rest of markdown stays as is (all of it was too busy)
+-- only tables, checkboxes and --- are rendered, the rest of markdown stays as is (all of it was too busy)
 local off = { enabled = false }
 
 return {
@@ -11,9 +11,9 @@ return {
     -- it also hides ** ` and link urls off the cursor line, the cursor line stays raw
     win_options = { conceallevel = { rendered = 2 } },
     bullet = off,
-    checkbox = off,
+    -- a done task is struck through whole, not just its [x]
+    checkbox = { checked = { scope_highlight = "@markup.strikethrough" } },
     code = off,
-    dash = off,
     document = off,
     heading = off,
     html = off,
