@@ -1,7 +1,7 @@
--- the theme's bg_d (lua/theme.lua), the same the picker backdrop dims with
-local bg_d = require("theme").bg_d
+-- the theme's bg_d, as the picker backdrop, in light bg2 (lua/theme.lua)
+local to = require("theme").dim
 local dim = {
-  rgb = { tonumber(bg_d:sub(2, 3), 16), tonumber(bg_d:sub(4, 5), 16), tonumber(bg_d:sub(6, 7), 16) },
+  rgb = { tonumber(to:sub(2, 3), 16), tonumber(to:sub(4, 5), 16), tonumber(to:sub(6, 7), 16) },
   intensity = 0.4,
 }
 
@@ -22,7 +22,7 @@ return {
   event = "VeryLazy",
   opts = {
     ncmode = "windows", -- the same file in another split is dimmed too
-    -- no fade towards the window's own background: text and background both blend into bg_d,
+    -- no fade towards the window's own background: text and background both blend into that colour,
     -- like under the picker backdrop
     fadelevel = 1,
     tint = { fg = dim, bg = dim, sp = dim },
