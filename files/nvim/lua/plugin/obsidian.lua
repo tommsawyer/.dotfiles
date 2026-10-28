@@ -89,13 +89,22 @@ return {
       "<leader>ox",
       -- unchecked boxes with text in all notes, not [x] or empty ones
       function()
-        Snacks.picker.grep({
+        -- a finder of our own, not grep: the regex stays out of the input, and typing filters the task text
+        Snacks.picker({
           title = "TODO",
-          dirs = { vault },
-          exclude = { "templates/" },
-          search = [[^\s*[-*] \[ \]\s+\S]],
-          regex = true,
-          live = false,
+          format = "file",
+          finder = function()
+            local out = vim.system({ "rg", "--line-number", "--no-heading", "--color=never", "-g", "!templates/",
+              "--", [[^\s*[-*] \[ \]\s+\S]] }, { cwd = vault, text = true }):wait().stdout or ""
+            local items = {}
+            for l in vim.gsplit(out, "\n", { trimempty = true }) do
+              local file, lnum, text = l:match("^(.-):(%d+):(.*)$")
+              if file then
+                items[#items + 1] = { file = file, cwd = vault, pos = { tonumber(lnum), 0 }, text = text, line = text }
+              end
+            end
+            return items
+          end,
         })
       end,
       desc = "Open todos",
