@@ -45,6 +45,9 @@ return {
       zen = {
         -- solid background around zen window instead of dimmed editor
         backdrop = { transparent = false, blend = 99 },
+        -- a couple of empty lines above the text; shorter by as much so it does not run off the bottom
+        row = 2,
+        height = function(win) return win:parent_size().height - 2 end,
         -- plain text: no line numbers, sign column (git signs, diagnostics) and dropbar winbar
         wo = {
           winbar = "",
