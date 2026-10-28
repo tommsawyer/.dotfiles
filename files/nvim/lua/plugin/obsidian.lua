@@ -93,14 +93,9 @@ return {
           title = "TODO",
           dirs = { vault },
           exclude = { "templates/" },
+          search = [[^\s*[-*] \[ \]\s+\S]],
+          regex = true,
           live = false,
-          -- the regex goes to rg through a copy of the filter: set as search, it would show up in the input
-          finder = function(opts, ctx)
-            local todo = ctx:clone()
-            todo.filter = ctx.filter:clone()
-            todo.filter.search = [[^\s*[-*] \[ \]\s+\S]]
-            return require("snacks.picker.source.grep").grep(opts, todo)
-          end,
         })
       end,
       desc = "Open todos",
