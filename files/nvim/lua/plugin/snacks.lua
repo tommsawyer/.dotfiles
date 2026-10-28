@@ -1,6 +1,14 @@
 -- generated and noisy files, hidden from the file and grep pickers
 local exclude = { ".git/", "node_modules", "*_templ.go", "*_templ.txt", "go.sum" }
 
+-- the matcher lowercases with string.lower, which skips non-ASCII (Cyrillic), so lowercase
+-- such paths here; byte lengths stay the same, so match highlights still line up
+local function lower_text(item)
+  if item.text:find("[\128-\255]") then
+    item.text = vim.fn.tolower(item.text)
+  end
+end
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -18,6 +26,8 @@ return {
       formatters = {
         file = { filename_first = true }, -- name first, then the dimmed path
       },
+      -- always case-insensitive, even with capitals in the query
+      matcher = { smartcase = false },
     },
     input = { enabled = true },
     notifier = { enabled = true },
@@ -67,14 +77,14 @@ return {
   },
 
   keys = {
-    { "<leader>go", function() Snacks.gitbrowse() end,                         desc = "Open in browser",      mode = { "n", "v" } },
-    { "<leader>n",  function() Snacks.notifier.show_history() end,             desc = "Notification history" },
-    { "<leader>z",  function() Snacks.zen() end,                               desc = "Zen mode" },
+    { "<leader>go", function() Snacks.gitbrowse() end,                                                 desc = "Open in browser",      mode = { "n", "v" } },
+    { "<leader>n",  function() Snacks.notifier.show_history() end,                                     desc = "Notification history" },
+    { "<leader>z",  function() Snacks.zen() end,                                                       desc = "Zen mode" },
 
-    { "<space>",    function() Snacks.picker.files({ exclude = exclude }) end, desc = "Files" },
-    { "<leader>f",  function() Snacks.picker.grep({ exclude = exclude }) end,  desc = "Live Grep" },
-    { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end,      desc = "LSP workspace symbols" },
-    { "<leader>h",  function() Snacks.picker.help() end,                       desc = "Help tags" },
-    { "<leader>b",  function() Snacks.picker.buffers() end,                    desc = "Buffers" },
+    { "<space>",    function() Snacks.picker.files({ exclude = exclude, transform = lower_text }) end, desc = "Files" },
+    { "<leader>f",  function() Snacks.picker.grep({ exclude = exclude }) end,                          desc = "Live Grep" },
+    { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end,                              desc = "LSP workspace symbols" },
+    { "<leader>h",  function() Snacks.picker.help() end,                                               desc = "Help tags" },
+    { "<leader>b",  function() Snacks.picker.buffers() end,                                            desc = "Buffers" },
   },
 }
