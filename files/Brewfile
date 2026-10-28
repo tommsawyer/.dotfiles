@@ -48,5 +48,8 @@ brew "openjdk@21"
 brew "xcode-build-server"
 brew "xcbeautify"
 
+# terminal
+cask "kitty"
+
 # fonts
 cask "font-fira-code-nerd-font"

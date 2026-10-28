@@ -15,6 +15,7 @@ files/zshrc|$(HOME)/.zshrc
 files/hushlogin|$(HOME)/.hushlogin
 files/tmux|$(HOME)/.config/tmux
 files/nvim|$(HOME)/.config/nvim
+files/kitty|$(HOME)/.config/kitty
 files/bat|$(HOME)/.config/bat
 files/theme|$(HOME)/.config/theme
 files/theme/theme|$(HOME)/.local/bin/theme
@@ -97,6 +98,9 @@ check:
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
 		files/lazygit/config.yml files/lazygit/light.yml files/k9s/config.yaml files/k9s/skins/*.yaml files/bookokrat/themes.yaml
 	@echo "json"; jq empty files/claude/settings.json
+	@# load_config only warns about unknown keys, so any output is a failure
+	@echo "kitty"; out=$$(kitty +runpy 'import sys; from kitty.config import load_config; \
+		load_config(sys.argv[-1])' files/kitty/kitty.conf 2>&1); [ -z "$$out" ] || { echo "$$out"; exit 1; }
 	@echo "lua"; lua-language-server --check="$(DOTFILES)/files/nvim" --configpath="$(DOTFILES)/.luarc.json" \
 		--checklevel=Warning >/dev/null || { echo "run it without >/dev/null to see the problems"; exit 1; }
 	@# goes through ~/.config/nvim, so needs `make symlinks`; startup errors are printed, silenced ones are not

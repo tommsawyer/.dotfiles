@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  Конфиги для macOS: zsh, tmux, neovim, lazygit, delta и k9s в одной теме onedark,
+  Конфиги для macOS: kitty, zsh, tmux, neovim, lazygit, delta и k9s в одной теме onedark,
   тёмной (warmer) или светлой (light) по команде `theme`.
 </p>
 
@@ -58,7 +58,7 @@
 - **Git через lazygit.** Частые команды `git` в терминале подсказывают, как
   сделать то же в lazygit.
 - **Светлая тема одной командой.** `theme light` / `theme dark` переключает
-  iTerm, tmux и всё остальное, тема macOS не трогается.
+  iTerm или kitty, tmux и всё остальное, тема macOS не трогается.
 
 <p align="right"><a href="#содержание">↑ к содержанию</a></p>
 
@@ -90,6 +90,14 @@ make install
    в самом файле: правка профиля в настройках iTerm переписывает его, оставляя
    только имя и guid.
 2. **Neovim:** при первом запуске `nvim` сам ставит плагины.
+
+**kitty** вместо iTerm настраивать не нужно: он ставится из Brewfile, а
+[`files/kitty`](files/kitty) линкуется в `~/.config/kitty`. Интерфейс
+минимальный: без заголовка окна, вкладок и сплитов (их делает tmux), из
+сочетаний клавиш оставлены только обычные для терминала: `Cmd-C`/`Cmd-V`,
+`Cmd-N` (новое окно), `Cmd-W`, `Cmd-Q`, `Cmd-K` (очистить), `Cmd-=`/`Cmd--`/`Cmd-0`
+(размер шрифта), `Ctrl-Cmd-F` (полный экран). Shift+Enter и Ctrl+Enter kitty
+отправляет кодами CSI u, иначе tmux их не различает.
 
 > [!WARNING]
 > `git status`, `commit`, `push` и другие частые команды в терминале не
@@ -447,6 +455,10 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 - **iTerm.** Профиль «OneDark Light» наследует «OneDark Warmer» и меняет
   только цвета. Команда переключает профиль во всех окнах с tmux, а новое окно
   iTerm берёт его при запуске zsh.
+- **kitty:** все открытые окна, через сокет удалённого управления
+  (`listen_on` в [`kitty.conf`](files/kitty/kitty.conf)). Новый kitty берёт
+  тему при запуске: `theme.py` подключает `onedark-warmer.conf` или
+  `onedark-light.conf`, те же цвета, что в профилях iTerm.
 - **tmux:** статус-бар, рамки и попапы.
 - **Открытые shell** — со следующего промпта: промпт, fzf, bat, delta.
 
@@ -488,7 +500,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat |
 | `make bookokrat` | вставляет темы onedark в `~/.config/bookokrat/config.yaml` |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
-| `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, json, lua-language-server, запуск nvim |
+| `make check` | быстрые проверки: zsh, tmux, kitty, shellcheck, yaml, json, lua-language-server, запуск nvim |
 | `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |
 | `make nvim-sync` | обновляет плагины nvim без интерфейса (`Lazy! sync`, пишет `lazy-lock.json`) |
 | `make clean` | удаляет ссылки и подключение delta в `~/.gitconfig` |
@@ -501,6 +513,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `files/hushlogin` | `~/.hushlogin` (убирает «Last login») |
 | `files/tmux` | `~/.config/tmux` |
 | `files/nvim` | `~/.config/nvim` |
+| `files/kitty` | `~/.config/kitty` |
 | `files/bat` | `~/.config/bat` |
 | `files/theme` | `~/.config/theme` |
 | `files/theme/theme` | `~/.local/bin/theme` |

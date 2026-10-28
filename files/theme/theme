@@ -1,7 +1,7 @@
 #!/bin/sh
-# theme [light|dark|toggle]: onedark light or warmer for iTerm, tmux and what starts afterwards
-# (bat, delta, lazygit, k9s, fzf, bookokrat, new shells; open shells at their next prompt). nvim
-# and claude code take it on restart. Without an argument prints the current one.
+# theme [light|dark|toggle]: onedark light or warmer for iTerm, kitty, tmux and what starts
+# afterwards (bat, delta, lazygit, k9s, fzf, bookokrat, new shells; open shells at their next
+# prompt). nvim and claude code take it on restart. Without an argument prints the current one.
 # ~/.local/bin/theme links here (make symlinks); the palette and exports are in env.sh.
 
 set -eu
@@ -37,6 +37,15 @@ if tmux has-session 2>/dev/null; then
     fi
   done
   tmux source-file ~/.config/tmux/tmux.conf
+fi
+
+# kitty: every running one through its socket (listen_on in kitty.conf), --configured for its
+# new windows too; a stale socket of a crashed kitty only fails
+if command -v kitty >/dev/null; then
+  for sock in "${TMPDIR:-/tmp}"/kitty-*; do
+    [ -S "$sock" ] || continue
+    kitty @ --to "unix:$sock" set-colors --all --configured ~/.config/kitty/"$thm_onedark".conf || :
+  done
 fi
 
 # bookokrat: its theme: in the config it writes itself (make bookokrat put the themes there)
