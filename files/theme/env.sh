@@ -30,11 +30,12 @@ fi
 
 # bat: its --theme-light / --theme-dark (bat/config); delta: a feature of delta.gitconfig
 export THEME BAT_THEME="$THEME" DELTA_FEATURES="$thm_onedark" K9S_SKIN="$thm_onedark"
+# ${thm_fg}:regular in braces: zsh reads $thm_fg:r as the :r modifier
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=fg:$thm_fg,bg:$thm_bg0,hl:$thm_blue,fg+:$thm_fg,bg+:$thm_bg3,hl+:$thm_cyan \
   --color=info:$thm_yellow,prompt:$thm_purple,pointer:$thm_orange,marker:$thm_green,spinner:$thm_purple \
   --color=header:$thm_cyan,border:$thm_grey,gutter:$thm_bg0,separator:$thm_grey \
-  --color=scrollbar:$thm_grey,query:$thm_fg:regular"
+  --color=scrollbar:$thm_grey,query:${thm_fg}:regular"
 
 # the escape for text in a palette colour: thm_ansi "#57A5E5" -> \033[38;2;87;165;229m
 thm_ansi() {
