@@ -74,7 +74,7 @@ make install
 ```
 
 `make install` ставит Homebrew и всё из [`files/Brewfile`](files/Brewfile)
-(включая шрифт JetBrains Mono Nerd Font), emmet language server и
+(включая шрифт Fira Code Nerd Font), emmet language server и
 русский словарь для проверки орфографии. Потом создаёт симлинки на конфиги.
 
 > [!NOTE]
@@ -86,7 +86,9 @@ make install
 1. **iTerm2:** Settings → Profiles → выбрать «OneDark Warmer» → Other Actions → Set
    as Default. Сам профиль (цвета, шрифт, без меток команд) подключается из
    [`files/iterm/profile.json`](files/iterm/profile.json) как dynamic profile.
-   Его guid не меняется, так что это делается один раз.
+   Его guid не меняется, так что это делается один раз. Цвета и шрифт меняются
+   в самом файле: правка профиля в настройках iTerm переписывает его, оставляя
+   только имя и guid.
 2. **Neovim:** при первом запуске `nvim` сам ставит плагины.
 
 > [!WARNING]

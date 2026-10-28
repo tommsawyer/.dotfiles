@@ -48,4 +48,4 @@ brew "xcode-build-server"
 brew "xcbeautify"
 
 # fonts
-cask "font-jetbrains-mono-nerd-font"
+cask "font-fira-code-nerd-font"
