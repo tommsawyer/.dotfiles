@@ -74,7 +74,6 @@ return {
     { "<leader>oo", "<cmd>Obsidian quick_switch<cr>",      desc = "Notes" },
     { "<leader>of", "<cmd>Obsidian search<cr>",            desc = "Search notes" },
     { "<leader>on", "<cmd>Obsidian new_from_template<cr>", desc = "New note from template" },
-    { "<leader>oi", "<cmd>Obsidian template<cr>",          desc = "Insert template" },
     { "<leader>ot", "<cmd>Obsidian today<cr>",             desc = "Today's note" },
     { "<leader>ob", "<cmd>Obsidian backlinks<cr>",         desc = "Backlinks" },
     {
