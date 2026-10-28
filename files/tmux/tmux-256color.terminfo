@@ -1,0 +1,4 @@
+# the tmux-256color shipped with macOS has no strikethrough, so nvim inside tmux never sends it;
+# compiled into ~/.terminfo by `make terminfo`, which takes precedence over the system entry
+tmux-256color|tmux with 256 colors and strikethrough,
+	smxx=\E[9m, rmxx=\E[29m, use=tmux-256color,

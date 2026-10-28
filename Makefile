@@ -28,7 +28,7 @@ files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
 
-install: homebrew brew npm symlinks iterm spell
+install: homebrew brew npm symlinks terminfo iterm spell
 
 homebrew:
 	@command -v brew >/dev/null 2>&1 || \
@@ -53,6 +53,10 @@ symlinks:
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
 		git config --global --add include.path "$(DELTA_CONFIG)"
+
+# the system tic: ~/.terminfo is read by the system ncurses too, and brew's tic writes a format it may not read
+terminfo:
+	/usr/bin/tic -x -o "$(HOME)/.terminfo" "$(DOTFILES)/files/tmux/tmux-256color.terminfo"
 
 # global prefs, a profile cannot hold them; iTerm picks them up on restart
 iterm:
@@ -95,4 +99,4 @@ clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm symlinks iterm spell nvim-sync check fmt clean
+.PHONY: install homebrew brew npm symlinks terminfo iterm spell nvim-sync check fmt clean
