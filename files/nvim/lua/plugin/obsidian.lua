@@ -59,6 +59,8 @@ return {
       statusline = { enabled = false },
       ui = { enable = false },
       picker = { name = "snacks.picker" },
+      -- ,oa toggles between undone and done, without the ~ ! > states
+      checkbox = { order = { " ", "x" } },
       daily_notes = { folder = "daily" },
       templates = {
         folder = "templates",
