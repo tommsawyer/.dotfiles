@@ -1,4 +1,7 @@
 local theme = require("theme")
+-- sidebars (file tree, Trouble, the dropbar menu) on the darkest background, bg_d; in light it is
+-- a heavy #c9c9c9 grey, so bg2 there
+local sidebar = theme.light and "$bg2" or "$bg_d"
 
 return {
   "navarasu/onedark.nvim",
@@ -6,8 +9,12 @@ return {
   priority = 1000,
   opts = {
     style = theme.style, -- warmer or light, lua/theme.lua
-    -- the file tree already sits on the darkest background (bg_d), like a sidebar
     highlights = {
+      -- the file tree: the theme puts it on bg_d, here on the sidebar colour above
+      NvimTreeNormal = { fg = "$fg", bg = sidebar },
+      NvimTreeNormalFloat = { fg = "$fg", bg = sidebar },
+      NvimTreeVertSplit = { fg = sidebar, bg = sidebar },
+      NvimTreeEndOfBuffer = { fg = sidebar, bg = sidebar },
       -- dropbar: a light band in the current window (like the active tab in tmux),
       -- plain background in the others, so splits show where the cursor is
       WinBar = { fg = "$light_grey", bg = "$bg1" },
@@ -24,11 +31,11 @@ return {
       -- place of its DropBarKindDir / DropBarKindFile there, the bar keeps those)
       DropBarMenuKindDir = { fg = "$blue" },
       DropBarMenuKindFile = { fg = "$fg" },
-      -- and on its background (bg_d), not the completion menu one (NormalFloat)
-      DropBarMenuNormalFloat = { fg = "$fg", bg = "$bg_d" },
+      -- and on its background (sidebar), not the completion menu one (NormalFloat)
+      DropBarMenuNormalFloat = { fg = "$fg", bg = sidebar },
       -- Trouble lists (references, symbols, diagnostics) on the file tree background, like a sidebar
-      TroubleNormal = { bg = "$bg_d" },
-      TroubleNormalNC = { bg = "$bg_d" },
+      TroubleNormal = { bg = sidebar },
+      TroubleNormalNC = { bg = sidebar },
       -- the status line nvim still draws under a window with another one below it (laststatus = 0):
       -- blank (statusline in options.lua) and on the editor background, just a gap
       StatusLine = { bg = "$bg0" },
