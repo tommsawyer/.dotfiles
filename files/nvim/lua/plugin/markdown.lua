@@ -1,4 +1,4 @@
--- only tables, checkboxes and --- are rendered, the rest of markdown stays as is (all of it was too busy)
+-- only tables, checkboxes, code and --- are rendered, the rest of markdown stays as is (all of it was too busy)
 local off = { enabled = false }
 
 return {
@@ -13,7 +13,8 @@ return {
     bullet = off,
     -- a done task is struck through whole, not just its [x]
     checkbox = { checked = { scope_highlight = "@markup.strikethrough" } },
-    code = off,
+    -- background for code blocks and inline code, no language icon and name above the block
+    code = { style = "normal" },
     document = off,
     heading = off,
     html = off,
