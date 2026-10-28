@@ -15,7 +15,7 @@ if [ "$THEME" = light ]; then
   thm_grey="#A0A1A7" thm_light_grey="#818387"
   thm_blue="#4078F2" thm_cyan="#0184BC" thm_yellow="#986801" thm_purple="#A626A4"
   thm_green="#50A14F" thm_orange="#C18401" thm_red="#E45649"
-  thm_onedark=onedark-light thm_iterm="OneDark Light"
+  thm_onedark=onedark-light thm_iterm="OneDark Light" thm_bookokrat="OneDark Light"
   export LG_CONFIG_FILE="$HOME/Library/Application Support/lazygit/config.yml,$HOME/Library/Application Support/lazygit/light.yml"
 else
   thm_bg0="#232326" thm_bg3="#37383D" thm_fg="#A7AAB0"
@@ -24,7 +24,7 @@ else
   thm_green="#8FB573" thm_orange="#C49060"
   # the warm style's red, a bit softer than warmer's #DE5D68
   thm_red="#E16D77"
-  thm_onedark=onedark-warmer thm_iterm="OneDark Warmer"
+  thm_onedark=onedark-warmer thm_iterm="OneDark Warmer" thm_bookokrat="OneDark Warmer"
   unset LG_CONFIG_FILE
 fi
 

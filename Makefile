@@ -28,7 +28,7 @@ files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
 
-install: homebrew brew npm symlinks terminfo iterm spell
+install: homebrew brew npm symlinks terminfo iterm spell bookokrat
 
 homebrew:
 	@command -v brew >/dev/null 2>&1 || \
@@ -63,6 +63,21 @@ iterm:
 	@# Minimal theme: the title bar and tabs take the terminal background
 	defaults write com.googlecode.iterm2 TabStyleWithAutomaticOption -int 5
 
+# bookokrat writes its config.yaml itself, so not a link: the onedark themes go in place of
+# its custom_themes section (to the end of the file) and theme: is set to the current one
+BOOKOKRAT_CONFIG := $(HOME)/.config/bookokrat/config.yaml
+bookokrat:
+	mkdir -p "$(dir $(BOOKOKRAT_CONFIG))"
+	@[ -f "$(BOOKOKRAT_CONFIG)" ] || printf 'version: 3\ntheme: ""\n' >"$(BOOKOKRAT_CONFIG)"
+	@# the section runs to the next top-level key; blank lines at the end are dropped and the
+	@# header comment of themes.yaml is not copied, so that a second run changes nothing
+	@. files/theme/env.sh && { \
+		awk '/^custom_themes:/ { skip = 1; next } skip && /^[^ \t#]/ { skip = 0 } skip { next } \
+			/^$$/ { blank++; next } { for (; blank; blank--) print ""; print }' "$(BOOKOKRAT_CONFIG)" | \
+			sed "s/^theme: .*/theme: \"$$thm_bookokrat\"/"; \
+		echo; sed '/^#/d' files/bookokrat/themes.yaml; \
+	} >"$(BOOKOKRAT_CONFIG).tmp" && mv "$(BOOKOKRAT_CONFIG).tmp" "$(BOOKOKRAT_CONFIG)"
+
 spell:
 	mkdir -p "$(HOME)/.local/share/nvim/site/spell"
 	cd "$(HOME)/.local/share/nvim/site/spell" && for f in ru.utf-8.spl ru.utf-8.sug; do \
@@ -80,7 +95,7 @@ check:
 		rc=$$?; tmux -L dotfiles-check kill-server 2>/dev/null; exit $$rc
 	@echo "sh"; shellcheck -x files/tmux/*.sh files/theme/theme files/theme/env.sh
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
-		files/lazygit/config.yml files/lazygit/light.yml files/k9s/config.yaml files/k9s/skins/*.yaml
+		files/lazygit/config.yml files/lazygit/light.yml files/k9s/config.yaml files/k9s/skins/*.yaml files/bookokrat/themes.yaml
 	@echo "json"; jq empty files/claude/settings.json
 	@echo "lua"; lua-language-server --check="$(DOTFILES)/files/nvim" --configpath="$(DOTFILES)/.luarc.json" \
 		--checklevel=Warning >/dev/null || { echo "run it without >/dev/null to see the problems"; exit 1; }
@@ -99,4 +114,4 @@ clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm symlinks terminfo iterm spell nvim-sync check fmt clean
+.PHONY: install homebrew brew npm symlinks terminfo iterm spell bookokrat nvim-sync check fmt clean

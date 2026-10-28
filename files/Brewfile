@@ -8,6 +8,7 @@ brew "go"
 
 # cli
 brew "bat"
+brew "bookokrat"
 brew "fd"
 brew "fzf"
 brew "glow"

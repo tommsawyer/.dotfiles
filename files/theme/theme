@@ -1,7 +1,7 @@
 #!/bin/sh
 # theme [light|dark|toggle]: onedark light or warmer for iTerm, tmux and what starts afterwards
-# (bat, delta, lazygit, k9s, fzf, new shells; open shells at their next prompt). nvim and
-# claude code take it on restart. Without an argument prints the current one.
+# (bat, delta, lazygit, k9s, fzf, bookokrat, new shells; open shells at their next prompt). nvim
+# and claude code take it on restart. Without an argument prints the current one.
 # ~/.local/bin/theme links here (make symlinks); the palette and exports are in env.sh.
 
 set -eu
@@ -38,3 +38,7 @@ if tmux has-session 2>/dev/null; then
   done
   tmux source-file ~/.config/tmux/tmux.conf
 fi
+
+# bookokrat: its theme: in the config it writes itself (make bookokrat put the themes there)
+bookokrat=$HOME/.config/bookokrat/config.yaml
+[ ! -f "$bookokrat" ] || sed -i '' "s/^theme: .*/theme: \"$thm_bookokrat\"/" "$bookokrat"

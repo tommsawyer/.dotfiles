@@ -450,7 +450,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 - **tmux:** статус-бар, рамки и попапы.
 - **Открытые shell** — со следующего промпта: промпт, fzf, bat, delta.
 
-То, что запускается после переключения (lazygit, k9s, `C-f s`, `C-f a`),
+То, что запускается после переключения (lazygit, k9s, bookokrat, `C-f s`, `C-f a`),
 открывается уже в новой теме. **nvim и Claude Code** нужно перезапустить.
 В Claude Code тема своя (`/theme`).
 
@@ -466,6 +466,13 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
   `themes/onedark-warmer.tmTheme` / `onedark-light.tmTheme`, кэш тем
   пересобирает `make symlinks`.
 - `glow` рендерит markdown в терминале.
+- `bookokrat` — читалка EPUB и PDF в терминале. Свой `config.yaml` она пишет
+  сама, поэтому он не линкуется: `make bookokrat` вставляет в него темы
+  OneDark Warmer и OneDark Light из
+  [`files/bookokrat/themes.yaml`](files/bookokrat/themes.yaml) (секция
+  `custom_themes`, повторный запуск ничего не меняет), а `theme` выставляет
+  там нужную. Тема, переключённая при открытой читалке, применится, когда
+  её перезапустишь, если она до этого сама не перезапишет конфиг.
 - Алиасы: `vim` → `nvim`, `rg` всегда с `--hidden`, `coverage` запускает
   `go test` и открывает HTML-отчёт о покрытии.
 - Полный список программ — в [`files/Brewfile`](files/Brewfile).
@@ -478,7 +485,8 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 | Цель | Что делает |
 |---|---|
-| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь |
+| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat |
+| `make bookokrat` | вставляет темы onedark в `~/.config/bookokrat/config.yaml` |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
 | `make check` | быстрые проверки: zsh, tmux, shellcheck, yaml, json, lua-language-server, запуск nvim |
 | `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |
