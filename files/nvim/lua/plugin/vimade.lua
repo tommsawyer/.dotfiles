@@ -1,5 +1,9 @@
--- the theme's bg_d (onedark warmer), the same dark the picker backdrop dims with
-local dim = { rgb = { 0x1b, 0x1c, 0x1e }, intensity = 0.4 }
+-- the theme's bg_d (lua/theme.lua), the same the picker backdrop dims with
+local bg_d = require("theme").bg_d
+local dim = {
+  rgb = { tonumber(bg_d:sub(2, 3), 16), tonumber(bg_d:sub(4, 5), 16), tonumber(bg_d:sub(6, 7), 16) },
+  intensity = 0.4,
+}
 
 -- the file window left last: it stays lit while the cursor is in the file tree, Trouble...
 -- (on leave, not enter: the window nvim starts in is never entered)
@@ -18,7 +22,7 @@ return {
   event = "VeryLazy",
   opts = {
     ncmode = "windows", -- the same file in another split is dimmed too
-    -- no fade towards the window's own background: text and background both blend into the dark,
+    -- no fade towards the window's own background: text and background both blend into bg_d,
     -- like under the picker backdrop
     fadelevel = 1,
     tint = { fg = dim, bg = dim, sp = dim },

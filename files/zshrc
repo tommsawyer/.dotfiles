@@ -68,6 +68,17 @@ _title_preexec() {
 add-zsh-hook precmd _title_precmd
 add-zsh-hook preexec _title_preexec
 
+# onedark warmer or light (`theme`): palette for the prompt below, exports for bat, delta, fzf...
+# Read again at a prompt after `theme` switched it, from this shell or another one
+source ~/.config/theme/env.sh
+_theme_sync() {
+  local f=${XDG_STATE_HOME:-$HOME/.local/state}/theme t=dark
+  [[ -r $f && $(<$f) == light ]] && t=light
+  [[ $t == $THEME ]] || source ~/.config/theme/env.sh
+}
+# a new iTerm window opens with the default profile, dark; under tmux `theme` switches the terminal
+[[ -z $TMUX && $TERM_PROGRAM == iTerm.app && $THEME == light ]] && print -n "\e]1337;SetProfile=$thm_iterm\a"
+
 # Prompt: "dotfiles/files/tmux ❯", the path from the repo root (outside a repo from ~),
 # ❯ red after a failed command. Right: the exit code with the signal name (130 INT), how
 # long the command took (from 0.5s), background jobs. The branch only outside tmux, its
@@ -93,20 +104,21 @@ _prompt_duration() {
 _prompt_precmd() {
   local ret=$? dir branch
   local -a right
+  _theme_sync
   # only after a command ran: an empty Enter or ^C keeps what the last command left
   if [[ -n $_prompt_start ]]; then
     _prompt_ok=$(( ! ret ))
     _prompt_right=()
     if (( ret )); then
       local sig; (( ret > 128 )) && sig=${signals[ret - 127]}
-      _prompt_right+="%F{#E16D77}✘ $ret${sig:+ $sig}%f"
+      _prompt_right+="%F{$thm_red}✘ $ret${sig:+ $sig}%f"
     fi
     local -F took=$(( EPOCHREALTIME - _prompt_start ))
-    (( took >= 0.5 )) && _prompt_duration $took && _prompt_right+="%F{#DBB671}$REPLY%f"
+    (( took >= 0.5 )) && _prompt_duration $took && _prompt_right+="%F{$thm_yellow}$REPLY%f"
     unset _prompt_start
   fi
   right=($_prompt_right)
-  (( ${#jobstates} )) && right+="%F{#57A5E5}⚙ ${#jobstates}%f"
+  (( ${#jobstates} )) && right+="%F{$thm_blue}⚙ ${#jobstates}%f"
 
   # one git call for both; physical paths, so a link into a repo (~/.config/tmux) resolves too
   local -a git=(${(f)"$(command git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null)"})
@@ -122,19 +134,19 @@ _prompt_precmd() {
 
   [[ -n $SSH_CONNECTION ]] && dir="%n@%m:$dir"
 
-  _prompt_left="%F{#57A5E5}${dir//\%/%%}%f"
-  [[ -n $branch ]] && _prompt_left+=" %F{#818387}${branch//\%/%%}%f"
-  local c='#BB70D2'; (( _prompt_ok )) || c='#E16D77'
+  _prompt_left="%F{$thm_blue}${dir//\%/%%}%f"
+  [[ -n $branch ]] && _prompt_left+=" %F{$thm_light_grey}${branch//\%/%%}%f"
+  local c=$thm_purple; (( _prompt_ok )) || c=$thm_red
   _prompt_char="%F{$c}❯%f"
   PROMPT="$_prompt_left $_prompt_char "
-  local sep=' %F{#5A5B5E}·%f '
+  local sep=" %F{$thm_grey}·%f "
   RPROMPT=${(pj:$sep:)right}
 }
 
 # redraws the finished line with only the start time on the right, the left part stays put
 _prompt_collapse() {
   [[ $CONTEXT == start ]] || return 0
-  PROMPT="$_prompt_left $_prompt_char " RPROMPT="%F{#5A5B5E}%D{%H:%M:%S}%f"
+  PROMPT="$_prompt_left $_prompt_char " RPROMPT="%F{$thm_grey}%D{%H:%M:%S}%f"
   zle .reset-prompt
 }
 
@@ -159,11 +171,6 @@ export PATH="$PATH:$GOBIN"
 export PATH="$HOME/.local/bin:$PATH"
 # JDK for Gradle (keg-only, brew does not link it)
 [ -d "$HOMEBREW_PREFIX/opt/openjdk@21" ] && export JAVA_HOME="$HOMEBREW_PREFIX/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
-export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
-  --color=fg:#A7AAB0,bg:#232326,hl:#57A5E5,fg+:#A7AAB0,bg+:#37383D,hl+:#51A8B3 \
-  --color=info:#DBB671,prompt:#BB70D2,pointer:#C49060,marker:#8FB573,spinner:#BB70D2 \
-  --color=header:#51A8B3,border:#5A5B5E,gutter:#232326,separator:#5A5B5E \
-  --color=scrollbar:#5A5B5E,query:#A7AAB0:regular"
 export EDITOR=nvim
 
 # respects .gitignore (no node_modules, build output), shows dotfiles

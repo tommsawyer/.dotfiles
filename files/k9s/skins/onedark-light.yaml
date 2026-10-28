@@ -1,0 +1,116 @@
+# -----------------------------------------------------------------------------
+# OneDark Light Skin
+# -----------------------------------------------------------------------------
+
+# Styles...
+foreground: &foreground "#383a42"
+# the terminal background as is, not "#fafafa", so it matches iTerm
+# even when k9s falls back to 256 colors (no COLORTERM=truecolor, e.g. in an old tmux server)
+background: &background "default"
+black: &black "#fafafa"
+blue: &blue "#4078f2"
+green: &green "#50a14f"
+grey: &grey "#818387"
+orange: &orange "#c18401"
+purple: &purple "#a626a4"
+red: &red "#e45649"
+yellow: &yellow "#986801"
+yellow_bright: &yellow_bright "#e2c792"
+
+# Skin...
+k9s:
+  body:
+    fgColor: *foreground
+    bgColor: *background
+    logoColor: *green
+  prompt:
+    fgColor: *foreground
+    bgColor: *background
+    suggestColor: *orange
+  info:
+    fgColor: *grey
+    sectionColor: *green
+  help:
+    fgColor: *foreground
+    bgColor: *background
+    keyColor: *yellow
+    numKeyColor: *blue
+    sectionColor: *purple
+  dialog:
+    fgColor: *black
+    bgColor: *background
+    buttonFgColor: *foreground
+    buttonBgColor: *green
+    buttonFocusFgColor: *black
+    buttonFocusBgColor: *blue
+    labelFgColor: *orange
+    fieldFgColor: *blue
+  frame:
+    border:
+      fgColor: *green
+      focusColor: *green
+    menu:
+      fgColor: *grey
+      keyColor: *yellow
+      numKeyColor: *yellow
+    crumbs:
+      fgColor: *black
+      bgColor: *green
+      activeColor: *yellow
+    status:
+      newColor: *blue
+      modifyColor: *green
+      addColor: *grey
+      pendingColor: *orange
+      errorColor: *red
+      highlightColor: *yellow
+      killColor: *purple
+      completedColor: *grey
+    title:
+      fgColor: *blue
+      bgColor: *background
+      highlightColor: *purple
+      counterColor: *foreground
+      filterColor: *blue
+  views:
+    charts:
+      bgColor: *background
+      defaultDialColors:
+        - *green
+        - *red
+      defaultChartColors:
+        - *green
+        - *red
+    table:
+      fgColor: *yellow
+      bgColor: *background
+      cursorFgColor: *black
+      cursorBgColor: *blue
+      markColor: *yellow_bright
+      header:
+        fgColor: *grey
+        bgColor: *background
+        sorterColor: *orange
+    xray:
+      fgColor: *blue
+      bgColor: *background
+      cursorColor: *foreground
+      graphicColor: *yellow_bright
+      showIcons: false
+    yaml:
+      keyColor: *red
+      colonColor: *grey
+      valueColor: *grey
+    logs:
+      fgColor: *grey
+      bgColor: *background
+      indicator:
+        fgColor: *blue
+        bgColor: *background
+        toggleOnColor: *red
+        toggleOffColor: *grey
+    help:
+      fgColor: *grey
+      bgColor: *background
+      indicator:
+        fgColor: *blue

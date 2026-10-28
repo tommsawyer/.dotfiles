@@ -1,0 +1,3 @@
+# laid over config.yml by LG_CONFIG_FILE while `theme light` is on (~/.config/theme/env.sh)
+gui:
+  colorScheme: light

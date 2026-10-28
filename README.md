@@ -3,7 +3,8 @@
 </p>
 
 <p align="center">
-  Конфиги для macOS: zsh, tmux, neovim, lazygit, delta и k9s в одной теме onedark (warmer).
+  Конфиги для macOS: zsh, tmux, neovim, lazygit, delta и k9s в одной теме onedark,
+  тёмной (warmer) или светлой (light) по команде `theme`.
 </p>
 
 <details>
@@ -36,6 +37,7 @@
    - [delta](#delta)
    - [k9s](#k9s)
    - [zoxide и fzf](#zoxide-и-fzf)
+   - [Светлая тема](#светлая-тема)
    - [Прочее](#прочее)
 1. [Устройство репозитория](#устройство-репозитория)
    - [Цели make](#цели-make)
@@ -55,6 +57,8 @@
   справа, и им можно отправить место под курсором или весь файл.
 - **Git через lazygit.** Частые команды `git` в терминале подсказывают, как
   сделать то же в lazygit.
+- **Светлая тема одной командой.** `theme light` / `theme dark` переключает
+  iTerm, tmux и всё остальное, тема macOS не трогается.
 
 <p align="right"><a href="#содержание">↑ к содержанию</a></p>
 
@@ -153,8 +157,8 @@ Prefix — `C-f`. Всё, кроме `tm`, настроено в
 у каждого — что сейчас делает AI-агент (берётся из заголовка его панели), а
 перед этим статус Claude: ▲ ждёт ответа, 󰔟 работает, ✔ закончил. Справа
 git-ветка с числом добавленных и удалённых строк, ошибки и предупреждения nvim
-из панелей текущего окна, контекст kubectl и время. Палитра onedark записана
-комментарием в конфиге. `extended-keys` пропускает `Shift-Enter` и подобные
+из панелей текущего окна, контекст kubectl и время. Цвета берутся из
+`theme-dark.conf` или `theme-light.conf` рядом с `tmux.conf`. `extended-keys` пропускает `Shift-Enter` и подобные
 комбинации в nvim и Claude Code.
 
 <p align="right"><a href="#содержание">↑ к содержанию</a></p>
@@ -390,7 +394,7 @@ Shell — zsh без фреймворков, всё в [`files/zshrc`](files/zsh
 
 Основной способ работать с git. Запускается через `lg` или `C-f g`.
 Настройки в [`files/lazygit/config.yml`](files/lazygit/config.yml): цвета
-onedark, `e` открывает файл в nvim. Диффы рисует delta, при ширине от 140
+onedark (`darkTheme` и `lightTheme`), `e` открывает файл в nvim. Диффы рисует delta, при ширине от 140
 колонок — в две колонки.
 
 В терминале `git status`, `commit`, `push` и другие частые команды (включая
@@ -405,15 +409,16 @@ Pager для git, [`files/git/delta.gitconfig`](files/git/delta.gitconfig).
 `make symlinks`. Дифф показывается в две колонки, `n` / `N` прыгают между
 файлами. Добавленные строки синие, а не зелёные, чтобы лучше отличаться от
 красных. Конфликты в стиле `zdiff3`, подсветка синтаксиса — тема onedark из
-bat.
+bat. Цвета тёмной и светлой темы — две секции (features) `onedark-warmer` и
+`onedark-light`.
 
 ### k9s
 
 Kubernetes, запускается через `C-f K` или `k9s`. Работает только на чтение:
 удалить, отредактировать и убить ничего нельзя. Для разовой правки есть
 `k9s --write`. Логи показывают последние 200 строк за 5 минут. Настройки в
-[`files/k9s/config.yaml`](files/k9s/config.yaml), скин — в
-`files/k9s/skins/onedark-warmer.yaml`.
+[`files/k9s/config.yaml`](files/k9s/config.yaml), скины — в
+`files/k9s/skins/onedark-warmer.yaml` и `onedark-light.yaml`.
 
 ### zoxide и fzf
 
@@ -427,12 +432,37 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 История zoxide нужна для `tm`. fzf ищет файлы через `rg` с
 учётом `.gitignore` и показывает скрытые. Цвета onedark заданы в
-`FZF_DEFAULT_OPTS` в `zshrc`.
+`FZF_DEFAULT_OPTS` в [`files/theme/env.sh`](files/theme/env.sh).
+
+### Светлая тема
+
+`theme light`, `theme dark` или `theme toggle`, без аргумента команда печатает
+текущую тему. Выбор хранится в `~/.local/state/theme`, без этого файла тема
+тёмная. Тема macOS не участвует.
+
+Сразу переключаются:
+
+- **iTerm.** Профиль «OneDark Light» наследует «OneDark Warmer» и меняет
+  только цвета. Команда переключает профиль во всех окнах с tmux, а новое окно
+  iTerm берёт его при запуске zsh.
+- **tmux:** статус-бар, рамки и попапы.
+- **Открытые shell** — со следующего промпта: промпт, fzf, bat, delta.
+
+То, что запускается после переключения (lazygit, k9s, `C-f s`, `C-f a`),
+открывается уже в новой теме. **nvim и Claude Code** нужно перезапустить.
+В Claude Code тема своя (`/theme`).
+
+Всё, что зависит от темы, задаёт [`files/theme/env.sh`](files/theme/env.sh):
+палитру и переменные `BAT_THEME`, `DELTA_FEATURES`, `LG_CONFIG_FILE`,
+`K9S_SKIN` и `FZF_DEFAULT_OPTS`. Его подключают zshrc, команда `theme` (она
+же копирует переменные в окружение tmux для попапов) и пикеры tmux. nvim
+читает тему в [`lua/theme.lua`](files/nvim/lua/theme.lua).
 
 ### Прочее
 
 - Тема bat — в [`files/bat/config`](files/bat/config) и
-  `themes/onedark-warmer.tmTheme`, кэш тем пересобирает `make symlinks`.
+  `themes/onedark-warmer.tmTheme` / `onedark-light.tmTheme`, кэш тем
+  пересобирает `make symlinks`.
 - `glow` рендерит markdown в терминале.
 - Алиасы: `vim` → `nvim`, `rg` всегда с `--hidden`, `coverage` запускает
   `go test` и открывает HTML-отчёт о покрытии.
@@ -462,8 +492,10 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `files/tmux` | `~/.config/tmux` |
 | `files/nvim` | `~/.config/nvim` |
 | `files/bat` | `~/.config/bat` |
-| `files/lazygit/config.yml` | `~/Library/Application Support/lazygit/config.yml` |
-| `files/k9s/config.yaml`, `skins/onedark-warmer.yaml` | `~/Library/Application Support/k9s/` |
+| `files/theme` | `~/.config/theme` |
+| `files/theme/theme` | `~/.local/bin/theme` |
+| `files/lazygit/config.yml`, `light.yml` | `~/Library/Application Support/lazygit/` |
+| `files/k9s/config.yaml`, `skins/onedark-*.yaml` | `~/Library/Application Support/k9s/` |
 | `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` |
 | `files/claude/settings.json` | `~/.claude/settings.json` (настройки и хуки Claude Code) |
 | `files/git/delta.gitconfig` | подключается из `~/.gitconfig` |

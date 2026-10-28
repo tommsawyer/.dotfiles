@@ -12,11 +12,15 @@
 
 [delta]
   line-numbers = true
-  syntax-theme = onedark-warmer
+  # the dark set when DELTA_FEATURES does not pick one (`theme` sets it: zshrc, the tmux environment)
+  features = onedark-warmer
 
-# onedark warmer colors; added lines are blue, not green: red vs blue tells apart better.
+# added lines are blue, not green: red vs blue tells apart better.
 # deleted lines are red at 15% / 30% over the background, the theme's diff_delete is barely visible
 # +/- markers mark the lines without relying on color
+[delta "onedark-warmer"]
+  dark = true
+  syntax-theme = onedark-warmer
   keep-plus-minus-markers       = true
   minus-style                   = syntax "#3F2C30"
   minus-non-emph-style          = syntax "#3F2C30"
@@ -29,3 +33,20 @@
   plus-empty-line-marker-style  = syntax "#1A2A37"
   line-numbers-plus-style       = "#57A5E5"
   line-numbers-zero-style       = "#5A5B5E"
+
+# the same over onedark light: blue and red at 15% / 30% over its background
+[delta "onedark-light"]
+  light = true
+  syntax-theme = onedark-light
+  keep-plus-minus-markers       = true
+  minus-style                   = syntax "#F7E1DF"
+  minus-non-emph-style          = syntax "#F7E1DF"
+  minus-emph-style              = syntax "#F3C9C5"
+  minus-empty-line-marker-style = syntax "#F7E1DF"
+  line-numbers-minus-style      = "#E45649"
+  plus-style                    = syntax "#DEE6F9"
+  plus-non-emph-style           = syntax "#DEE6F9"
+  plus-emph-style               = syntax "#C2D3F8"
+  plus-empty-line-marker-style  = syntax "#DEE6F9"
+  line-numbers-plus-style       = "#4078F2"
+  line-numbers-zero-style       = "#A0A1A7"

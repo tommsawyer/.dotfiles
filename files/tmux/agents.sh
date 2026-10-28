@@ -17,17 +17,22 @@ if [ "$1" = state ]; then
   exit 0
 fi
 
+# the icons and fzf's colours in the palette of the current theme
+# shellcheck source=files/theme/env.sh
+. ~/.config/theme/env.sh
+
 if [ "$1" = list ]; then
   # a shell in the pane: claude has exited without SessionEnd (killed), its state is stale;
   # the title without the status glyph claude puts in front ("✳ ", "⠐ "), as in tmux.conf
   tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{session_name}:#{window_index}	#{pane_current_command}	#{s/^[^A-Za-z0-9А-Яа-яЁё]+ //:pane_title}" 2>/dev/null |
-    awk -F '\t' '
+    awk -F '\t' -v wait="$(thm_ansi "$thm_yellow")" -v working="$(thm_ansi "$thm_cyan")" \
+      -v done="$(thm_ansi "$thm_green")" -v other="$(thm_ansi "$thm_grey")" '
       $1 == "" || $4 ~ /^-?(zsh|bash|sh)$/ { next }
       {
-        if ($1 == "wait") { rank = 0; icon = "\033[38;2;219;182;113m▲" }
-        else if ($1 == "working") { rank = 1; icon = "\033[38;2;81;168;179m󰔟" }
-        else if ($1 == "done") { rank = 2; icon = "\033[38;2;143;181;115m✔" }
-        else { rank = 3; icon = "\033[38;2;90;91;94m○" }
+        if ($1 == "wait") { rank = 0; icon = wait "▲" }
+        else if ($1 == "working") { rank = 1; icon = working "󰔟" }
+        else if ($1 == "done") { rank = 2; icon = done "✔" }
+        else { rank = 3; icon = other "○" }
         # the title goes last: awk pads by bytes, a cyrillic one would break the columns;
         # session:window once more, hidden, for the preview label
         printf "%d\t%s\t%s\033[0m %-16s %s\t%s\n", rank, $2, icon, $3, $5, $3

@@ -2,7 +2,10 @@ gui:
   nerdFontsVersion: "3"
   expandFocusedSidePanel: true
   border: single
-  theme:
+  # dark unless LG_CONFIG_FILE adds light.yml (`theme light`, ~/.config/theme/env.sh); also what
+  # {{colorScheme}} passes to delta below
+  colorScheme: dark
+  darkTheme:
     activeBorderColor:
       - "#57A5E5"
       - "bold"
@@ -27,6 +30,32 @@ gui:
       - "#DE5D68"
     defaultFgColor:
       - "#A7AAB0"
+  # the same roles in onedark light; text on marked commits in its background, not bg_d
+  lightTheme:
+    activeBorderColor:
+      - "#4078F2"
+      - "bold"
+    inactiveBorderColor:
+      - "#A0A1A7"
+    searchingActiveBorderColor:
+      - "#C18401"
+      - "bold"
+    optionsTextColor:
+      - "#4078F2"
+    selectedLineBgColor:
+      - "#DCDCDC"
+    cherryPickedCommitFgColor:
+      - "#FAFAFA"
+    cherryPickedCommitBgColor:
+      - "#A626A4"
+    markedBaseCommitFgColor:
+      - "#FAFAFA"
+    markedBaseCommitBgColor:
+      - "#986801"
+    unstagedChangesColor:
+      - "#E45649"
+    defaultFgColor:
+      - "#383A42"
 
 git:
   diffRenderers:

@@ -1,0 +1,40 @@
+#!/bin/sh
+# theme [light|dark|toggle]: onedark light or warmer for iTerm, tmux and what starts afterwards
+# (bat, delta, lazygit, k9s, fzf, new shells; open shells at their next prompt). nvim and
+# claude code take it on restart. Without an argument prints the current one.
+# ~/.local/bin/theme links here (make symlinks); the palette and exports are in env.sh.
+
+set -eu
+# shellcheck source=files/theme/env.sh
+. ~/.config/theme/env.sh
+
+case ${1-} in
+  "") echo "$THEME"; exit ;;
+  toggle) if [ "$THEME" = light ]; then new=dark; else new=light; fi ;;
+  light | dark) new=$1 ;;
+  *) echo "usage: theme [light|dark|toggle]" >&2; exit 2 ;;
+esac
+
+state=${XDG_STATE_HOME:-$HOME/.local/state}/theme
+mkdir -p "$(dirname "$state")"
+echo "$new" >"$state"
+# shellcheck source=files/theme/env.sh
+. ~/.config/theme/env.sh
+
+# iTerm: the profile with its colours, straight to the terminal: this one outside tmux,
+# under tmux the tty of each attached client
+seq=$(printf '\033]1337;SetProfile=%s\007' "$thm_iterm")
+[ -n "${TMUX-}" ] || ! [ -t 1 ] || printf '%s' "$seq" >/dev/tty
+
+if tmux has-session 2>/dev/null; then
+  tmux list-clients -F '#{client_tty}' | while read -r tty; do printf '%s' "$seq" >"$tty"; done
+  # for popups (lazygit, k9s, the pickers) and new panes; tmux.conf takes its palette itself
+  for var in THEME BAT_THEME DELTA_FEATURES K9S_SKIN LG_CONFIG_FILE FZF_DEFAULT_OPTS; do
+    if eval "[ -n \"\${$var+x}\" ]"; then
+      eval "tmux set-environment -g $var \"\$$var\""
+    else
+      tmux set-environment -gu "$var"
+    fi
+  done
+  tmux source-file ~/.config/tmux/tmux.conf
+fi

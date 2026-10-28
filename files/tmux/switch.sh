@@ -8,19 +8,22 @@
 # Lives in ~/.config/tmux (the whole folder is linked by `make symlinks`).
 
 dir=$(dirname "$0")
+# fzf's colours and the greyed out current session in the palette of the current theme
+# shellcheck source=files/theme/env.sh
+. ~/.config/theme/env.sh
 
 if [ "$1" = list ]; then
   [ -z "$CURRENT_SESSION" ] && [ -n "$TMUX_PANE" ] && CURRENT_SESSION=$(tmux display -p -t "$TMUX_PANE" '#S')
   # the name goes first again on its own, hidden: what the preview, kill and enter work with
   tmux list-sessions -F "#{session_last_attached}	#{session_name}	#{session_windows}	#{pane_current_path}" 2>/dev/null |
     sort -rn |
-    awk -F '\t' -v home="$HOME" -v cur="$CURRENT_SESSION" '
+    awk -F '\t' -v home="$HOME" -v cur="$CURRENT_SESSION" -v grey="$(thm_ansi "$thm_grey")" '
       {
         sub("^" home, "~", $4)
         row = sprintf("%s\t%-20s %-10s %s", $2, $2, $3 " win", $4)
         if ($2 == cur) current = row; else print row
       }
-      END { if (current != "") { sub("\t", "\t\033[38;2;90;91;94m", current); print current "  current\033[0m" } }'
+      END { if (current != "") { sub("\t", "\t" grey, current); print current "  current\033[0m" } }'
   exit
 fi
 

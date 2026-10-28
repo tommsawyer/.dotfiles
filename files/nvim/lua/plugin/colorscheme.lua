@@ -1,9 +1,11 @@
+local theme = require("theme")
+
 return {
   "navarasu/onedark.nvim",
   lazy = false,
   priority = 1000,
   opts = {
-    style = "warmer",
+    style = theme.style, -- warmer or light, lua/theme.lua
     -- the file tree already sits on the darkest background (bg_d), like a sidebar
     highlights = {
       -- dropbar: a light band in the current window (like the active tab in tmux),
@@ -33,7 +35,7 @@ return {
       StatusLineNC = { bg = "$bg0" },
       -- the current indent scope: a guide a bit brighter than the rest (bg1), not purple;
       -- between bg3 and grey, the palette has no step there
-      IblScope = { fg = "#46474c", fmt = "nocombine" },
+      IblScope = { fg = theme.light and "#bebec2" or "#46474c", fmt = "nocombine" },
       -- picker title as a label on the frame, like flash labels
       SnacksPickerTitle = { fg = "$bg0", bg = "$green", fmt = "bold" },
       -- groups the theme leaves to plugin / nvim defaults (blue-gray folder icons, a light green
@@ -45,6 +47,8 @@ return {
     },
   },
   config = function(_, opts)
+    -- onedark leaves it as is; for plugins and nvim's own defaults that look at it
+    vim.o.background = theme.light and "light" or "dark"
     require("onedark").setup(opts)
     require("onedark").load()
   end
