@@ -16,6 +16,7 @@ if [ "$THEME" = light ]; then
   thm_blue="#4078F2" thm_cyan="#0184BC" thm_yellow="#986801" thm_purple="#A626A4"
   thm_green="#50A14F" thm_orange="#C18401" thm_red="#E45649"
   thm_onedark=onedark-light thm_iterm="OneDark Light" thm_bookokrat="OneDark Light"
+  thm_tock_text=$thm_fg thm_tock_blue=$thm_blue thm_tock_red=$thm_red
   export LG_CONFIG_FILE="$HOME/Library/Application Support/lazygit/config.yml,$HOME/Library/Application Support/lazygit/light.yml"
 else
   thm_bg0="#232326" thm_bg3="#37383D" thm_fg="#A7AAB0"
@@ -25,6 +26,9 @@ else
   # the warm style's red, a bit softer than warmer's #DE5D68
   thm_red="#E16D77"
   thm_onedark=onedark-warmer thm_iterm="OneDark Warmer" thm_bookokrat="OneDark Warmer"
+  # tock draws today / the selected day in its text colour on red / blue: fg on the palette's
+  # accents is ~1.3:1, so a brighter text and deeper accents (~3:1 both on them and on the background)
+  thm_tock_text="#DCDFE4" thm_tock_blue="#207FCD" thm_tock_red="#D84350"
   unset LG_CONFIG_FILE
 fi
 
@@ -39,8 +43,8 @@ export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
 
 # tock (its own names for the roles: highlight is durations, secondary is today in the calendar);
 # the tag colour has no env var, `theme` writes it to tock.yaml
-export TOCK_THEME_NAME=custom TOCK_COLOR_PRIMARY="$thm_blue" TOCK_COLOR_SECONDARY="$thm_red" \
-  TOCK_COLOR_TEXT="$thm_fg" TOCK_COLOR_SUBTEXT="$thm_light_grey" TOCK_COLOR_FAINT="$thm_grey" \
+export TOCK_THEME_NAME=custom TOCK_COLOR_PRIMARY="$thm_tock_blue" TOCK_COLOR_SECONDARY="$thm_tock_red" \
+  TOCK_COLOR_TEXT="$thm_tock_text" TOCK_COLOR_SUBTEXT="$thm_light_grey" TOCK_COLOR_FAINT="$thm_grey" \
   TOCK_COLOR_HIGHLIGHT="$thm_yellow"
 
 # the escape for text in a palette colour: thm_ansi "#57A5E5" -> \033[38;2;87;165;229m
