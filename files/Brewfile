@@ -17,6 +17,7 @@ brew "k9s"
 brew "lazygit"
 brew "ripgrep"
 brew "sesh"
+brew "tock"
 brew "tree-sitter-cli"
 brew "zoxide"
 

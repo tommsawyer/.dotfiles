@@ -168,8 +168,9 @@ Prefix — `C-f`. Всё, кроме `tm`, настроено в
 Стоит сверху. Слева имя сессии, оно желтеет, пока нажат prefix. Дальше окна,
 у каждого — что сейчас делает AI-агент (берётся из заголовка его панели), а
 перед этим статус Claude: ▲ ждёт ответа, 󰔟 работает, ✔ закончил. Справа
-git-ветка с числом добавленных и удалённых строк, ошибки и предупреждения nvim
-из панелей текущего окна, контекст kubectl и время. Цвета берутся из
+текущая задача tock (описание и сколько идёт), git-ветка с числом
+добавленных и удалённых строк, ошибки и предупреждения nvim из панелей
+текущего окна, контекст kubectl и время. Цвета берутся из
 `theme-dark.conf` или `theme-light.conf` рядом с `tmux.conf`. `extended-keys` пропускает `Shift-Enter` и подобные
 комбинации в nvim и Claude Code.
 
@@ -490,6 +491,12 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
   `custom_themes`, повторный запуск ничего не меняет), а `theme` выставляет
   там нужную. Тема, переключённая при открытой читалке, применится, когда
   её перезапустишь, если она до этого сама не перезапишет конфиг.
+- `tock` — трекер времени в терминале (`tock start -p team -d "Ревью"`, `tock stop`,
+  `tock report --today`). Свой `tock.yaml` он пишет сам, поэтому он не
+  линкуется: `make tock` прописывает в нём `file.path`, лог задач лежит в
+  `~/Documents/teamlead/stats/stats.txt`. Запущенная задача видна в
+  статус-баре tmux перед git-веткой
+  ([`files/tmux/tock.sh`](files/tmux/tock.sh)).
 - Алиасы: `vim` → `nvim`, `rg` всегда с `--hidden`, `coverage` запускает
   `go test` и открывает HTML-отчёт о покрытии.
 - Полный список программ — в [`files/Brewfile`](files/Brewfile).
@@ -502,8 +509,9 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 | Цель | Что делает |
 |---|---|
-| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat |
+| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat, путь лога tock |
 | `make bookokrat` | вставляет темы onedark в `~/.config/bookokrat/config.yaml` |
+| `make tock` | прописывает путь лога в `~/.config/tock/tock.yaml` |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
 | `make check` | быстрые проверки: zsh, tmux, kitty, shellcheck, yaml, json, lua-language-server, запуск nvim |
 | `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |

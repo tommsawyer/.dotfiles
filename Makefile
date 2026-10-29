@@ -29,7 +29,7 @@ files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
 
-install: homebrew brew npm symlinks terminfo iterm spell bookokrat
+install: homebrew brew npm symlinks terminfo iterm spell bookokrat tock
 
 homebrew:
 	@command -v brew >/dev/null 2>&1 || \
@@ -79,6 +79,19 @@ bookokrat:
 		echo; sed '/^#/d' files/bookokrat/themes.yaml; \
 	} >"$(BOOKOKRAT_CONFIG).tmp" && mv "$(BOOKOKRAT_CONFIG).tmp" "$(BOOKOKRAT_CONFIG)"
 
+# tock writes its tock.yaml itself (last_update_check), so not a link: only file.path is set in it,
+# the activity log next to the teamlead notes; a second run changes nothing
+TOCK_CONFIG := $(HOME)/.config/tock/tock.yaml
+TOCK_FILE := $(HOME)/Documents/teamlead/stats/stats.txt
+tock:
+	mkdir -p "$(dir $(TOCK_CONFIG))" "$(dir $(TOCK_FILE))"
+	@touch "$(TOCK_CONFIG)"
+	@awk -v p="$(TOCK_FILE)" '/^[^ \t#]/ { inf = 0 } \
+		/^file:/ { print; print "    path: " p; inf = seen = 1; next } \
+		inf && /^[ \t]+path:/ { next } { print } \
+		END { if (!seen) printf "file:\n    path: %s\n", p }' "$(TOCK_CONFIG)" >"$(TOCK_CONFIG).tmp" && \
+		mv "$(TOCK_CONFIG).tmp" "$(TOCK_CONFIG)"
+
 spell:
 	mkdir -p "$(HOME)/.local/share/nvim/site/spell"
 	cd "$(HOME)/.local/share/nvim/site/spell" && for f in ru.utf-8.spl ru.utf-8.sug; do \
@@ -118,4 +131,4 @@ clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm symlinks terminfo iterm spell bookokrat nvim-sync check fmt clean
+.PHONY: install homebrew brew npm symlinks terminfo iterm spell bookokrat tock nvim-sync check fmt clean
