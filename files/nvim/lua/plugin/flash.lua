@@ -1,7 +1,32 @@
+-- same physical keys as the default labels, in the russian layout
+local ru_labels = "фывапролдйцукенгшщзячсмить"
+ru_labels = ru_labels .. vim.fn.toupper(ru_labels)
+
+-- a search typed in russian gets russian labels, so jumping needs no layout switch
+local function labeler(_, state)
+  state.flash_labeler = state.flash_labeler or require("flash.labeler").new(state)
+  state.flash_labels = state.flash_labels or state.opts.labels
+  if not state.pattern():find("[а-яёА-ЯЁ]") then
+    state.opts.labels = state.flash_labels
+    return state.flash_labeler:update()
+  end
+  state.opts.labels = ru_labels
+  -- flash compares labels with string.lower, which leaves cyrillic as is: with ignorecase
+  -- an uppercase letter after a match then drops every label
+  local lower = string.lower
+  string.lower = vim.fn.tolower
+  local ok, err = pcall(state.flash_labeler.update, state.flash_labeler)
+  string.lower = lower
+  if not ok then
+    error(err)
+  end
+end
+
 return {
   "folke/flash.nvim",
   event = "VeryLazy",
   opts = {
+    labeler = labeler,
     modes = {
       -- / and ? stay plain search, jumps go through Enter
       search = {

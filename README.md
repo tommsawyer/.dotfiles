@@ -385,6 +385,9 @@ code action: `gra` → «Insert template at cursor».
   `:й` срабатывают как `:w` и `:q`. Это задано в `options.lua`.
 - Маппинги с leader, Ctrl и клавиши плагинов дублирует langmapper,
   [`lua/plugin/langmapper.lua`](files/nvim/lua/plugin/langmapper.lua).
+- Если в flash ищешь по-русски, метки тоже русские (`фыва…`, те же клавиши, что
+  и `asdf…`), и прыгнуть можно, не переключая раскладку,
+  [`lua/plugin/flash.lua`](files/nvim/lua/plugin/flash.lua).
 - hardtime не даёт жать `hjkl` много раз подряд и подсказывает движение
   получше, [`lua/plugin/hardtime.lua`](files/nvim/lua/plugin/hardtime.lua).
 
