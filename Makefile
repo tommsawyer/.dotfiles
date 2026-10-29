@@ -79,18 +79,18 @@ bookokrat:
 		echo; sed '/^#/d' files/bookokrat/themes.yaml; \
 	} >"$(BOOKOKRAT_CONFIG).tmp" && mv "$(BOOKOKRAT_CONFIG).tmp" "$(BOOKOKRAT_CONFIG)"
 
-# tock writes its tock.yaml itself (last_update_check), so not a link: only file.path is set in it,
-# the activity log next to the teamlead notes; a second run changes nothing
+# tock writes its tock.yaml itself, so not a link: only these keys are set in it, the activity log
+# next to the teamlead notes and the tag colour of the current theme (`theme` switches it, the other
+# colours come from env.sh); last_update_check goes, updates come from brew
 TOCK_CONFIG := $(HOME)/.config/tock/tock.yaml
 TOCK_FILE := $(HOME)/Documents/teamlead/stats/stats.txt
 tock:
 	mkdir -p "$(dir $(TOCK_CONFIG))" "$(dir $(TOCK_FILE))"
-	@touch "$(TOCK_CONFIG)"
-	@awk -v p="$(TOCK_FILE)" '/^[^ \t#]/ { inf = 0 } \
-		/^file:/ { print; print "    path: " p; inf = seen = 1; next } \
-		inf && /^[ \t]+path:/ { next } { print } \
-		END { if (!seen) printf "file:\n    path: %s\n", p }' "$(TOCK_CONFIG)" >"$(TOCK_CONFIG).tmp" && \
-		mv "$(TOCK_CONFIG).tmp" "$(TOCK_CONFIG)"
+	@. files/theme/env.sh && ruby -ryaml -e 'f, path, tag = ARGV; \
+		c = (File.exist?(f) && YAML.unsafe_load_file(f)) || {}; c.delete("last_update_check"); \
+		c.merge!("check_updates" => false, "time_format" => "24", "weekly_target" => "40h"); \
+		(c["file"] ||= {})["path"] = path; (c["theme"] ||= {})["tag"] = tag; \
+		File.write(f, c.to_yaml.delete_prefix("---\n"))' "$(TOCK_CONFIG)" "$(TOCK_FILE)" "$$thm_green"
 
 spell:
 	mkdir -p "$(HOME)/.local/share/nvim/site/spell"

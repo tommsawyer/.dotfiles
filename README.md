@@ -468,13 +468,13 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 - **tmux:** статус-бар, рамки и попапы.
 - **Открытые shell** — со следующего промпта: промпт, fzf, bat, delta.
 
-То, что запускается после переключения (lazygit, k9s, bookokrat, `C-f s`, `C-f a`),
+То, что запускается после переключения (lazygit, k9s, bookokrat, tock, `C-f s`, `C-f a`),
 открывается уже в новой теме. **nvim и Claude Code** нужно перезапустить.
 В Claude Code тема своя (`/theme`).
 
 Всё, что зависит от темы, задаёт [`files/theme/env.sh`](files/theme/env.sh):
 палитру и переменные `BAT_THEME`, `DELTA_FEATURES`, `LG_CONFIG_FILE`,
-`K9S_SKIN` и `FZF_DEFAULT_OPTS`. Его подключают zshrc, команда `theme` (она
+`K9S_SKIN`, `FZF_DEFAULT_OPTS` и цвета tock (`TOCK_COLOR_*`). Его подключают zshrc, команда `theme` (она
 же копирует переменные в окружение tmux для попапов) и пикеры tmux. nvim
 читает тему в [`lua/theme.lua`](files/nvim/lua/theme.lua).
 
@@ -492,11 +492,14 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
   там нужную. Тема, переключённая при открытой читалке, применится, когда
   её перезапустишь, если она до этого сама не перезапишет конфиг.
 - `tock` — трекер времени в терминале (`tock start -p team -d "Ревью"`, `tock stop`,
-  `tock report --today`). Свой `tock.yaml` он пишет сам, поэтому он не
-  линкуется: `make tock` прописывает в нём `file.path`, лог задач лежит в
-  `~/Documents/teamlead/stats/stats.txt`. Запущенная задача видна в
-  статус-баре tmux перед git-веткой
-  ([`files/tmux/tock.sh`](files/tmux/tock.sh)).
+  `tock report --today`, `tock calendar`). Свой `tock.yaml` он пишет сам, поэтому
+  он не линкуется: `make tock` прописывает в нём только свои ключи — лог задач в
+  `~/Documents/teamlead/stats/stats.txt`, 24-часовое время, норму 40h в неделю,
+  без проверки обновлений (они приходят из brew) и цвет тегов. Остальные цвета
+  темы onedark tock берёт из `TOCK_COLOR_*` в
+  [`files/theme/env.sh`](files/theme/env.sh), а цвет тегов `theme` меняет в
+  `tock.yaml`: переменной для него у tock нет. Запущенная задача видна в
+  статус-баре tmux перед git-веткой ([`files/tmux/tock.sh`](files/tmux/tock.sh)).
 - Алиасы: `vim` → `nvim`, `rg` всегда с `--hidden`, `coverage` запускает
   `go test` и открывает HTML-отчёт о покрытии.
 - Полный список программ — в [`files/Brewfile`](files/Brewfile).
@@ -509,9 +512,9 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 | Цель | Что делает |
 |---|---|
-| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat, путь лога tock |
+| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat, настройки tock |
 | `make bookokrat` | вставляет темы onedark в `~/.config/bookokrat/config.yaml` |
-| `make tock` | прописывает путь лога в `~/.config/tock/tock.yaml` |
+| `make tock` | прописывает путь лога, норму и цвет тегов в `~/.config/tock/tock.yaml` |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
 | `make check` | быстрые проверки: zsh, tmux, kitty, shellcheck, yaml, json, lua-language-server, запуск nvim |
 | `make fmt` | форматирует Lua через lua_ls, так же, как при сохранении в nvim |

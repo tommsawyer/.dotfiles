@@ -2,7 +2,7 @@
 # The current theme, onedark warmer (dark) or onedark light: what `theme light|dark` wrote to
 # ~/.local/state/theme, dark without it. Sets its palette (thm_*, for the zsh prompt and the
 # fzf pickers), its iTerm profile (thm_iterm, iterm/profile.json) and exports what makes bat,
-# delta, lazygit, k9s and fzf follow it.
+# delta, lazygit, k9s, fzf and tock follow it.
 # Sourced by zshrc (again at a prompt after a switch), the tmux pickers and `theme`, which also
 # copies the exports into the tmux environment for its popups.
 # Lives in ~/.config/theme (the whole folder is linked by `make symlinks`).
@@ -36,6 +36,12 @@ export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=info:$thm_yellow,prompt:$thm_purple,pointer:$thm_orange,marker:$thm_green,spinner:$thm_purple \
   --color=header:$thm_cyan,border:$thm_grey,gutter:$thm_bg0,separator:$thm_grey \
   --color=scrollbar:$thm_grey,query:${thm_fg}:regular"
+
+# tock (its own names for the roles: highlight is durations, secondary is today in the calendar);
+# the tag colour has no env var, `theme` writes it to tock.yaml
+export TOCK_THEME_NAME=custom TOCK_COLOR_PRIMARY="$thm_blue" TOCK_COLOR_SECONDARY="$thm_red" \
+  TOCK_COLOR_TEXT="$thm_fg" TOCK_COLOR_SUBTEXT="$thm_light_grey" TOCK_COLOR_FAINT="$thm_grey" \
+  TOCK_COLOR_HIGHLIGHT="$thm_yellow"
 
 # the escape for text in a palette colour: thm_ansi "#57A5E5" -> \033[38;2;87;165;229m
 thm_ansi() {
