@@ -29,12 +29,12 @@ fi
 . ~/.config/theme/env.sh
 
 if [ "$1" = list ]; then
-  # a shell in the pane: claude has exited without SessionEnd (killed), its state is stale;
-  # the title without the status glyph claude puts in front ("✳ ", "⠐ "), as in tmux.conf
-  tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{session_name}:#{window_index}	#{pane_current_command}	#{s/^[^A-Za-z0-9А-Яа-яЁё]+ //:pane_title}" 2>/dev/null |
+  # @agent_live: no shell in the pane, else claude has exited without SessionEnd (killed) and its
+  # state is stale; @agent_task: the title without claude's status glyph (both in tmux.conf)
+  tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{session_name}:#{window_index}	#{E:@agent_live}	#{E:@agent_task}" 2>/dev/null |
     awk -F '\t' -v wait="$(thm_ansi "$thm_yellow")" -v working="$(thm_ansi "$thm_cyan")" \
       -v done="$(thm_ansi "$thm_green")" -v other="$(thm_ansi "$thm_grey")" '
-      $1 == "" || $4 ~ /^-?(zsh|bash|sh)$/ { next }
+      $1 == "" || !$4 { next }
       {
         if ($1 == "wait") { rank = 0; icon = wait "󰂞" }
         else if ($1 == "done") { rank = 1; icon = done "󰗠" }
@@ -51,8 +51,8 @@ fi
 
 # the first waiting agent, else the first finished one you have not seen; the pane you are in skipped
 if [ "$1" = next ]; then
-  pane=$(tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{pane_current_command}" 2>/dev/null |
-    awk -F '\t' -v here="$2" '$2 == here || $3 ~ /^-?(zsh|bash|sh)$/ { next }
+  pane=$(tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{E:@agent_live}" 2>/dev/null |
+    awk -F '\t' -v here="$2" '$2 == here || !$3 { next }
       $1 == "wait" { print $2; found = 1; exit }
       $1 == "done" && !d { d = $2 }
       END { if (!found && d) print d }')
