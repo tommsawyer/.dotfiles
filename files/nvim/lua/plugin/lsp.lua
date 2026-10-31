@@ -1,3 +1,48 @@
+-- what the servers have in common: diagnostics, keys, starting them. The settings of each server
+-- are in after/lsp/<name>.lua (after: nvim-lspconfig's own lsp/<name>.lua must not override them)
+
+local function set_keys(buf)
+  local function map(lhs, rhs, desc, mode)
+    vim.keymap.set(mode or 'n', lhs, rhs, { buf = buf, desc = desc })
+  end
+  -- the lists go to Trouble, on the built-in gr* / gO keys too (those open quickfix)
+  local function trouble(keys, list, desc)
+    for _, lhs in ipairs(keys) do
+      map(lhs, '<cmd>Trouble ' .. list .. '<cr>', desc .. ' (Trouble)')
+    end
+  end
+
+  map('K', vim.lsp.buf.hover, 'Hover')
+  map('gd', vim.lsp.buf.definition, 'Go to definition')
+  map('ga', vim.lsp.buf.code_action, 'Code action', { 'n', 'v' })
+  trouble({ 'grr' }, 'lsp_references focus=true', 'References')
+  trouble({ 'gi', 'gri' }, 'lsp_implementations focus=true', 'Implementations')
+  trouble({ 'gy', 'grt' }, 'lsp_type_definitions focus=true', 'Type definitions')
+  trouble({ '<leader>s', 'gO' }, 'symbols', 'Symbols')
+end
+
+-- go: add missing / remove unused imports on save (gopls organizeImports),
+-- conform then formats with gofumpt
+local function organize_go_imports(args)
+  local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'gopls' })[1]
+  if not client then
+    return
+  end
+
+  local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
+  params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
+  local result = client:request_sync('textDocument/codeAction', params, 1000, args.buf)
+  for _, action in ipairs(result and result.result or {}) do
+    if not action.edit then
+      local resolved = client:request_sync('codeAction/resolve', action, 1000, args.buf)
+      action = resolved and resolved.result or action
+    end
+    if action.edit then
+      vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+    end
+  end
+end
+
 return {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre', 'BufNewFile' },
@@ -22,127 +67,17 @@ return {
 
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
-      callback = function(args)
-        local buf = args.buf
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buf = buf, desc = 'Hover' })
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buf = buf, desc = 'Go to definition' })
-        vim.keymap.set('n', 'gy', '<cmd>Trouble lsp_type_definitions focus=true<cr>',
-          { buf = buf, desc = 'Type definitions (Trouble)' })
-        vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations focus=true<cr>',
-          { buf = buf, desc = 'Implementations (Trouble)' })
-        vim.keymap.set('n', '<leader>s', '<cmd>Trouble symbols<cr>', { buf = buf, desc = 'Symbols (Trouble)' })
-        -- built-in gr*/gO defaults open quickfix; send the lists to Trouble too
-        vim.keymap.set('n', 'grr', '<cmd>Trouble lsp_references focus=true<cr>',
-          { buf = buf, desc = 'References (Trouble)' })
-        vim.keymap.set('n', 'gri', '<cmd>Trouble lsp_implementations focus=true<cr>',
-          { buf = buf, desc = 'Implementations (Trouble)' })
-        vim.keymap.set('n', 'grt', '<cmd>Trouble lsp_type_definitions focus=true<cr>',
-          { buf = buf, desc = 'Type definitions (Trouble)' })
-        vim.keymap.set('n', 'gO', '<cmd>Trouble symbols<cr>', { buf = buf, desc = 'Symbols (Trouble)' })
-        vim.keymap.set({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, { buf = buf, desc = 'Code action' })
-      end,
+      callback = function(args) set_keys(args.buf) end,
     })
 
-    -- go: add missing / remove unused imports on save (gopls organizeImports),
-    -- conform then formats with gofumpt
     vim.api.nvim_create_autocmd('BufWritePre', {
       group = vim.api.nvim_create_augroup('UserGoImports', { clear = true }),
       pattern = '*.go',
-      callback = function(args)
-        local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'gopls' })[1]
-        if not client then
-          return
-        end
-
-        local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
-        params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
-        local result = client:request_sync('textDocument/codeAction', params, 1000, args.buf)
-        for _, action in ipairs(result and result.result or {}) do
-          if not action.edit then
-            local resolved = client:request_sync('codeAction/resolve', action, 1000, args.buf)
-            action = resolved and resolved.result or action
-          end
-          if action.edit then
-            vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
-          end
-        end
-      end,
+      callback = organize_go_imports,
     })
 
-    vim.lsp.config('gopls', {
-      settings = {
-        gopls = {
-          templateExtensions = { 'html', 'tmpl', 'gotmpl' },
-        },
-      },
-    })
-
-    vim.lsp.config('jsonls', {
-      settings = {
-        json = {
-          schemas = require('schemastore').json.schemas(),
-          validate = { enable = true },
-        },
-      },
-    })
-
-    vim.lsp.config('yamlls', {
-      settings = {
-        yaml = {
-          keyOrdering = false,
-          schemaStore = {
-            enable = false,
-            url = "",
-          },
-          schemas = require('schemastore').yaml.schemas({
-            extra = {
-              -- same url as the catalog entry, so it replaces it: keep the catalog globs and add included files
-              {
-                name = 'gitlab-ci',
-                description = 'GitLab CI: main file and files included from .gitlab/ci/',
-                url =
-                'https://gitlab.com/gitlab-org/gitlab-foss/-/raw/master/app/assets/javascripts/editor/schema/ci.json',
-                fileMatch = {
-                  '**/.gitlab-ci.yml', '**/.gitlab-ci.yaml', '**/*.gitlab-ci.yml', '**/*.gitlab-ci.yaml',
-                  '**/.gitlab/ci/*.yml', '**/.gitlab/ci/*.yaml',
-                },
-              },
-            },
-          }),
-          -- gitlab ci `!reference [job, script]`
-          customTags = { '!reference sequence' },
-        },
-      },
-    })
-
-    vim.lsp.config('basedpyright', {
-      settings = {
-        basedpyright = {
-          disableOrganizeImports = true,                -- ruff does it
-          analysis = { typeCheckingMode = 'standard' }, -- default "recommended" is very noisy
-        },
-      },
-    })
-
-    -- ruff: lint + format + imports; hover comes from basedpyright
-    vim.lsp.config('ruff', {
-      on_attach = function(client) client.server_capabilities.hoverProvider = false end,
-    })
-
-    vim.lsp.config('lua_ls', {
-      settings = {
-        Lua = {
-          runtime = { version = 'LuaJIT' },
-          diagnostics = { globals = { 'vim' } },
-          workspace = {
-            checkThirdParty = false,
-            library = { vim.env.VIMRUNTIME },
-          },
-        },
-      },
-    })
-
-    -- the default filetypes plus go templates
+    -- the default filetypes plus go templates; here, not in after/lsp: that file cannot read
+    -- the config it is a part of
     vim.lsp.config('emmet_language_server', {
       filetypes = vim.list_extend(vim.deepcopy(vim.lsp.config.emmet_language_server.filetypes), { 'templ', 'gotmpl' }),
     })

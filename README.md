@@ -261,10 +261,11 @@ Leader — `,`. Если начать комбинацию и подождать
 Списки открываются в Trouble
 ([`lua/plugin/trouble.lua`](files/nvim/lua/plugin/trouble.lua)).
 
-Серверы описаны в [`lua/plugin/lsp.lua`](files/nvim/lua/plugin/lsp.lua).
-Включает их встроенный `vim.lsp.enable` (список в конце файла), а
-nvim-lspconfig только поставляет конфиги. Сами серверы ставятся через
-Brewfile, Mason не используется. Отдельно настроены:
+Общее для серверов лежит в [`lua/plugin/lsp.lua`](files/nvim/lua/plugin/lsp.lua),
+настройки каждого — в [`after/lsp/<имя>.lua`](files/nvim/after/lsp). Включает их
+встроенный `vim.lsp.enable` (список в конце `lsp.lua`), а nvim-lspconfig только
+поставляет конфиги. Сами серверы ставятся через Brewfile, Mason не используется.
+Отдельно настроены:
 
 - gopls — понимает шаблоны;
 - jsonls и yamlls — схемы из schemastore, для yaml ещё GitLab CI;
