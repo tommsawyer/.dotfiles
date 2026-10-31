@@ -80,16 +80,17 @@ return {
   },
 
   keys = {
-    { "<leader>go", function() Snacks.gitbrowse() end,                                                 desc = "Open in browser",      mode = { "n", "v" } },
-    { "<leader>n",  function() Snacks.notifier.show_history() end,                                     desc = "Notification history" },
-    { "<leader>z",  function() Snacks.zen() end,                                                       desc = "Zen mode" },
+    { "<leader>go", function() Snacks.gitbrowse() end,                                                        desc = "Open in browser",      mode = { "n", "v" } },
+    { "<leader>n",  function() Snacks.notifier.show_history() end,                                            desc = "Notification history" },
+    { "<leader>z",  function() Snacks.zen() end,                                                              desc = "Zen mode" },
 
-    { "<space>",    function() Snacks.picker.files({ exclude = exclude, transform = lower_text }) end, desc = "Files" },
-    { "<leader>f",  function() Snacks.picker.grep({ exclude = exclude }) end,                          desc = "Live Grep" },
-    { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end,                              desc = "LSP workspace symbols" },
-    { "<leader>h",  function() Snacks.picker.help() end,                                               desc = "Help tags" },
-    { "<leader>b",  function() Snacks.picker.buffers() end,                                            desc = "Buffers" },
-    { "<leader>gs", function() Snacks.picker.git_status() end,                                         desc = "Changed files" },
-    { "<leader>gd", function() Snacks.picker.git_diff() end,                                           desc = "Changed hunks" },
+    { "<space>",    function() Snacks.picker.files({ exclude = exclude, transform = lower_text }) end,        desc = "Files" },
+    { "<leader>f",  function() Snacks.picker.grep({ exclude = exclude }) end,                                 desc = "Live Grep" },
+    { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end,                                     desc = "LSP workspace symbols" },
+    { "<leader>h",  function() Snacks.picker.help() end,                                                      desc = "Help tags" },
+    { "<leader>b",  function() Snacks.picker.buffers() end,                                                   desc = "Buffers" },
+    { "<leader>gs", function() Snacks.picker.git_status() end,                                                desc = "Changed files" },
+    -- against the base gitsigns diffs every buffer against (:Gitsigns change_base <rev> true), else the index
+    { "<leader>gd", function() Snacks.picker.git_diff({ base = require("gitsigns.config").config.base }) end, desc = "Changed hunks" },
   },
 }
