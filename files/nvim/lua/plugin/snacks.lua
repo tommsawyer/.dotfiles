@@ -89,5 +89,7 @@ return {
     { "<leader>d",  function() Snacks.picker.lsp_workspace_symbols() end,                              desc = "LSP workspace symbols" },
     { "<leader>h",  function() Snacks.picker.help() end,                                               desc = "Help tags" },
     { "<leader>b",  function() Snacks.picker.buffers() end,                                            desc = "Buffers" },
+    { "<leader>gs", function() Snacks.picker.git_status() end,                                         desc = "Changed files" },
+    { "<leader>gd", function() Snacks.picker.git_diff() end,                                           desc = "Changed hunks" },
   },
 }
