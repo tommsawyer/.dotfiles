@@ -2,6 +2,8 @@ gui:
   nerdFontsVersion: "3"
   expandFocusedSidePanel: true
   border: single
+  showNumstatInFilesView: true
+  showRandomTip: false
   # dark unless LG_CONFIG_FILE adds light.yml (`theme light`, ~/.config/theme/env.sh); also what
   # {{colorScheme}} passes to delta below
   colorScheme: dark
