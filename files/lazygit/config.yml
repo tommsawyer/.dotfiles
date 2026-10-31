@@ -67,3 +67,41 @@ git:
 
 os:
   editPreset: nvim # e opens the file in nvim inside the popup
+
+# worktrees with a tmux session of their own (~/.config/tmux/worktree.sh): the keys of the Worktrees
+# tab (panel 2, ]) take over the built-in ones, which know nothing about tmux; space still switches
+# lazygit itself to the worktree
+customCommands:
+  # spelled out twice: lazygit does not load a config with yaml aliases
+  - key: <ctrl+n>
+    context: global
+    description: New worktree with a tmux session
+    prompts:
+      - type: input
+        title: Branch, new or existing
+        key: Branch
+    command: ~/.config/tmux/worktree.sh new {{.Form.Branch | quote}}
+    output: log
+  - key: "n"
+    context: worktrees
+    description: New worktree with a tmux session
+    prompts:
+      - type: input
+        title: Branch, new or existing
+        key: Branch
+    command: ~/.config/tmux/worktree.sh new {{.Form.Branch | quote}}
+    output: log
+  - key: <enter>
+    context: worktrees
+    description: Open the tmux session of the worktree
+    command: ~/.config/tmux/worktree.sh open {{.SelectedWorktree.Path | quote}}
+    output: log
+  - key: d
+    context: worktrees
+    description: Remove the worktree, its tmux session and its branch if merged
+    prompts:
+      - type: confirm
+        title: Remove worktree
+        body: "Remove {{.SelectedWorktree.Path}} and its tmux session? Whatever runs in the session is killed."
+    command: ~/.config/tmux/worktree.sh rm {{.SelectedWorktree.Path | quote}}
+    output: log

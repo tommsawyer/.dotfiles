@@ -8,4 +8,7 @@ window=$1 client=$2
 shift 2
 tmux set -w -t "$window" window-style dim=40 \; set -w -t "$window" window-active-style dim=40
 tmux display-popup -c "$client" "$@"
-tmux set -wu -t "$window" window-style \; set -wu -t "$window" window-active-style
+# the window may be gone by now (worktree.sh removes the session it is in), and run-shell would
+# show the error over the pane
+tmux set -wu -t "$window" window-style \; set -wu -t "$window" window-active-style 2>/dev/null
+exit 0
