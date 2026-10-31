@@ -1,3 +1,2 @@
-files/nvim/plugin
 .DS_Store
 files/nvim/lua/plugin/local.lua
