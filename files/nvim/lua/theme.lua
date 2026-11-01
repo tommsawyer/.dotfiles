@@ -12,6 +12,4 @@ return {
   style = light and "light" or "warmer",
   -- bg_d: the picker backdrop
   bg_d = light and "#c9c9c9" or "#1b1c1e",
-  -- what an inactive split fades into (vimade): bg_d too, in light bg2, its bg_d darkens too much
-  dim = light and "#e6e6e6" or "#1b1c1e",
 }
