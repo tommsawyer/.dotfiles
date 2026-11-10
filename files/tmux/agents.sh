@@ -1,6 +1,8 @@
 #!/bin/sh
 # prefix a: fzf over the panes running claude code in every session, the ones waiting for you
 # first, with a live preview of the selected pane; enter jumps there (session, window and pane).
+# Each line ends with how long ago the pane was last visited (@agent_visited, set by the
+# pane-focus-in hook in tmux.conf).
 # prefix A (`agents.sh next <pane> <client>`): straight to the agent that needs you, without fzf.
 # The state comes from claude's hooks (files/claude/settings.json): they run `agents.sh state ...`,
 # which keeps it in the pane option @agent_state, so it goes away with the pane. "done" turns
@@ -31,9 +33,9 @@ fi
 if [ "$1" = list ]; then
   # @agent_live: no shell in the pane, else claude has exited without SessionEnd (killed) and its
   # state is stale; @agent_task: the title without claude's status glyph (both in tmux.conf)
-  tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{session_name}:#{window_index}	#{E:@agent_live}	#{E:@agent_task}" 2>/dev/null |
+  tmux list-panes -a -F "#{@agent_state}	#{pane_id}	#{session_name}:#{window_index}	#{E:@agent_live}	#{E:@agent_task}	#{@agent_visited}" 2>/dev/null |
     awk -F '\t' -v wait="$(thm_ansi "$thm_yellow")" -v working="$(thm_ansi "$thm_cyan")" \
-      -v done="$(thm_ansi "$thm_green")" -v other="$(thm_ansi "$thm_grey")" '
+      -v done="$(thm_ansi "$thm_green")" -v other="$(thm_ansi "$thm_grey")" -v now="$(date +%s)" '
       $1 == "" || !$4 { next }
       {
         if ($1 == "wait") { rank = 0; icon = wait "󰂞" }
@@ -41,9 +43,20 @@ if [ "$1" = list ]; then
         else if ($1 == "working") { rank = 2; icon = working "󰔟" }
         else if ($1 == "seen") { rank = 3; icon = other "󰄬" }
         else { rank = 3; icon = other "○" }
+        # how long ago the pane was last visited (@agent_visited, the pane-focus-in hook);
+        # hidden while it has never been visited
+        vis = ""
+        if ($6 ~ /^[0-9]+$/) {
+          age = now - $6
+          if (age < 60) hum = "now"
+          else if (age < 3600) hum = int(age / 60) "m"
+          else if (age < 86400) hum = int(age / 3600) "h"
+          else hum = int(age / 86400) "d"
+          vis = other "󰥔 " hum "\033[0m "
+        }
         # the title goes last: awk pads by bytes, a cyrillic one would break the columns;
         # session:window once more, hidden, for the preview label
-        printf "%d\t%s\t%s\033[0m %-16s %s\t%s\n", rank, $2, icon, $3, $5, $3
+        printf "%d\t%s\t%s\033[0m %-16s %s %s\t%s\n", rank, $2, icon, $3, $5, vis, $3
       }' |
     sort -s -n -k1,1 | cut -f2-
   exit
