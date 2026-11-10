@@ -4,7 +4,7 @@
 
 # Styles...
 foreground: &foreground "#383a42"
-# the terminal background as is, not "#fafafa", so it matches iTerm
+# the terminal background as is, not "#fafafa", so it matches kitty
 # even when k9s falls back to 256 colors (no COLORTERM=truecolor, e.g. in an old tmux server)
 background: &background "default"
 black: &black "#fafafa"

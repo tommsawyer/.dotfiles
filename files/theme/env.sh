@@ -1,7 +1,7 @@
 # shellcheck shell=sh disable=SC2034 # thm_* are for the scripts that source this
 # The current theme, onedark warmer (dark) or onedark light: what `theme light|dark` wrote to
 # ~/.local/state/theme, dark without it. Sets its palette (thm_*, for the zsh prompt and the
-# fzf pickers), its iTerm profile (thm_iterm, iterm/profile.json) and exports what makes bat,
+# fzf pickers) and exports what makes bat,
 # delta, lazygit, k9s, fzf and tock follow it.
 # Sourced by zshrc (again at a prompt after a switch), the tmux pickers and `theme`, which also
 # copies the exports into the tmux environment for its popups.
@@ -15,7 +15,7 @@ if [ "$THEME" = light ]; then
   thm_grey="#A0A1A7" thm_light_grey="#818387"
   thm_blue="#4078F2" thm_cyan="#0184BC" thm_yellow="#986801" thm_purple="#A626A4"
   thm_green="#50A14F" thm_orange="#C18401" thm_red="#E45649"
-  thm_onedark=onedark-light thm_iterm="OneDark Light" thm_bookokrat="OneDark Light"
+  thm_onedark=onedark-light thm_bookokrat="OneDark Light"
   thm_tock_text=$thm_fg thm_tock_blue=$thm_blue thm_tock_red=$thm_red
   export LG_CONFIG_FILE="$HOME/Library/Application Support/lazygit/config.yml,$HOME/Library/Application Support/lazygit/light.yml"
 else
@@ -25,7 +25,7 @@ else
   thm_green="#8FB573" thm_orange="#C49060"
   # the warm style's red, a bit softer than warmer's #DE5D68
   thm_red="#E16D77"
-  thm_onedark=onedark-warmer thm_iterm="OneDark Warmer" thm_bookokrat="OneDark Warmer"
+  thm_onedark=onedark-warmer thm_bookokrat="OneDark Warmer"
   # tock draws today / the selected day in its text colour on red / blue: fg on the palette's
   # accents is ~1.3:1, so a brighter text and deeper accents (~3:1 both on them and on the background)
   thm_tock_text="#DCDFE4" thm_tock_blue="#207FCD" thm_tock_red="#D84350"

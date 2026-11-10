@@ -76,8 +76,6 @@ _theme_sync() {
   [[ -r $f && $(<$f) == light ]] && t=light
   [[ $t == $THEME ]] || source ~/.config/theme/env.sh
 }
-# a new iTerm window opens with the default profile, dark; under tmux `theme` switches the terminal
-[[ -z $TMUX && $TERM_PROGRAM == iTerm.app && $THEME == light ]] && print -n "\e]1337;SetProfile=$thm_iterm\a"
 
 # Prompt: "dotfiles/files/tmux ❯", the path from the repo root (outside a repo from ~),
 # ❯ red after a failed command. Right: the exit code with the signal name (130 INT), how

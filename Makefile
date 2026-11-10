@@ -1,7 +1,6 @@
 # paths are taken from wherever the repo is cloned
 DOTFILES := $(CURDIR)
 LAZYGIT_DIR := $(HOME)/Library/Application Support/lazygit
-ITERM_PROFILES_DIR := $(HOME)/Library/Application Support/iTerm2/DynamicProfiles
 K9S_DIR := $(HOME)/Library/Application Support/k9s
 DELTA_CONFIG := $(DOTFILES)/files/git/delta.gitconfig
 
@@ -24,12 +23,11 @@ files/lazygit/light.yml|$(LAZYGIT_DIR)/light.yml
 files/k9s/config.yaml|$(K9S_DIR)/config.yaml
 files/k9s/skins/onedark-warmer.yaml|$(K9S_DIR)/skins/onedark-warmer.yaml
 files/k9s/skins/onedark-light.yaml|$(K9S_DIR)/skins/onedark-light.yaml
-files/iterm/profile.json|$(ITERM_PROFILES_DIR)/dotfiles.json
 files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
 
-install: homebrew brew npm symlinks terminfo iterm spell bookokrat tock
+install: homebrew brew npm symlinks terminfo spell bookokrat tock
 
 homebrew:
 	@command -v brew >/dev/null 2>&1 || \
@@ -43,14 +41,12 @@ npm:
 	npm install -g --prefix "$(HOME)/.local" @olrtg/emmet-language-server
 
 symlinks:
-	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(HOME)/.claude" "$(LAZYGIT_DIR)" "$(ITERM_PROFILES_DIR)" "$(K9S_DIR)/skins"
+	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(HOME)/.claude" "$(LAZYGIT_DIR)" "$(K9S_DIR)/skins"
 	@# a real file in the way is moved to *.backup
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r src dst; do \
 		if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then mv "$$dst" "$$dst.backup" && echo "backed up $$dst"; fi; \
 		ln -sfn "$(DOTFILES)/$$src" "$$dst" && echo "$$dst -> $$src"; \
 	done
-	# drop dangling links left from renamed profiles, iTerm complains about them on start
-	@find "$(ITERM_PROFILES_DIR)" -type l ! -exec test -e {} \; -print -delete
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
 		git config --global --add include.path "$(DELTA_CONFIG)"
@@ -58,11 +54,6 @@ symlinks:
 # the system tic: ~/.terminfo is read by the system ncurses too, and brew's tic writes a format it may not read
 terminfo:
 	/usr/bin/tic -x -o "$(HOME)/.terminfo" "$(DOTFILES)/files/tmux/tmux-256color.terminfo"
-
-# global prefs, a profile cannot hold them; iTerm picks them up on restart
-iterm:
-	@# Minimal theme: the title bar and tabs take the terminal background
-	defaults write com.googlecode.iterm2 TabStyleWithAutomaticOption -int 5
 
 # bookokrat writes its config.yaml itself, so not a link: the onedark themes go in place of
 # its custom_themes section (to the end of the file) and theme: is set to the current one
@@ -131,4 +122,4 @@ clean:
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r _ dst; do [ ! -L "$$dst" ] || rm "$$dst"; done
 	-git config --global --fixed-value --unset-all include.path "$(DELTA_CONFIG)"
 
-.PHONY: install homebrew brew npm symlinks terminfo iterm spell bookokrat tock nvim-sync check fmt clean
+.PHONY: install homebrew brew npm symlinks terminfo spell bookokrat tock nvim-sync check fmt clean

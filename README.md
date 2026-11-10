@@ -58,7 +58,7 @@
 - **Git через lazygit.** Частые команды `git` в терминале подсказывают, как
   сделать то же в lazygit.
 - **Светлая тема одной командой.** `theme light` / `theme dark` переключает
-  iTerm или kitty, tmux и всё остальное, тема macOS не трогается.
+  kitty, tmux и всё остальное, тема macOS не трогается.
 
 <p align="right"><a href="#содержание">↑ к содержанию</a></p>
 
@@ -81,25 +81,18 @@ make install
 > Если на месте ссылки лежит обычный файл, он переименовывается в `*.backup`.
 > Убрать все ссылки можно через `make clean`.
 
-После установки остаются два шага:
+После установки остаётся один шаг:
 
-1. **iTerm2:** Settings → Profiles → выбрать «OneDark Warmer» → Other Actions → Set
-   as Default. Сам профиль (цвета, шрифт, без меток команд) подключается из
-   [`files/iterm/profile.json`](files/iterm/profile.json) как dynamic profile.
-   Его guid не меняется, так что это делается один раз. Цвета и шрифт меняются
-   в самом файле: правка профиля в настройках iTerm переписывает его, оставляя
-   только имя и guid.
-2. **Neovim:** при первом запуске `nvim` сам ставит плагины.
+1. **Neovim:** при первом запуске `nvim` сам ставит плагины.
 
-**kitty** вместо iTerm настраивать не нужно: он ставится из Brewfile, а
-[`files/kitty`](files/kitty) линкуется в `~/.config/kitty`. Интерфейс
-минимальный: без заголовка окна, вкладок и сплитов (их делает tmux), из
-сочетаний клавиш оставлены только обычные для терминала: `Cmd-C`/`Cmd-V`,
-`Cmd-N` (новое окно), `Cmd-W`, `Cmd-Q`, `Cmd-K` (очистить), `Cmd-=`/`Cmd--`/`Cmd-0`
-(размер шрифта), `Ctrl-Cmd-F` (полный экран). Shift+Enter, Ctrl+Enter и Ctrl+.
-kitty отправляет кодами CSI u, иначе tmux их не различает. Ссылки, текущую
-папку и прогресс-бар tmux включает для kitty в `terminal-features`: в отличие
-от iTerm, kitty их сам не сообщает.
+**kitty** ставится из Brewfile, а [`files/kitty`](files/kitty) линкуется в
+`~/.config/kitty`. Интерфейс минимальный: без заголовка окна, вкладок и
+сплитов (их делает tmux), из сочетаний клавиш оставлены только обычные для
+терминала: `Cmd-C`/`Cmd-V`, `Cmd-N` (новое окно), `Cmd-W`, `Cmd-Q`, `Cmd-K`
+(очистить), `Cmd-=`/`Cmd--`/`Cmd-0` (размер шрифта), `Ctrl-Cmd-F` (полный
+экран). Shift+Enter, Ctrl+Enter и Ctrl+. kitty отправляет кодами CSI u, иначе
+tmux их не различает. Ссылки, текущую папку и прогресс-бар tmux включает для
+kitty в `terminal-features`: kitty их сам не сообщает.
 
 > [!WARNING]
 > `git status`, `commit`, `push` и другие частые команды в терминале не
@@ -488,13 +481,10 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 Сразу переключаются:
 
-- **iTerm.** Профиль «OneDark Light» наследует «OneDark Warmer» и меняет
-  только цвета. Команда переключает профиль во всех окнах с tmux, а новое окно
-  iTerm берёт его при запуске zsh.
 - **kitty:** все открытые окна, через сокет удалённого управления
   (`listen_on` в [`kitty.conf`](files/kitty/kitty.conf)). Новый kitty берёт
   тему при запуске: `theme.py` подключает `onedark-warmer.conf` или
-  `onedark-light.conf`, те же цвета, что в профилях iTerm.
+  `onedark-light.conf`, те же цвета, что в tmux, bat и k9s.
 - **tmux:** статус-бар, рамки и попапы.
 - **Открытые shell** — со следующего промпта: промпт, fzf, bat, delta.
 
@@ -542,7 +532,7 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 
 | Цель | Что делает |
 |---|---|
-| `make install` | Homebrew, Brewfile, emmet, симлинки, настройки iTerm2, словарь, темы bookokrat, настройки tock |
+| `make install` | Homebrew, Brewfile, emmet, симлинки, словарь, темы bookokrat, настройки tock |
 | `make bookokrat` | вставляет темы onedark в `~/.config/bookokrat/config.yaml` |
 | `make tock` | прописывает путь лога, норму и цвет тегов в `~/.config/tock/tock.yaml` |
 | `make symlinks` | создаёт ссылки на конфиги (список — `LINKS` в [`Makefile`](Makefile)) |
@@ -565,7 +555,6 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `files/theme/theme` | `~/.local/bin/theme` |
 | `files/lazygit/config.yml`, `light.yml` | `~/Library/Application Support/lazygit/` |
 | `files/k9s/config.yaml`, `skins/onedark-*.yaml` | `~/Library/Application Support/k9s/` |
-| `files/iterm/profile.json` | `~/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json` |
 | `files/claude/settings.json` | `~/.claude/settings.json` (настройки и хуки Claude Code) |
 | `files/git/delta.gitconfig` | подключается из `~/.gitconfig` |
 
