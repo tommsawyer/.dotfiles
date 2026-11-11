@@ -12,10 +12,15 @@ setopt extended_history share_history hist_expire_dups_first hist_ignore_dups \
 alias history='fc -il 1'
 
 # completion: a menu walked with arrows, case-insensitive, matches inside words too;
-# -i skips completion dirs with unsafe permissions instead of asking about them
+# -i skips completion dirs with unsafe permissions instead of asking about them.
+# On apple silicon brew's zsh completions (kubectx, k3d, ...) are not in the default fpath
+fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
 zmodload zsh/complist
 autoload -Uz compinit && compinit -i
 autoload -Uz bashcompinit && bashcompinit
+# kubectl: completes subcommands, flags and names of pods/contexts/namespaces (names come
+# from the current namespace, so kubens first); regenerates per shell, costs one kubectl run
+command -v kubectl >/dev/null && source <(kubectl completion zsh)
 setopt complete_in_word always_to_end
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
