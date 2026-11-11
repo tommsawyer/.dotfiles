@@ -7,7 +7,7 @@ return {
         enable = false,
         url = "",
       },
-      schemas = require('schemastore').yaml.schemas({
+      schemas = vim.tbl_extend('force', require('schemastore').yaml.schemas({
         extra = {
           -- same url as the catalog entry, so it replaces it: keep the catalog globs and add included files
           {
@@ -21,6 +21,12 @@ return {
             },
           },
         },
+      }), {
+        -- kubernetes is not in schemastore: bundled in yamlls as the `kubernetes` keyword, off
+        -- by default. The docs are the same kubectl explain reads (K = hover, field completion,
+        -- validation). The kubectl edit temp file matches its own glob, so `kedit` gets the
+        -- schema wherever it runs; add work repo globs here when needed
+        kubernetes = { '**/k8stest/**/*.yaml', '**/kubectl-edit-*.yaml' },
       }),
       -- gitlab ci `!reference [job, script]`
       customTags = { '!reference sequence' },
