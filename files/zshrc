@@ -21,6 +21,8 @@ autoload -Uz bashcompinit && bashcompinit
 # kubectl: completes subcommands, flags and names of pods/contexts/namespaces (names come
 # from the current namespace, so kubens first); regenerates per shell, costs one kubectl run
 command -v kubectl >/dev/null && source <(kubectl completion zsh) && compdef _kubectl k
+# stern: completion knows --namespace/--context values and deployment/<name> queries
+command -v stern >/dev/null && source <(stern --completion=zsh)
 setopt complete_in_word always_to_end
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
