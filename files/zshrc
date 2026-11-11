@@ -20,7 +20,7 @@ autoload -Uz compinit && compinit -i
 autoload -Uz bashcompinit && bashcompinit
 # kubectl: completes subcommands, flags and names of pods/contexts/namespaces (names come
 # from the current namespace, so kubens first); regenerates per shell, costs one kubectl run
-command -v kubectl >/dev/null && source <(kubectl completion zsh)
+command -v kubectl >/dev/null && source <(kubectl completion zsh) && compdef _kubectl k
 setopt complete_in_word always_to_end
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
@@ -80,7 +80,7 @@ add-zsh-hook preexec _title_preexec
 # reads the file only and never calls the API, so an unreachable cluster does not slow the
 # prompt down. When the custom k* functions settle in, add them to _k8s_words.
 typeset -g _k8s_seen= _k8s_ctx= _k8s_ns= _k8s_mtime=0
-_k8s_words=(kubectl kubectx kubens stern helm k3d)
+_k8s_words=(k kubectl kubectx kubens stern helm k3d)
 _k8s_preexec() {
   [[ -n $_k8s_seen ]] && return
   local w
@@ -219,6 +219,7 @@ export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
 
 alias vim='nvim'
 alias rg='rg --hidden'
+alias k='kubectl'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 alias lg='lazygit'
 
