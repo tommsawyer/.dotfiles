@@ -1,7 +1,6 @@
 # paths are taken from wherever the repo is cloned
 DOTFILES := $(CURDIR)
 LAZYGIT_DIR := $(HOME)/Library/Application Support/lazygit
-K9S_DIR := $(HOME)/Library/Application Support/k9s
 DELTA_CONFIG := $(DOTFILES)/files/git/delta.gitconfig
 
 # on a fresh mac brew is not on PATH yet, and each recipe line is a new shell
@@ -20,9 +19,6 @@ files/theme|$(HOME)/.config/theme
 files/theme/theme|$(HOME)/.local/bin/theme
 files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
 files/lazygit/light.yml|$(LAZYGIT_DIR)/light.yml
-files/k9s/config.yaml|$(K9S_DIR)/config.yaml
-files/k9s/skins/onedark-warmer.yaml|$(K9S_DIR)/skins/onedark-warmer.yaml
-files/k9s/skins/onedark-light.yaml|$(K9S_DIR)/skins/onedark-light.yaml
 files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
@@ -41,7 +37,7 @@ npm:
 	npm install -g --prefix "$(HOME)/.local" @olrtg/emmet-language-server
 
 symlinks:
-	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(HOME)/.claude" "$(LAZYGIT_DIR)" "$(K9S_DIR)/skins"
+	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(HOME)/.claude" "$(LAZYGIT_DIR)"
 	@# a real file in the way is moved to *.backup
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r src dst; do \
 		if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then mv "$$dst" "$$dst.backup" && echo "backed up $$dst"; fi; \
@@ -100,7 +96,7 @@ check:
 		rc=$$?; tmux -L dotfiles-check kill-server 2>/dev/null; exit $$rc
 	@echo "sh"; shellcheck -x files/tmux/*.sh files/theme/theme files/theme/env.sh
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
-		files/lazygit/config.yml files/lazygit/light.yml files/k9s/config.yaml files/k9s/skins/*.yaml files/bookokrat/themes.yaml
+		files/lazygit/config.yml files/lazygit/light.yml files/bookokrat/themes.yaml
 	@echo "json"; jq empty files/claude/settings.json
 	@# load_config only warns about unknown keys, so any output is a failure
 	@echo "kitty"; out=$$(kitty +runpy 'import sys; from kitty.config import load_config; \

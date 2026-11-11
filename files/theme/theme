@@ -1,6 +1,6 @@
 #!/bin/sh
 # theme [light|dark|toggle]: onedark light or warmer for kitty, tmux and what starts
-# afterwards (bat, delta, lazygit, k9s, fzf, bookokrat, tock, new shells; open shells at their next
+# afterwards (bat, delta, lazygit, fzf, bookokrat, tock, new shells; open shells at their next
 # prompt). nvim and claude code take it on restart. Without an argument prints the current one.
 # ~/.local/bin/theme links here (make symlinks); the palette and exports are in env.sh.
 
@@ -22,8 +22,8 @@ echo "$new" >"$state"
 . ~/.config/theme/env.sh
 
 if tmux has-session 2>/dev/null; then
-  # for popups (lazygit, k9s, the pickers) and new panes; tmux.conf takes its palette itself
-  for var in THEME BAT_THEME DELTA_FEATURES K9S_SKIN LG_CONFIG_FILE FZF_DEFAULT_OPTS; do
+  # for popups (lazygit, the pickers) and new panes; tmux.conf takes its palette itself
+  for var in THEME BAT_THEME DELTA_FEATURES LG_CONFIG_FILE FZF_DEFAULT_OPTS; do
     if eval "[ -n \"\${$var+x}\" ]"; then
       eval "tmux set-environment -g $var \"\$$var\""
     else

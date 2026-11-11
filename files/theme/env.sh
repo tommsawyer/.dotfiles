@@ -2,7 +2,7 @@
 # The current theme, onedark warmer (dark) or onedark light: what `theme light|dark` wrote to
 # ~/.local/state/theme, dark without it. Sets its palette (thm_*, for the zsh prompt and the
 # fzf pickers) and exports what makes bat,
-# delta, lazygit, k9s, fzf and tock follow it.
+# delta, lazygit, fzf and tock follow it.
 # Sourced by zshrc (again at a prompt after a switch), the tmux pickers and `theme`, which also
 # copies the exports into the tmux environment for its popups.
 # Lives in ~/.config/theme (the whole folder is linked by `make symlinks`).
@@ -33,7 +33,7 @@ else
 fi
 
 # bat: its --theme-light / --theme-dark (bat/config); delta: a feature of delta.gitconfig
-export THEME BAT_THEME="$THEME" DELTA_FEATURES="$thm_onedark" K9S_SKIN="$thm_onedark"
+export THEME BAT_THEME="$THEME" DELTA_FEATURES="$thm_onedark"
 # ${thm_fg}:regular in braces: zsh reads $thm_fg:r as the :r modifier
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline-right --highlight-line \
   --color=fg:$thm_fg,bg:$thm_bg0,hl:$thm_blue,fg+:$thm_fg,bg+:$thm_bg3,hl+:$thm_cyan \

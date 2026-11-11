@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  Конфиги для macOS: kitty, zsh, tmux, neovim, lazygit, delta и k9s в одной теме onedark,
+  Конфиги для macOS: kitty, zsh, tmux, neovim, lazygit и delta в одной теме onedark,
   тёмной (warmer) или светлой (light) по команде `theme`.
 </p>
 
@@ -35,7 +35,6 @@
 1. [Консольные утилиты](#консольные-утилиты)
    - [lazygit](#lazygit)
    - [delta](#delta)
-   - [k9s](#k9s)
    - [zoxide и fzf](#zoxide-и-fzf)
    - [Светлая тема](#светлая-тема)
    - [Прочее](#прочее)
@@ -166,7 +165,7 @@ Worktree даёт вторую копию репозитория на своей
 Worktree с изменениями `d` не удаляет, несмерженная ветка остаётся. Файлы вне git,
 например `.env`, в копию не попадают.
 
-Оба списка, lazygit и k9s открываются в попапе, а окно под ним затемняется,
+lazygit открывается в попапе, а окно под ним затемняется,
 как под плавающими окнами в nvim
 ([`files/tmux/popup.sh`](files/tmux/popup.sh)).
 
@@ -179,11 +178,11 @@ Worktree с изменениями `d` не удаляет, несмерженн
 | `C-f h/j/k/l` | перейти между панелями |
 | `C-f J` / `C-f b` | присоединить панель / вынести в отдельное окно |
 | `C-f !` / `C-f @` | раскладки main-horizontal / even-horizontal |
-| `C-f g` / `C-f K` | lazygit / k9s в попапе |
+| `C-f g` | lazygit в попапе |
 
 Всё открывается в текущей папке. Окна нумеруются с 1, после закрытия номера
-сдвигаются без дыр. Мышь включена. Попапы lazygit и k9s занимают 90% экрана и
-закрываются вместе с программой.
+сдвигаются без дыр. Мышь включена. Попап lazygit занимает 90% экрана и
+закрывается вместе с программой.
 
 ### Статус-бар
 
@@ -451,14 +450,6 @@ Pager для git, [`files/git/delta.gitconfig`](files/git/delta.gitconfig).
 bat. Цвета тёмной и светлой темы — две секции (features) `onedark-warmer` и
 `onedark-light`.
 
-### k9s
-
-Kubernetes, запускается через `C-f K` или `k9s`. Работает только на чтение:
-удалить, отредактировать и убить ничего нельзя. Для разовой правки есть
-`k9s --write`. Логи показывают последние 200 строк за 5 минут. Настройки в
-[`files/k9s/config.yaml`](files/k9s/config.yaml), скины — в
-`files/k9s/skins/onedark-warmer.yaml` и `onedark-light.yaml`.
-
 ### zoxide и fzf
 
 | Клавиша | Действие |
@@ -484,17 +475,17 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 - **kitty:** все открытые окна, через сокет удалённого управления
   (`listen_on` в [`kitty.conf`](files/kitty/kitty.conf)). Новый kitty берёт
   тему при запуске: `theme.py` подключает `onedark-warmer.conf` или
-  `onedark-light.conf`, те же цвета, что в tmux, bat и k9s.
+  `onedark-light.conf`, те же цвета, что в tmux и bat.
 - **tmux:** статус-бар, рамки и попапы.
 - **Открытые shell** — со следующего промпта: промпт, fzf, bat, delta.
 
-То, что запускается после переключения (lazygit, k9s, bookokrat, tock, `C-f s`, `C-f a`),
+То, что запускается после переключения (lazygit, bookokrat, tock, `C-f s`, `C-f a`),
 открывается уже в новой теме. **nvim и Claude Code** нужно перезапустить.
 В Claude Code тема своя (`/theme`).
 
 Всё, что зависит от темы, задаёт [`files/theme/env.sh`](files/theme/env.sh):
 палитру и переменные `BAT_THEME`, `DELTA_FEATURES`, `LG_CONFIG_FILE`,
-`K9S_SKIN`, `FZF_DEFAULT_OPTS` и цвета tock (`TOCK_COLOR_*`). Его подключают zshrc, команда `theme` (она
+`FZF_DEFAULT_OPTS` и цвета tock (`TOCK_COLOR_*`). Его подключают zshrc, команда `theme` (она
 же копирует переменные в окружение tmux для попапов) и пикеры tmux. nvim
 читает тему в [`lua/theme.lua`](files/nvim/lua/theme.lua).
 
@@ -554,7 +545,6 @@ Kubernetes, запускается через `C-f K` или `k9s`. Работа
 | `files/theme` | `~/.config/theme` |
 | `files/theme/theme` | `~/.local/bin/theme` |
 | `files/lazygit/config.yml`, `light.yml` | `~/Library/Application Support/lazygit/` |
-| `files/k9s/config.yaml`, `skins/onedark-*.yaml` | `~/Library/Application Support/k9s/` |
 | `files/claude/settings.json` | `~/.claude/settings.json` (настройки и хуки Claude Code) |
 | `files/git/delta.gitconfig` | подключается из `~/.gitconfig` |
 
