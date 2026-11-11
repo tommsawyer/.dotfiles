@@ -286,4 +286,25 @@ git() {
   command git "$@"
 }
 
+# describe and `get -o yaml` print through bat with yaml highlighting — but only when
+# the output is a terminal: pipes, grep and scripts get the raw text
+kubectl() {
+  # pipefail: the pipeline keeps kubectl's exit code, not bat's
+  setopt local_options pipefail
+  if [[ -t 1 ]]; then
+    case $1 in
+      describe)
+        command kubectl describe "${@:2}" | bat -l yaml --style=plain
+        return ;;
+      get)
+        local s=" $* "
+        if [[ $s == *' -o yaml '* || $s == *' -oyaml '* || $s == *' -o=yaml '* ]]; then
+          command kubectl "$@" | bat -l yaml --style=plain
+          return
+        fi ;;
+    esac
+  fi
+  command kubectl "$@"
+}
+
 [ -f ~/.zshcustom ] && source ~/.zshcustom
