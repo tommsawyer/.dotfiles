@@ -68,6 +68,39 @@ _title_preexec() {
 add-zsh-hook precmd _title_precmd
 add-zsh-hook preexec _title_preexec
 
+# kubernetes in the prompt: after the first kubectl-family command in this shell a segment
+# with the cluster and namespace appears (the kubernetes glyph, context[/namespace]); before
+# that, and in shells that never touch the cluster, the prompt stays clean. The values are
+# re-read only when kubeconfig changed, checked by mtime at a prompt; `config current-context`
+# reads the file only and never calls the API, so an unreachable cluster does not slow the
+# prompt down. When the custom k* functions settle in, add them to _k8s_words.
+typeset -g _k8s_seen= _k8s_ctx= _k8s_ns= _k8s_mtime=0
+_k8s_words=(kubectl kubectx kubens stern helm k3d)
+_k8s_preexec() {
+  [[ -n $_k8s_seen ]] && return
+  local w
+  for w in ${(z)1}; do
+    (( _k8s_words[(Ie)${w:t}] )) && { _k8s_seen=1; return }
+  done
+}
+add-zsh-hook preexec _k8s_preexec
+
+_k8s_refresh() {
+  local f mt newest=0 ctx ns
+  for f in ${(s.:.)${KUBECONFIG:-$HOME/.kube/config}}; do
+    [[ -f $f ]] || continue
+    mt=$(stat -f %m "$f") && (( mt > newest )) && newest=$mt
+  done
+  (( newest == _k8s_mtime )) && return
+  _k8s_mtime=$newest
+  if ctx=$(command kubectl config current-context 2>/dev/null); then
+    ns=$(command kubectl config view --minify -o jsonpath='{..namespace}' 2>/dev/null)
+    _k8s_ctx=$ctx _k8s_ns=$ns
+  else
+    _k8s_ctx= _k8s_ns=
+  fi
+}
+
 # onedark warmer or light (`theme`): palette for the prompt below, exports for bat, delta, fzf...
 # Read again at a prompt after `theme` switched it, from this shell or another one
 source ~/.config/theme/env.sh
@@ -134,6 +167,11 @@ _prompt_precmd() {
 
   _prompt_left="%F{$thm_blue}${dir//\%/%%}%f"
   [[ -n $branch ]] && _prompt_left+=" %F{$thm_light_grey}${branch//\%/%%}%f"
+  # lazy kubernetes segment: set up by _k8s_preexec, values by _k8s_refresh, gone in a fresh shell
+  if [[ -n $_k8s_seen ]]; then
+    _k8s_refresh
+    [[ -n $_k8s_ctx ]] && _prompt_left+=" %F{$thm_cyan} ${_k8s_ctx}${_k8s_ns:+/$_k8s_ns}%f"
+  fi
   local c=$thm_purple; (( _prompt_ok )) || c=$thm_red
   _prompt_char="%F{$c}❯%f"
   PROMPT="$_prompt_left $_prompt_char "
