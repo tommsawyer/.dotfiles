@@ -1,6 +1,7 @@
 -- a local pull request: comments on the lines of a diff go to the agent as one message.
 -- ,rr the working tree, ,rc commits, ,rb a branch; in the diff i comments, r marks a file reviewed,
--- S sends the comments to the agent through sidekick, q ends the round (exports and archives them)
+-- S sends the comments to the agent through sidekick, q ends the round (exports and archives them);
+-- notes on plain files: ,rn comments the line (or the visual range), ,rs sends all comments from anywhere
 return {
   "georgeguimaraes/review.nvim",
   version = "*",
@@ -22,12 +23,13 @@ return {
     },
   },
   keys = {
-    { "<leader>rr", "<cmd>Review<cr>",         desc = "Review working tree" },
-    { "<leader>rc", "<cmd>Review commits<cr>", desc = "Review commits" },
-    { "<leader>rb", "<cmd>Review branch<cr>",  desc = "Review branch" },
-    { "<leader>rn", ":Review note<cr>",        mode = { "n", "x" },            desc = "Review: note here" },
-    { "<leader>re", "<cmd>Review edit<cr>",    desc = "Review: edit comment" },
-    { "<leader>rd", "<cmd>Review delete<cr>",  desc = "Review: delete comment" },
-    { "<leader>rl", "<cmd>Review list<cr>",    desc = "Review: list comments" },
+    { "<leader>rr", "<cmd>Review<cr>",          desc = "Review working tree" },
+    { "<leader>rc", "<cmd>Review commits<cr>",  desc = "Review commits" },
+    { "<leader>rb", "<cmd>Review branch<cr>",   desc = "Review branch" },
+    { "<leader>rn", ":Review note<cr>",         mode = { "n", "x" },              desc = "Review: note here" },
+    { "<leader>re", "<cmd>Review edit<cr>",     desc = "Review: edit comment" },
+    { "<leader>rd", "<cmd>Review delete<cr>",   desc = "Review: delete comment" },
+    { "<leader>rl", "<cmd>Review list<cr>",     desc = "Review: list comments" },
+    { "<leader>rs", "<cmd>Review sidekick<cr>", desc = "Review: send to sidekick" },
   },
 }
