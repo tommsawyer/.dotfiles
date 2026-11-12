@@ -11,6 +11,11 @@ return {
   },
   event = "VeryLazy", -- not cmd: notes on files show up without :Review
   opts = {
+    keymaps = {
+      -- no submit key and no hint in the header: submit is <CR> in normal mode
+      -- (type, esc, enter), cancel is q or esc
+      popup_submit = false,
+    },
     export = {
       -- replaces the default header together with its legend of types and of ~
       header = table.concat({
