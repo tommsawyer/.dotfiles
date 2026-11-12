@@ -1,8 +1,10 @@
 gui:
   nerdFontsVersion: "3"
   expandFocusedSidePanel: true
-  border: single
+  sidePanelWidth: 0.4
+  border: rounded
   showNumstatInFilesView: true
+  showDivergenceFromBaseBranch: arrowAndNumber
   showRandomTip: false
   # dark unless LG_CONFIG_FILE adds light.yml (`theme light`, ~/.config/theme/env.sh); also what
   # {{colorScheme}} passes to delta below
@@ -28,8 +30,9 @@ gui:
       - "#1B1C1E"
     markedBaseCommitBgColor:
       - "#DBB671"
+    # the palette red (env.sh), not warmer's #de5d68 that nvim still uses
     unstagedChangesColor:
-      - "#DE5D68"
+      - "#E16D77"
     defaultFgColor:
       - "#A7AAB0"
   # the same roles in onedark light; text on marked commits in its background, not bg_d
