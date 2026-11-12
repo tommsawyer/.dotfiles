@@ -55,6 +55,11 @@ return {
       -- titles ("Type", "Comment") sit on FloatBorder while its body is Normal,
       -- and their two backgrounds clashed; on bg0 the titles merge with the body
       FloatBorder = { fg = "$grey", bg = "$bg0" },
+      -- which-key floats on the editor background, not on the float band: its
+      -- body and frame on bg0 blend into the editor (its default link is
+      -- NormalFloat, a lighter band than the theme's background)
+      WhichKeyNormal = { bg = "$bg0" },
+      WhichKeyBorder = { fg = "$grey", bg = "$bg0" },
       -- ,gp hunk preview in the delta colours of lazygit
       -- (files/git/delta.gitconfig): added lines on the blue tint, deleted on
       -- the red one, changed words on the emph tints — not the theme's green
