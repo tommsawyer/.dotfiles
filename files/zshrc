@@ -224,6 +224,8 @@ alias rg='rg --hidden'
 alias k='kubectl'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 alias lg='lazygit'
+# to the root of the current git repo; outside a repo it stays where it is
+alias grt='cd "$(git rev-parse --show-toplevel 2>/dev/null)"'
 
 # tmux session named after a folder: created there if missing, then attached (outside tmux)
 # or switched to (inside tmux, where attaching would nest). `tm` takes the current folder;
