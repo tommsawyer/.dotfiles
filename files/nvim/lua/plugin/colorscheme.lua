@@ -51,6 +51,27 @@ return {
       NvimTreeWindowPicker = { fg = "$bg0", bg = "$green", fmt = "bold" },
       ModeMsg = { fg = "$green" },
       OkMsg = { fg = "$green" },
+      -- float frames on the editor background: the review.nvim comment popup
+      -- titles ("Type", "Comment") sit on FloatBorder while its body is Normal,
+      -- and their two backgrounds clashed; on bg0 the titles merge with the body
+      FloatBorder = { fg = "$grey", bg = "$bg0" },
+      -- ,gp hunk preview in the delta colours of lazygit
+      -- (files/git/delta.gitconfig): added lines on the blue tint, deleted on
+      -- the red one, changed words on the emph tints — not the theme's green
+      -- and red line backgrounds, and not the inverted TermCursor word blocks
+      GitSignsAddPreview = { bg = theme.light and "#DEE6F9" or "#1A2A37" },
+      GitSignsDeletePreview = { bg = theme.light and "#F7E1DF" or "#3F2C30" },
+      GitSignsAddInline = { bg = theme.light and "#C2D3F8" or "#2C485F" },
+      GitSignsDeleteInline = { bg = theme.light and "#F3C9C5" or "#5B343A" },
+      GitSignsChangeInline = { fg = "$yellow", bg = theme.light and "$diff_change" or "$dark_yellow" },
+      -- review.nvim comment lines in the same tint language as the diff:
+      -- suggestion is an addition (blue), issue a deletion (red), note a
+      -- neutral band, praise a whisper of green; the plugin's navy hexes are
+      -- tuned for a bluer background
+      ReviewNoteLine = { bg = "$bg3" },
+      ReviewSuggestionLine = { bg = theme.light and "#DEE6F9" or "#1A2A37" },
+      ReviewIssueLine = { bg = theme.light and "#F7E1DF" or "#3F2C30" },
+      ReviewPraiseLine = { bg = "$diff_add" },
     },
   },
   config = function(_, opts)
