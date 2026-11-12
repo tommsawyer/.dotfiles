@@ -9,6 +9,7 @@ return {
     end,
     spec = {
       { "<leader>g", group = "git" },
+      { "<leader>r", group = "review" },
       { "<leader>i", group = "ai" },
       { "<leader>o", group = "notes" },
       { "gr",        group = "lsp" },
