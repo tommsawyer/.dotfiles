@@ -17,6 +17,8 @@ files/kitty|$(HOME)/.config/kitty
 files/bat|$(HOME)/.config/bat
 files/theme|$(HOME)/.config/theme
 files/theme/theme|$(HOME)/.local/bin/theme
+files/zsh-patina/onedark-warmer.toml|$(HOME)/.config/zsh-patina/onedark-warmer.toml
+files/zsh-patina/onedark-light.toml|$(HOME)/.config/zsh-patina/onedark-light.toml
 files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
 files/lazygit/light.yml|$(LAZYGIT_DIR)/light.yml
 files/claude/settings.json|$(HOME)/.claude/settings.json
@@ -37,12 +39,16 @@ npm:
 	npm install -g --prefix "$(HOME)/.local" @olrtg/emmet-language-server
 
 symlinks:
-	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(HOME)/.claude" "$(LAZYGIT_DIR)"
+	mkdir -p "$(HOME)/.config" "$(HOME)/.local/bin" "$(HOME)/.claude" "$(HOME)/.config/zsh-patina" "$(LAZYGIT_DIR)"
 	@# a real file in the way is moved to *.backup
 	@printf '%s\n' "$$LINKS" | while IFS='|' read -r src dst; do \
 		if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then mv "$$dst" "$$dst.backup" && echo "backed up $$dst"; fi; \
 		ln -sfn "$(DOTFILES)/$$src" "$$dst" && echo "$$dst -> $$src"; \
 	done
+	@# zsh-patina: its config points at the current palette's theme file, `theme` seds the line
+	@[ -f "$(HOME)/.config/zsh-patina/config.toml" ] || \
+		printf '[highlighting]\ntheme = "file:~/.config/zsh-patina/onedark-warmer.toml"\n' \
+		>"$(HOME)/.config/zsh-patina/config.toml"
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
 		git config --global --add include.path "$(DELTA_CONFIG)"

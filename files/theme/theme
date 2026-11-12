@@ -49,3 +49,11 @@ bookokrat=$HOME/.config/bookokrat/config.yaml
 # tock: the tag colour in its tock.yaml (make tock put it there), the rest comes from env.sh
 tock=$HOME/.config/tock/tock.yaml
 [ ! -f "$tock" ] || sed -i '' "s/^\( *\)tag: .*/\1tag: \"$thm_green\"/" "$tock"
+
+# zsh-patina: point its config at the current palette's theme file (linked by make symlinks,
+# created by it too) and restart the daemon, it is shared by every open shell
+patina=$HOME/.config/zsh-patina/config.toml
+if command -v zsh-patina >/dev/null && [ -f "$patina" ]; then
+  sed -i '' "s|^theme = .*|theme = \"file:~/.config/zsh-patina/$thm_onedark.toml\"|" "$patina"
+  zsh-patina restart >/dev/null || :
+fi

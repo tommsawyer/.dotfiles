@@ -308,3 +308,9 @@ kubectl() {
 }
 
 [ -f ~/.zshcustom ] && source ~/.zshcustom
+
+# fish-like highlighting of the typed line: a Rust daemon (Sublime grammars, <1ms) colors
+# commands, strings, options; missing commands red, existing paths underlined. The theme is
+# onedark, the same hex as nvim; `theme light|dark` swaps the file and restarts the daemon.
+# Runs last, after the ZLE widgets defined above
+eval "$($HOMEBREW_PREFIX/bin/zsh-patina activate)"

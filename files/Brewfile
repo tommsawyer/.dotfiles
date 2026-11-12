@@ -21,6 +21,7 @@ brew "stern"
 brew "tock"
 brew "tree-sitter-cli"
 brew "zoxide"
+brew "zsh-patina"
 
 # language servers (sourcekit-lsp for swift comes with Xcode)
 brew "basedpyright"

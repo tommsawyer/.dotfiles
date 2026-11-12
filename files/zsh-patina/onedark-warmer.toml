@@ -1,0 +1,58 @@
+# onedark warmer for zsh-patina: the same hex as nvim (onedark.nvim warmer, treesitter).
+# Scope names are patina's (`zsh-patina list-scopes`, `zsh-patina tokenize` shows them per
+# token); the colours follow nvim's bash queries: keywords purple, commands blue, builtins
+# cyan, strings green, numbers and $UPPERCASE orange, flags and escapes red, comments grey.
+# Switched by `theme light|dark` (it seds config.toml and restarts the daemon); linked into
+# ~/.config/zsh-patina by make symlinks.
+
+# comments
+"comment" = "#5a5b5e"
+
+# strings, quotes painted with them (nvim colours the whole string node); regexes and
+# escapes go orange / red (@string.regexp, @string.escape)
+"string" = "#8fb573"
+"punctuation.definition.string" = "#8fb573"
+"keyword.operator.regexp" = "#c49060"
+"constant.character.escape" = "#de5d68"
+
+# numbers and booleans orange; but the fd in a redirection (2 in 2>) is an operator in
+# nvim, fg; `!!` and friends are special, red
+"constant" = "#c49060"
+"constant.numeric.integer.decimal.file-descriptor" = "#a7aab0"
+"meta.group.expansion.history" = "#de5d68"
+
+# commands blue (@function.call), the keyword builtins (exec, command, [[, let) cyan
+# (@function.builtin); function names in definitions blue
+"variable.function" = "#57a5e5"
+"keyword.builtin" = "#51a8b3"
+"support" = "#51a8b3"
+"entity.name.function" = "#57a5e5"
+
+# keywords (if, for, ...) purple
+"keyword" = "#bb70d2"
+
+# variables: $UPPERCASE and assignments orange (@constant), the $ sigil and the ${ } braces
+# red (@punctuation.special), grouping ( ) and [[ ]] light grey (@punctuation.bracket)
+"variable.other" = "#c49060"
+"storage" = "#c49060"
+"punctuation.definition.variable" = "#de5d68"
+"punctuation.section.expansion.parameter" = "#de5d68"
+"punctuation.section" = "#818387"
+"punctuation.definition.compound" = "#818387"
+
+# flags with their dash red (@variable.parameter); plain word arguments stay fg
+"variable.parameter" = "#de5d68"
+"punctuation.definition.parameter" = "#de5d68"
+
+# ~ plain, nvim leaves it unpainted
+"variable.language.tilde" = "#a7aab0"
+
+# reset command substitutions to terminal defaults, what is inside is highlighted afresh
+"meta.group.expansion.command.parens" = {}
+
+# what patina resolves at runtime: existing commands blue, builtins cyan, missing ones red
+# (DiagnosticError), existing paths underlined
+"dynamic.callable" = "#57a5e5"
+"dynamic.callable.builtin" = "#51a8b3"
+"dynamic.callable.missing" = "#de5d68"
+"dynamic.path" = { underline = true }
