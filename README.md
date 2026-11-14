@@ -10,7 +10,7 @@
 <details>
 <summary><b>Скриншот</b></summary>
 <br>
-<img src="assets/screenshot.png" alt="tmux и neovim: дерево файлов, хлебные крошки, тема onedark">
+<img src="assets/screenshot.png" alt="tmux и neovim: дерево файлов, хлебные крошки, светлая и тёмная темы onedark через диагональ">
 </details>
 
 ## Содержание
