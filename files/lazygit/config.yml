@@ -65,8 +65,9 @@ gui:
 git:
   diffRenderers:
     - type: stdinFilter
-      # side by side only when the diff view is wide enough (+ maximizes it)
-      command: delta --{{colorScheme}} --paging=never --width={{width}} {{if ge .width 140}}--side-by-side{{end}}
+      command:
+        delta --{{colorScheme}} --paging=never --width={{width}} --max-line-distance=0
+        --hunk-header-decoration-style=none {{if ge .width 140}}--side-by-side{{end}}
 
 os:
   # e hands the file to ~/.local/bin/lgedit (files/lazygit/lgedit): it opens it in the nvim
