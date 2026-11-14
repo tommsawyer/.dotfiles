@@ -2,6 +2,14 @@ return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPre", "BufNewFile" },
   opts = {
+    -- brand-new (untracked) files are not attached by default, so no signs, no hunks;
+    -- with this the whole file shows as added lines
+    attach_to_untracked = true,
+    -- default untracked sign is a thin dashed line (┆); use the same bold bar as added
+    -- lines of tracked files (the highlight already falls back to GitSignsAdd)
+    signs = {
+      untracked = { text = "┃" },
+    },
     -- keys only in buffers gitsigns is attached to (files in a git repo)
     on_attach = function(buf)
       local gs = require("gitsigns")
