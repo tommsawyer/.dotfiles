@@ -60,6 +60,10 @@ return {
       -- NormalFloat, a lighter band than the theme's background)
       WhichKeyNormal = { bg = "$bg0" },
       WhichKeyBorder = { fg = "$grey", bg = "$bg0" },
+      -- gitsigns popups (,gb blame, ,gp hunk preview) paint their text pieces
+      -- with NormalFloat; this window-local replacement (gitsigns.lua) keeps
+      -- the text colour but puts it on the editor background, like which-key
+      GitSignsPopupFloat = { fg = "$fg", bg = "$bg0" },
       -- ,gp hunk preview in the delta colours of lazygit
       -- (files/git/delta.gitconfig): added lines on the blue tint, deleted on
       -- the red one, changed words on the emph tints — not the theme's green
