@@ -12,6 +12,7 @@
 
 [delta]
   line-numbers = false
+  hunk-header-style = omit
   # the dark set when DELTA_FEATURES does not pick one (`theme` sets it: zshrc, the tmux environment)
   features = onedark-warmer
 
