@@ -25,6 +25,14 @@ return {
         return "<Ignore>"
       end, { buf = buf, expr = true, desc = "Previous git hunk" })
 
+      -- global=true so every attached buffer follows, silently: no command echo
+      vim.keymap.set("n", "<leader>gm", function()
+        gs.change_base("master", true)
+      end, { buf = buf, desc = "Diff against master (global)" })
+      vim.keymap.set("n", "<leader>gh", function()
+        gs.change_base("HEAD", true)
+      end, { buf = buf, desc = "Diff against HEAD (global)" })
+
       vim.keymap.set("n", "<leader>gu", gs.reset_hunk, { buf = buf, desc = "Reset hunk" })
       vim.keymap.set("n", "<leader>gb", gs.blame_line, { buf = buf, desc = "Blame line" })
       vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { buf = buf, desc = "Preview hunk" })
