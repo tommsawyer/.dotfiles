@@ -90,9 +90,7 @@ return {
     { "<leader>h",  function() Snacks.picker.help() end,                                                                              desc = "Help tags" },
     { "<leader>b",  function() Snacks.picker.buffers() end,                                                                           desc = "Buffers" },
     { "<leader>gs", function() Snacks.picker.git_status() end,                                                                        desc = "Changed files" },
-    -- against the base gitsigns diffs every buffer against (:Gitsigns change_base <rev> true), else the index
-    { "<leader>gd", function() Snacks.picker.git_diff({ base = require("gitsigns.config").config.base }) end,                         desc = "Changed hunks" },
-    -- <leader>gd but one entry per file; HEAD when no base is set (group=false is one entry per hunk)
-    { "<leader>gD", function() Snacks.picker.git_diff({ base = require("gitsigns.config").config.base or "HEAD", group = true }) end, desc = "Changed files vs base" },
+    { "<leader>gd", function() Snacks.picker.git_diff({ base = require("gitsigns.config").config.base or "HEAD", group = true }) end, desc = "Changed files vs base" },
+    { "<leader>gD", function() Snacks.picker.git_diff({ base = require("gitsigns.config").config.base or "HEAD" }) end,               desc = "Changed hunks" },
   },
 }
