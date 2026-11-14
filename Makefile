@@ -21,6 +21,7 @@ files/zsh-patina/onedark-warmer.toml|$(HOME)/.config/zsh-patina/onedark-warmer.t
 files/zsh-patina/onedark-light.toml|$(HOME)/.config/zsh-patina/onedark-light.toml
 files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
 files/lazygit/light.yml|$(LAZYGIT_DIR)/light.yml
+files/lazygit/lgedit|$(HOME)/.local/bin/lgedit
 files/claude/settings.json|$(HOME)/.claude/settings.json
 endef
 export LINKS
@@ -100,7 +101,7 @@ check:
 	@# a throwaway server: -n only parses and misses unknown options
 	@echo "tmux"; tmux -L dotfiles-check -f /dev/null new-session -d \; source-file files/tmux/tmux.conf; \
 		rc=$$?; tmux -L dotfiles-check kill-server 2>/dev/null; exit $$rc
-	@echo "sh"; shellcheck -x files/tmux/*.sh files/theme/theme files/theme/env.sh
+	@echo "sh"; shellcheck -x files/tmux/*.sh files/theme/theme files/theme/env.sh files/lazygit/lgedit
 	@echo "yaml"; ruby -ryaml -e 'ARGV.each { |f| YAML.load_file(f, aliases: true) }' \
 		files/lazygit/config.yml files/lazygit/light.yml files/bookokrat/themes.yaml
 	@echo "json"; jq empty files/claude/settings.json

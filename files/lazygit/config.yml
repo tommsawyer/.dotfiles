@@ -69,7 +69,13 @@ git:
       command: delta --{{colorScheme}} --paging=never --width={{width}} {{if ge .width 140}}--side-by-side{{end}}
 
 os:
-  editPreset: nvim # e opens the file in nvim inside the popup
+  # e hands the file to ~/.local/bin/lgedit (files/lazygit/lgedit): it opens it in the nvim
+  # already running in the tmux session, focuses its pane and quits lazygit; the socket nvim
+  # listens on comes from files/nvim/init.lua. lazygit execs the command without a shell, so
+  # no quotes around {{filename}}: they would become part of the name; lgedit runs the RPC
+  # in a detached job, nothing waits inside lazygit and editInTerminal stays false
+  edit: "~/.local/bin/lgedit {{filename}}"
+  editAtLine: "~/.local/bin/lgedit {{filename}} {{line}}"
 
 # worktrees with a tmux session of their own (~/.config/tmux/worktree.sh): the keys of the Worktrees
 # tab (panel 2, ]) take over the built-in ones, which know nothing about tmux; space still switches

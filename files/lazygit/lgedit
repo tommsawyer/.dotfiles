@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# lazygit's os.edit (files/lazygit/config.yml): hand the file to the nvim already running in
+# this tmux session — the first pane that has one — focus its pane and quit lazygit, so `e`
+# opens the file in the editor that is already open instead of a new nvim over lazygit.
+# Without a live nvim in the session, a fresh one opens in a new tab moved to the front.
+# The RPC to nvim runs as a run-shell job on the tmux server, detached from this script and
+# from the pane: lazygit quits at once, the file arrives a moment later. nvim announces
+# itself by listening on /tmp/nvim-<tmux server>-<tmux pane>.sock (files/nvim/init.lua); the
+# server name keeps sessions of separate tmux servers (a test rig, nested tmux) apart. The
+# prefix g popup is closed by hand and last: a popup pane dies together with this script,
+# the run-shell job on the server does not. Lives in ~/.local/bin (make symlinks).
+
+set -euo pipefail
+
+usage() {
+  echo "usage: lgedit FILE [LINE]" >&2
+  exit 2
+}
+
+[ "$#" -ge 1 ] || usage
+file=$1
+shift
+line=''
+case ${1:-} in
+'') ;;
+# not a line number: lazygit execs os.edit without a shell, so a path with spaces arrives
+# split and its tail goes back into the path
+*[!0-9]*) set -- "$file" "$@" ;;
+*) line=$1; shift ;;
+esac
+[ "$#" -eq 0 ] || file=$(printf '%s' "$*")
+
+# lazygit runs this from the repo root with a path relative to it; the nvim that receives
+# the file may sit in any directory, so make the path absolute
+case $file in
+/*) ;;
+*) file=$PWD/$file ;;
+esac
+
+[ -n "${TMUX:-}" ] || { echo "lgedit: not inside tmux" >&2; exit 1; }
+server=${TMUX%%,*}
+server=${server##*/}
+
+# the first pane of the session whose nvim listens on its socket
+find_nvim() {
+  pane='' cmd=''
+  while read -r pane cmd; do
+    [ "$cmd" = nvim ] || continue
+    [ -S "/tmp/nvim-$server-$pane.sock" ] && { printf '%s\n' "$pane"; return 0; }
+  done < <(tmux list-panes -s -F '#{pane_id} #{pane_current_command}')
+  return 1
+}
+
+if pane=$(find_nvim); then
+  tmux switch-client -t "$pane" 2>/dev/null || true
+else
+  # no nvim in the session: a new tab moved to the very front — index 1 is taken by any
+  # live session (base-index 1), so it is swapped with the tab sitting there. nvim starts
+  # through the tab's own shell, typed into it like any `nvim` in a console: after :qa the
+  # tab stays with a prompt, and the shell, not tmux, parses the command — hence %q. The
+  # new nvim listens on its own pane socket and the next lgedit finds it
+  win=$(tmux new-window -c "$PWD" -P -F '#{window_id}')
+  tmux send-keys -t "$win" "nvim ${line:+"+$line"} $(printf '%q' "$file")" Enter
+  tmux move-window -s "$win" -t 1 2>/dev/null || tmux swap-window -s "$win" -t 1
+  tmux switch-client -t "$win"
+  line=''
+fi
+
+# the rest goes to a run-shell job on the tmux server: no nvim client call keeps lazygit on
+# screen. A socket file left behind by a crashed nvim is removed for the next run
+tmux setenv -g LGEDIT_SOCK "/tmp/nvim-$server-$pane.sock"
+tmux setenv -g LGEDIT_FILE "$file"
+tmux setenv -g LGEDIT_JUMP "normal! ${line}Gzz"
+# the job string is resolved by the run-shell sh, not here — hence the single quotes
+# shellcheck disable=SC2016
+tmux run-shell -b 'nvim --server "$LGEDIT_SOCK" --remote "$LGEDIT_FILE" || { rm -f "$LGEDIT_SOCK"; exit 0; }
+[ -n "$LGEDIT_JUMP" ] && nvim --server "$LGEDIT_SOCK" --remote-expr "execute(\"$LGEDIT_JUMP\")"
+tmux setenv -gu LGEDIT_SOCK; tmux setenv -gu LGEDIT_FILE; tmux setenv -gu LGEDIT_JUMP' >/dev/null
+
+# lazygit gets the terminal back once we exit, q is its quit key. The popup is closed by
+# hand (POPUP_CLIENT comes from the prefix g binding), it dies together with the pane
+if [ -n "${POPUP_CLIENT:-}" ]; then
+  tmux display-popup -C -c "$POPUP_CLIENT"
+else
+  tmux send-keys -t "${TMUX_PANE:?}" q
+fi
