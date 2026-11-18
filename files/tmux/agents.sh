@@ -1,6 +1,7 @@
 #!/bin/sh
 # prefix a: fzf over the panes running claude code in every session, the ones waiting for you
-# first, with a live preview of the selected pane; enter jumps there (session, window and pane).
+# first, with a live preview of the selected pane; enter jumps there (session, window and pane),
+# ctrl-x kills the pane with the agent (the pane option state goes with it, as everywhere).
 # Each line ends with how long ago the pane was last visited (@agent_visited, set by the
 # pane-focus-in hook in tmux.conf).
 # prefix A (`agents.sh next <pane> <client>`): straight to the agent that needs you, without fzf.
@@ -80,10 +81,11 @@ pane=$("$0" list | fzf \
   --delimiter '\t' \
   --with-nth 2 \
   --prompt 'agent> ' \
-  --footer 'enter: jump · ctrl-r: refresh' \
+  --footer 'enter: jump · ctrl-x: kill agent · ctrl-r: refresh' \
   --preview 'tmux capture-pane -ep -t {1}' \
   --preview-window 'right,55%,border-left' \
   --bind 'focus:transform-preview-label:printf " %s " {3}' \
-  --bind "ctrl-r:reload($0 list)" | cut -f1)
+  --bind "ctrl-r:reload($0 list)" \
+  --bind "ctrl-x:execute-silent(tmux kill-pane -t {1})+reload($0 list)" | cut -f1)
 
 [ -n "$pane" ] && tmux switch-client -t "$pane"
