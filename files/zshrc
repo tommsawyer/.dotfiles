@@ -224,6 +224,8 @@ alias rg='rg --hidden'
 alias k='kubectl'
 alias coverage='go test -coverprofile=c.out ./... && go tool cover -html=c.out && rm c.out'
 alias lg='lazygit'
+# bookokrat always starts in zen mode (no sidebar); toggle back with <Space>z / <C-z>
+alias bookokrat='bookokrat --zen-mode'
 # to the root of the current git repo; outside a repo it stays where it is
 alias grt='cd "$(git rev-parse --show-toplevel 2>/dev/null)"'
 
