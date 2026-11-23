@@ -64,6 +64,8 @@ return {
       -- with NormalFloat; this window-local replacement (gitsigns.lua) keeps
       -- the text colour but puts it on the editor background, like which-key
       GitSignsPopupFloat = { fg = "$fg", bg = "$bg0" },
+      GitSignsAdd = { fg = "$blue" },
+      GitSignsChange = { fg = "$yellow" },
       -- ,gp hunk preview in the delta colours of lazygit
       -- (files/git/delta.gitconfig): added lines on the blue tint, deleted on
       -- the red one, changed words on the emph tints — not the theme's green
