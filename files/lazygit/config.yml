@@ -6,10 +6,6 @@ gui:
   showNumstatInFilesView: true
   showDivergenceFromBaseBranch: arrowAndNumber
   showRandomTip: false
-  # lgedit (os.edit) returns at once and prints nothing into the pane, so there is nothing
-  # to look at after the subprocess: skip the "Press enter to return to lazygit" pause —
-  # lazygit redraws immediately and stays open in the pane
-  promptToReturnFromSubprocess: false
   # dark unless LG_CONFIG_FILE adds light.yml (`theme light`, ~/.config/theme/env.sh); also what
   # {{colorScheme}} passes to delta below
   colorScheme: dark
@@ -82,6 +78,11 @@ os:
   # lazygit and editInTerminal stays false
   edit: "~/.local/bin/lgedit {{filename}}"
   editAtLine: "~/.local/bin/lgedit {{filename}} {{line}}"
+
+# a top-level key, not gui: — the "Press enter to return to lazygit" pause after a subprocess
+# is noise here: lgedit returns at once and prints nothing into the pane, so lazygit redraws
+# immediately and stays open in a pane after it (the prefix g popup is closed by the script)
+promptToReturnFromSubprocess: false
 
 # worktrees with a tmux session of their own (~/.config/tmux/worktree.sh): the keys of the Worktrees
 # tab (panel 2, ]) take over the built-in ones, which know nothing about tmux; space still switches
