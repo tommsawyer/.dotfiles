@@ -6,6 +6,10 @@ gui:
   showNumstatInFilesView: true
   showDivergenceFromBaseBranch: arrowAndNumber
   showRandomTip: false
+  # lgedit (os.edit) returns at once and prints nothing into the pane, so there is nothing
+  # to look at after the subprocess: skip the "Press enter to return to lazygit" pause —
+  # lazygit redraws immediately and stays open in the pane
+  promptToReturnFromSubprocess: false
   # dark unless LG_CONFIG_FILE adds light.yml (`theme light`, ~/.config/theme/env.sh); also what
   # {{colorScheme}} passes to delta below
   colorScheme: dark
@@ -71,10 +75,11 @@ git:
 
 os:
   # e hands the file to ~/.local/bin/lgedit (files/lazygit/lgedit): it opens it in the nvim
-  # already running in the tmux session, focuses its pane and quits lazygit; the socket nvim
-  # listens on comes from files/nvim/init.lua. lazygit execs the command without a shell, so
-  # no quotes around {{filename}}: they would become part of the name; lgedit runs the RPC
-  # in a detached job, nothing waits inside lazygit and editInTerminal stays false
+  # already running in the tmux session and focuses its pane — the prefix g popup closes,
+  # in a pane lazygit stays open. The socket nvim listens on comes from files/nvim/init.lua.
+  # lazygit execs the command without a shell, so no quotes around {{filename}}: they would
+  # become part of the name; lgedit runs the RPC in a detached job, nothing waits inside
+  # lazygit and editInTerminal stays false
   edit: "~/.local/bin/lgedit {{filename}}"
   editAtLine: "~/.local/bin/lgedit {{filename}} {{line}}"
 

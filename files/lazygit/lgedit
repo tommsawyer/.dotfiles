@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # lazygit's os.edit (files/lazygit/config.yml): hand the file to the nvim already running in
-# this tmux session — the first pane that has one — focus its pane and quit lazygit, so `e`
-# opens the file in the editor that is already open instead of a new nvim over lazygit.
+# this tmux session — the first pane that has one — and focus its pane, so `e` opens the
+# file in the editor that is already open instead of a new nvim over lazygit. In a pane
+# lazygit stays open and redraws on its own, the prefix g popup closes entirely.
 # Without a live nvim in the session, a fresh one opens in a new tab moved to the front.
 # The RPC to nvim runs as a run-shell job on the tmux server, detached from this script and
-# from the pane: lazygit quits at once, the file arrives a moment later. nvim announces
+# from the pane: the script returns at once, the file arrives a moment later. nvim announces
 # itself by listening on /tmp/nvim-<tmux server>-<tmux pane>.sock (files/nvim/init.lua); the
 # server name keeps sessions of separate tmux servers (a test rig, nested tmux) apart. The
 # prefix g popup is closed by hand and last: a popup pane dies together with this script,
@@ -77,10 +78,9 @@ tmux run-shell -b 'nvim --server "$LGEDIT_SOCK" --remote "$LGEDIT_FILE" || { rm 
 [ -n "$LGEDIT_JUMP" ] && nvim --server "$LGEDIT_SOCK" --remote-expr "execute(\"$LGEDIT_JUMP\")"
 tmux setenv -gu LGEDIT_SOCK; tmux setenv -gu LGEDIT_FILE; tmux setenv -gu LGEDIT_JUMP' >/dev/null
 
-# lazygit gets the terminal back once we exit, q is its quit key. The popup is closed by
-# hand (POPUP_CLIENT comes from the prefix g binding), it dies together with the pane
+# lazygit redraws on its own once we exit — the enter prompt is off (promptToReturnFromSubprocess
+# in config.yml), so nothing needs to be typed into the pane. The popup is closed by hand
+# (POPUP_CLIENT comes from the prefix g binding), it dies together with the pane
 if [ -n "${POPUP_CLIENT:-}" ]; then
   tmux display-popup -C -c "$POPUP_CLIENT"
-else
-  tmux send-keys -t "${TMUX_PANE:?}" q
 fi
