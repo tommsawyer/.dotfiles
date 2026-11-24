@@ -55,6 +55,7 @@ return {
       -- titles ("Type", "Comment") sit on FloatBorder while its body is Normal,
       -- and their two backgrounds clashed; on bg0 the titles merge with the body
       FloatBorder = { fg = "$grey", bg = "$bg0" },
+      NormalFloat = { fg = "$fg", bg = "$bg0" },
       -- which-key floats on the editor background, not on the float band: its
       -- body and frame on bg0 blend into the editor (its default link is
       -- NormalFloat, a lighter band than the theme's background)
