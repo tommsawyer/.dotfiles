@@ -46,12 +46,16 @@ export TOCK_THEME_NAME=custom TOCK_COLOR_PRIMARY="$thm_tock_blue" TOCK_COLOR_SEC
   TOCK_COLOR_TEXT="$thm_tock_text" TOCK_COLOR_SUBTEXT="$thm_light_grey" TOCK_COLOR_FAINT="$thm_grey" \
   TOCK_COLOR_HIGHLIGHT="$thm_yellow"
 
-# thm_sgr "#57A5E5" -> 38;2;87;165;229: the SGR codes of the palette colours given, on one line;
-# builtins only, it runs at every shell start. thm_ansi: the escape for text in the colour
+# thm_sgr "#57A5E5" -> 38;2;87;165;229: the SGR codes of the palette colours given, several
+# space-separated and nothing after the last (thm_ansi puts it straight into \033[...m, a space
+# before the m makes it an unknown sequence); builtins only, it runs at every shell start.
+# thm_ansi: the escape for text in the colour
 thm_sgr() {
+  sep=
   for c in "$@"; do
     c=${c#\#}
-    printf '38;2;%d;%d;%d ' "0x${c%????}" "$(( (0x$c & 0xff00) >> 8 ))" "0x${c#????}"
+    printf '%s38;2;%d;%d;%d' "$sep" "0x${c%????}" "$(( (0x$c & 0xff00) >> 8 ))" "0x${c#????}"
+    sep=' '
   done
 }
 thm_ansi() { printf '\033[%sm' "$(thm_sgr "$1")"; }
