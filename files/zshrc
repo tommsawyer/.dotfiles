@@ -59,8 +59,14 @@ alias -g ....='../../..'
 alias md='mkdir -p'
 # mkdir -p and cd into it
 take() { mkdir -p -- "$1" && cd -- "$1" }
-export LSCOLORS=Gxfxcxdxbxegedabagacad
-alias ls='ls -G'
+# ls is eza: icons, colours from the palette (theme/env.sh). Only when stdout is a terminal,
+# like git below: scripts, `$(ls ...)`, pipes and tools (agent shells load this file's functions
+# too) keep the real ls; by hand: `command ls`. --icons needs its value spelled out: a bare one
+# takes the folder after it (`ls src`) as its own
+ls() {
+  if [[ -t 1 ]]; then eza --icons=always --group-directories-first "$@"; else command ls "$@"; fi
+}
+compdef _eza ls
 export PAGER=less LESS=-R
 
 # terminal / tmux pane title: the folder at the prompt, the command while it runs;

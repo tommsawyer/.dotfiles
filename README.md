@@ -79,6 +79,8 @@ downloaded on first launch.
   execution time, background jobs.
 - zoxide and fzf for navigation, bat, glow, tock — the current tock task is
   visible in the tmux status bar.
+- In a terminal `ls` is eza: icons, colours of the palette in both themes; pipes, scripts
+  and tools get the plain `ls`.
 - **`theme light` / `theme dark`** switches kitty, tmux and everything
   console at once; nvim and Claude Code need a restart.
 

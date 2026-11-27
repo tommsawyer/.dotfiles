@@ -1,8 +1,7 @@
 # shellcheck shell=sh disable=SC2034 # thm_* are for the scripts that source this
 # The current theme, onedark warmer (dark) or onedark light: what `theme light|dark` wrote to
 # ~/.local/state/theme, dark without it. Sets its palette (thm_*, for the zsh prompt and the
-# fzf pickers) and exports what makes bat,
-# delta, lazygit, fzf and tock follow it.
+# fzf pickers) and exports what makes bat, delta, lazygit, fzf, tock and eza follow it.
 # Sourced by zshrc (again at a prompt after a switch), the tmux pickers and `theme`, which also
 # copies the exports into the tmux environment for its popups.
 # Lives in ~/.config/theme (the whole folder is linked by `make symlinks`).
@@ -47,8 +46,30 @@ export TOCK_THEME_NAME=custom TOCK_COLOR_PRIMARY="$thm_tock_blue" TOCK_COLOR_SEC
   TOCK_COLOR_TEXT="$thm_tock_text" TOCK_COLOR_SUBTEXT="$thm_light_grey" TOCK_COLOR_FAINT="$thm_grey" \
   TOCK_COLOR_HIGHLIGHT="$thm_yellow"
 
-# the escape for text in a palette colour: thm_ansi "#57A5E5" -> \033[38;2;87;165;229m
-thm_ansi() {
-  set -- "${1#\#}"
-  printf '\033[38;2;%d;%d;%dm' "0x$(echo "$1" | cut -c1-2)" "0x$(echo "$1" | cut -c3-4)" "0x$(echo "$1" | cut -c5-6)"
+# thm_sgr "#57A5E5" -> 38;2;87;165;229: the SGR codes of the palette colours given, on one line;
+# builtins only, it runs at every shell start. thm_ansi: the escape for text in the colour
+thm_sgr() {
+  for c in "$@"; do
+    c=${c#\#}
+    printf '38;2;%d;%d;%d ' "0x${c%????}" "$(( (0x$c & 0xff00) >> 8 ))" "0x${c#????}"
+  done
 }
+thm_ansi() { printf '\033[%sm' "$(thm_sgr "$1")"; }
+
+# eza (ls): EZA_COLORS takes SGR codes, not colours. Names in the palette: folders bold blue,
+# symlinks and music cyan, executables and documents green, broken links, archives and sockets
+# red, pipes and devices yellow, code, build and key files yellow, images and video purple, temp
+# and compiled files grey. The columns muted (thm_light_grey), but the group/world-writable and
+# setuid/setgid bits in red; punctuation (the -> of a link, dashes) in thm_grey. What is left
+# out keeps eza's defaults, the terminal's 16 colours (kitty's are this palette). eza_colors(5)
+# The colours in braces: zsh reads $blue:ln as the :l modifier
+read -r blue cyan yellow purple green red grey muted <<EOF
+$(thm_sgr "$thm_blue" "$thm_cyan" "$thm_yellow" "$thm_purple" "$thm_green" "$thm_red" "$thm_grey" "$thm_light_grey")
+EOF
+export EZA_COLORS="di=1;${blue}:ln=${cyan}:ex=${green}:or=${red}:pi=${yellow}:so=${red}:bd=${yellow}:\
+cd=${yellow}:im=${purple}:vi=${purple}:mu=${cyan}:lo=${cyan}:co=${red}:do=${green}:cr=${yellow}:\
+bu=${yellow}:sc=${yellow}:tm=${grey}:cm=${grey}:\
+ur=${muted}:uw=${muted}:ux=${muted}:ue=${muted}:gr=${muted}:gx=${muted}:tr=${muted}:tx=${muted}:\
+gw=${red}:tw=${red}:su=${red}:sf=${red}:xa=${grey}:\
+sn=${muted}:sb=${muted}:uu=${muted}:uR=${muted}:un=${muted}:gu=${muted}:gR=${muted}:gn=${muted}:\
+lc=${muted}:lm=${muted}:da=${muted}:in=${muted}:bl=${muted}:oc=${muted}:xx=${grey}"

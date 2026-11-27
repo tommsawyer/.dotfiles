@@ -9,6 +9,7 @@ brew "go"
 # cli
 brew "bat"
 brew "bookokrat"
+brew "eza"
 brew "fd"
 brew "fzf"
 brew "glow"
