@@ -17,8 +17,8 @@ files/kitty|$(HOME)/.config/kitty
 files/bat|$(HOME)/.config/bat
 files/theme|$(HOME)/.config/theme
 files/theme/theme|$(HOME)/.local/bin/theme
-files/zsh-patina/onedark-warmer.toml|$(HOME)/.config/zsh-patina/onedark-warmer.toml
-files/zsh-patina/onedark-light.toml|$(HOME)/.config/zsh-patina/onedark-light.toml
+files/zsh-patina/gruvbox-material-dark.toml|$(HOME)/.config/zsh-patina/gruvbox-material-dark.toml
+files/zsh-patina/gruvbox-material-light.toml|$(HOME)/.config/zsh-patina/gruvbox-material-light.toml
 files/lazygit/config.yml|$(LAZYGIT_DIR)/config.yml
 files/lazygit/light.yml|$(LAZYGIT_DIR)/light.yml
 files/lazygit/lgedit|$(HOME)/.local/bin/lgedit
@@ -48,7 +48,7 @@ symlinks:
 	done
 	@# zsh-patina: its config points at the current palette's theme file, `theme` seds the line
 	@[ -f "$(HOME)/.config/zsh-patina/config.toml" ] || \
-		printf '[highlighting]\ntheme = "file:~/.config/zsh-patina/onedark-warmer.toml"\n' \
+		printf '[highlighting]\ntheme = "file:~/.config/zsh-patina/gruvbox-material-dark.toml"\n' \
 		>"$(HOME)/.config/zsh-patina/config.toml"
 	bat cache --build
 	git config --global --get-all include.path | grep -qxF "$(DELTA_CONFIG)" || \
@@ -58,7 +58,7 @@ symlinks:
 terminfo:
 	/usr/bin/tic -x -o "$(HOME)/.terminfo" "$(DOTFILES)/files/tmux/tmux-256color.terminfo"
 
-# bookokrat writes its config.yaml itself, so not a link: the onedark themes go in place of
+# bookokrat writes its config.yaml itself, so not a link: the gruvbox-material themes go in place of
 # its custom_themes section (to the end of the file) and theme: is set to the current one
 BOOKOKRAT_CONFIG := $(HOME)/.config/bookokrat/config.yaml
 bookokrat:

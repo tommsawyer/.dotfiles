@@ -114,7 +114,7 @@ _k8s_refresh() {
   fi
 }
 
-# onedark warmer or light (`theme`): palette for the prompt below, exports for bat, delta, fzf...
+# gruvbox-material, dark or light (`theme`): palette for the prompt below, exports for bat, delta, fzf...
 # Read again at a prompt after `theme` switched it, from this shell or another one
 source ~/.config/theme/env.sh
 _theme_sync() {
@@ -321,6 +321,6 @@ kubectl() {
 
 # fish-like highlighting of the typed line: a Rust daemon (Sublime grammars, <1ms) colors
 # commands, strings, options; missing commands red, existing paths underlined. The theme is
-# onedark, the same hex as nvim; `theme light|dark` swaps the file and restarts the daemon.
+# gruvbox-material, the same hex as nvim; `theme light|dark` swaps the file and restarts the daemon.
 # Runs last, after the ZLE widgets defined above
 eval "$($HOMEBREW_PREFIX/bin/zsh-patina activate)"

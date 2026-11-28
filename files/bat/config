@@ -1,5 +1,5 @@
 # BAT_THEME=light / dark (set by `theme`, ~/.config/theme/env.sh) picks one of these;
 # without it dark, not a guess from the terminal background
---theme-dark="onedark-warmer"
---theme-light="onedark-light"
+--theme-dark="gruvbox-material-dark"
+--theme-light="gruvbox-material-light"
 --theme=dark

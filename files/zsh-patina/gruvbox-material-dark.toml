@@ -1,0 +1,73 @@
+# gruvbox-material (hard) dark for zsh-patina: the same hex as nvim (gruvbox-material.nvim,
+# treesitter). Scope names are patina's (`zsh-patina list-scopes`, `zsh-patina tokenize` shows
+# them per token); of the keys here the most specific one is used. The colours are what nvim
+# paints in a zsh line: keywords red, operators orange, commands green, strings aqua, numbers
+# purple, comments grey (italic in nvim, but the ZLE has no italics).
+# Switched by `theme light|dark` (it seds config.toml and restarts the daemon); linked into
+# ~/.config/zsh-patina by make symlinks.
+
+# comments, the # with them
+"comment" = "#928374"
+"punctuation.definition.comment" = "#928374"
+
+# strings with their quotes and escapes (@string is one colour for the whole node), regexes
+# green (@string.regexp)
+"string" = "#89b482"
+"punctuation.definition.string" = "#89b482"
+"constant.character.escape" = "#89b482"
+"keyword.operator.regexp" = "#a9b665"
+
+# numbers purple; but the fd of a redirection (2 in 2>) is an operator in nvim, orange, and
+# !! and %1 plain words
+"constant" = "#d3869b"
+"constant.numeric.integer.decimal.file-descriptor" = "#e78a4e"
+"constant.numeric.integer.decimal.job" = "#d4be98"
+"punctuation.definition.variable.job" = "#d4be98"
+"meta.group.expansion.history" = "#d4be98"
+
+# commands green (@function.call), the keyword builtins (exec, command, [[, let) too
+# (@function.builtin); function names in definitions green
+"variable.function" = "#a9b665"
+"keyword.builtin" = "#a9b665"
+"entity.name.function" = "#a9b665"
+# the [[ ]] of a test are punctuation in nvim, plain
+"support" = "#d4be98"
+
+# keywords (if, for, case, ..., local, export) red; the ( ) of a case item blue, as the other
+# brackets of an expansion in nvim
+"keyword" = "#ea6962"
+"keyword.control.case.item" = "#7daea3"
+"storage" = "#ea6962"
+
+# operators orange (@operator): =, |, &&, redirections; but ; grey (@punctuation.delimiter)
+# and the # and : of ${#f}, ${u:f} yellow (@attribute.builtin)
+"keyword.operator" = "#e78a4e"
+"keyword.operator.logical.continue" = "#928374"
+"keyword.operator.arithmetic" = "#d8a657"
+"keyword.operator.substring" = "#d8a657"
+"punctuation.terminator" = "#928374"
+
+# variables: plain, the $ sigil and the ${ } braces blue (@punctuation.special), grouping
+# ( ) and [[ ]] plain (@punctuation.bracket)
+"variable.other" = "#d4be98"
+"punctuation.definition.variable" = "#7daea3"
+"punctuation.section.expansion.parameter" = "#7daea3"
+"punctuation.section" = "#d4be98"
+"punctuation.definition.compound" = "#d4be98"
+
+# flags with their dash and plain word arguments fg (@variable.parameter)
+"variable.parameter" = "#d4be98"
+"punctuation.definition.parameter" = "#d4be98"
+
+# ~ plain, nvim leaves it unpainted
+"variable.language.tilde" = "#d4be98"
+
+# reset command substitutions to terminal defaults, what is inside is highlighted afresh
+"meta.group.expansion.command.parens" = {}
+
+# what patina resolves at runtime: existing commands green, builtins green too, missing ones
+# red (DiagnosticError), existing paths underlined
+"dynamic.callable" = "#a9b665"
+"dynamic.callable.builtin" = "#a9b665"
+"dynamic.callable.missing" = "#ea6962"
+"dynamic.path" = { underline = true }

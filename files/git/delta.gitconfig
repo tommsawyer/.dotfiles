@@ -14,40 +14,41 @@
   line-numbers = false
   hunk-header-style = omit
   # the dark set when DELTA_FEATURES does not pick one (`theme` sets it: zshrc, the tmux environment)
-  features = onedark-warmer
+  features = gruvbox-material-dark
 
 # added lines are blue, not green: red vs blue tells apart better.
-# deleted lines are red at 15% / 30% over the background, the theme's diff_delete is barely visible
+# deleted lines are red at 15% / 30% over the background: the theme's own diff backgrounds
+# (bg_diff_red and the like) are barely visible
 # +/- markers mark the lines without relying on color
-[delta "onedark-warmer"]
+[delta "gruvbox-material-dark"]
   dark = true
-  syntax-theme = onedark-warmer
+  syntax-theme = gruvbox-material-dark
   keep-plus-minus-markers       = true
-  minus-style                   = syntax "#3F2C30"
-  minus-non-emph-style          = syntax "#3F2C30"
-  minus-emph-style              = syntax "#5B343A"
-  minus-empty-line-marker-style = syntax "#3F2C30"
-  line-numbers-minus-style      = "#DE5D68"
-  plus-style                    = syntax "#1A2A37"
-  plus-non-emph-style           = syntax "#1A2A37"
-  plus-emph-style               = syntax "#2C485F"
-  plus-empty-line-marker-style  = syntax "#1A2A37"
-  line-numbers-plus-style       = "#57A5E5"
-  line-numbers-zero-style       = "#5A5B5E"
+  minus-style                   = syntax "#3C2B2B"
+  minus-non-emph-style          = syntax "#3C2B2B"
+  minus-emph-style              = syntax "#5A3634"
+  minus-empty-line-marker-style = syntax "#3C2B2B"
+  line-numbers-minus-style      = "#EA6962"
+  plus-style                    = syntax "#2B3534"
+  plus-non-emph-style           = syntax "#2B3534"
+  plus-emph-style               = syntax "#3A4B48"
+  plus-empty-line-marker-style  = syntax "#2B3534"
+  line-numbers-plus-style       = "#7DAEA3"
+  line-numbers-zero-style       = "#7C6F64"
 
-# the same over onedark light: blue and red at 15% / 30% over its background
-[delta "onedark-light"]
+# the same over gruvbox-material light: blue and red at 15% / 30% over its background
+[delta "gruvbox-material-light"]
   light = true
-  syntax-theme = onedark-light
+  syntax-theme = gruvbox-material-light
   keep-plus-minus-markers       = true
-  minus-style                   = syntax "#F7E1DF"
-  minus-non-emph-style          = syntax "#F7E1DF"
-  minus-emph-style              = syntax "#F3C9C5"
-  minus-empty-line-marker-style = syntax "#F7E1DF"
-  line-numbers-minus-style      = "#E45649"
-  plus-style                    = syntax "#DEE6F9"
-  plus-non-emph-style           = syntax "#DEE6F9"
-  plus-emph-style               = syntax "#C2D3F8"
-  plus-empty-line-marker-style  = syntax "#DEE6F9"
-  line-numbers-plus-style       = "#4078F2"
-  line-numbers-zero-style       = "#A0A1A7"
+  minus-style                   = syntax "#F1DBC2"
+  minus-non-emph-style          = syntax "#F1DBC2"
+  minus-emph-style              = syntax "#E8C2AD"
+  minus-empty-line-marker-style = syntax "#F1DBC2"
+  line-numbers-minus-style      = "#C14A4A"
+  plus-style                    = syntax "#DEE1C9"
+  plus-non-emph-style           = syntax "#DEE1C9"
+  plus-emph-style               = syntax "#C3CDBB"
+  plus-empty-line-marker-style  = syntax "#DEE1C9"
+  line-numbers-plus-style       = "#45707A"
+  line-numbers-zero-style       = "#A89984"

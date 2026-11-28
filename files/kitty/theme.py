@@ -8,4 +8,4 @@ try:
         light = f.read().strip() == "light"
 except OSError:
     light = False
-print("include onedark-light.conf" if light else "include onedark-warmer.conf")
+print("include gruvbox-material-light.conf" if light else "include gruvbox-material-dark.conf")

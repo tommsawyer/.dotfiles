@@ -5,8 +5,7 @@
 # Lives in ~/.config/tmux (the whole folder is linked by `make symlinks`).
 
 # tmux dims colours toward black (dim=N multiplies them by 100 - N percent), nvim blends its
-# backdrop into them; the percentages below match the background dim (bg0 under bg_d, blend 40):
-# dark #232326 -> #1e1f21, light #fafafa -> #dcdcdc
+# backdrop into them. The prompt's blue goes #7DAEA3 -> #4B6861 in dark, #45707A -> #3C626B in light
 if [ "$(cat "${XDG_STATE_HOME:-$HOME/.local/state}/theme" 2>/dev/null)" = light ]; then
   dim=12
 else

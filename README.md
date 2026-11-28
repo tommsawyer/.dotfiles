@@ -1,11 +1,11 @@
 <h1 align="center">dotfiles</h1>
 
 <p align="center">
-  macOS configs: kitty, zsh, tmux, neovim, lazygit and delta, all in one onedark
-  theme — dark (warmer) or light, switched with the `theme` command.
+  macOS configs: kitty, zsh, tmux, neovim, lazygit and delta, all in one theme,
+  gruvbox-material — dark or light, switched with the `theme` command.
 </p>
 
-<img src="assets/screenshot.png" alt="tmux and neovim: file tree, breadcrumbs, light and dark onedark themes split diagonally">
+<img src="assets/screenshot.png" alt="tmux and neovim: file tree, breadcrumbs, the light and the dark theme split diagonally">
 
 ## Installation
 
@@ -39,8 +39,8 @@ downloaded on first launch.
 ### Git
 
 - The main tool is **lazygit**, in a tmux popup (`C-f g`).
-- Diffs are drawn by **delta**: two columns on wide screens, onedark
-  highlighting.
+- Diffs are drawn by **delta**: two columns on wide screens, with the
+  theme's highlighting.
 
 ### Agentic development
 

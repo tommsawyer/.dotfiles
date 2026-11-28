@@ -11,56 +11,56 @@ gui:
   colorScheme: dark
   darkTheme:
     activeBorderColor:
-      - "#57A5E5"
+      - "#7DAEA3"
       - "bold"
     inactiveBorderColor:
-      - "#5A5B5E"
+      - "#7C6F64"
     searchingActiveBorderColor:
-      - "#C49060"
+      - "#E78A4E"
       - "bold"
     optionsTextColor:
-      - "#57A5E5"
+      - "#7DAEA3"
     selectedLineBgColor:
-      - "#37383D"
+      - "#3C3836"
     cherryPickedCommitFgColor:
-      - "#1B1C1E"
+      - "#141617"
     cherryPickedCommitBgColor:
-      - "#BB70D2"
+      - "#D3869B"
     markedBaseCommitFgColor:
-      - "#1B1C1E"
+      - "#141617"
     markedBaseCommitBgColor:
-      - "#DBB671"
-    # the palette red (env.sh), not warmer's #de5d68 that nvim still uses
+      - "#D8A657"
+    # the palette red (env.sh)
     unstagedChangesColor:
-      - "#E16D77"
+      - "#EA6962"
     defaultFgColor:
-      - "#A7AAB0"
-  # the same roles in onedark light; text on marked commits in its background, not bg_d
+      - "#D4BE98"
+  # the same roles in the light palette; text on marked commits in the background, not bg_dim
   lightTheme:
     activeBorderColor:
-      - "#4078F2"
+      - "#45707A"
       - "bold"
     inactiveBorderColor:
-      - "#A0A1A7"
+      - "#A89984"
     searchingActiveBorderColor:
-      - "#C18401"
+      - "#C35E0A"
       - "bold"
     optionsTextColor:
-      - "#4078F2"
+      - "#45707A"
     selectedLineBgColor:
-      - "#DCDCDC"
+      - "#F2E5BC"
     cherryPickedCommitFgColor:
-      - "#FAFAFA"
+      - "#F9F5D7"
     cherryPickedCommitBgColor:
-      - "#A626A4"
+      - "#945E80"
     markedBaseCommitFgColor:
-      - "#FAFAFA"
+      - "#F9F5D7"
     markedBaseCommitBgColor:
-      - "#986801"
+      - "#B47109"
     unstagedChangesColor:
-      - "#E45649"
+      - "#C14A4A"
     defaultFgColor:
-      - "#383A42"
+      - "#654735"
 
 git:
   diffRenderers:
