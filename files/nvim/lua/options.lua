@@ -52,6 +52,9 @@ vim.filetype.add({
   },
 })
 
+vim.opt.title = true
+vim.opt.titlestring = "%t"
+
 vim.cmd("abbr rt return")
 
 -- russian layout (Russian - PC): normal/visual commands work without switching layout
